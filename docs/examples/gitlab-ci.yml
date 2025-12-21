@@ -1,0 +1,59 @@
+# GitLab CI Integration Example
+# This example shows how to configure Terraflow for use in GitLab CI pipelines
+
+backend:
+  type: s3
+  config:
+    # Use GitLab CI environment variables
+    bucket: ${AWS_REGION}-${AWS_ACCOUNT_ID}-terraform-state
+    key: ${CI_PROJECT_PATH}/${CI_COMMIT_REF_NAME}/terraform.tfstate
+    region: ${AWS_REGION}
+    encrypt: true
+    dynamodb_table: terraform-statelock
+
+secrets:
+  provider: aws-secrets
+  config:
+    # Use GitLab project path in secret name
+    secret_name: ${CI_PROJECT_PATH}/terraform-vars
+    region: ${AWS_REGION}
+
+auth:
+  assume_role:
+    role_arn: arn:aws:iam::${AWS_ACCOUNT_ID}:role/GitLabCIRole
+    session_name: gitlab-ci-${CI_PIPELINE_ID}
+    duration: 3600
+
+variables:
+  # Use GitLab CI context
+  environment: ${CI_COMMIT_REF_NAME}
+  gitlab_project: ${CI_PROJECT_PATH}
+  gitlab_sha: ${CI_COMMIT_SHA}
+
+workspace_strategy:
+  - cli
+  - env
+  - tag
+  - branch
+  - hostname
+
+# In GitLab CI, skip commit check (CI environment is clean by default)
+validations:
+  require_git_commit: false
+
+logging:
+  level: info
+
+# Example GitLab CI configuration (.gitlab-ci.yml):
+# terraform:
+#   image: node:20
+#   before_script:
+#     - npm install -g terraflow
+#   script:
+#     - terraflow plan
+#   variables:
+#     TERRAFLOW_CONFIG: .gitlab-ci/.tfwconfig.yml
+#   only:
+#     - main
+#     - merge_requests
+

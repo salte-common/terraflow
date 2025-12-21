@@ -554,10 +554,80 @@
       "tool": "cursor"
     },
     "README.md": {
-      "lines_total": 79,
-      "lines_ai_generated": 7,
-      "ai_percentage": 9,
-      "last_updated": "2025-12-21T04:42:42Z",
+      "lines_total": 250,
+      "lines_ai_generated": 178,
+      "ai_percentage": 71,
+      "last_updated": "2025-12-21T04:51:29Z",
+      "tool": "cursor"
+    },
+    "docs/configuration.md": {
+      "lines_total": 539,
+      "lines_ai_generated": 539,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T04:51:29Z",
+      "tool": "cursor"
+    },
+    "docs/plugins.md": {
+      "lines_total": 400,
+      "lines_ai_generated": 400,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T04:51:29Z",
+      "tool": "cursor"
+    },
+    "docs/examples/aws-s3-secrets-manager.yml": {
+      "lines_total": 53,
+      "lines_ai_generated": 53,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T04:51:29Z",
+      "tool": "cursor"
+    },
+    "docs/examples/azure-azurerm.yml": {
+      "lines_total": 41,
+      "lines_ai_generated": 41,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T04:51:29Z",
+      "tool": "cursor"
+    },
+    "docs/examples/gcp-gcs.yml": {
+      "lines_total": 35,
+      "lines_ai_generated": 35,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T04:51:29Z",
+      "tool": "cursor"
+    },
+    "docs/examples/multi-environment.yml": {
+      "lines_total": 49,
+      "lines_ai_generated": 49,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T04:51:29Z",
+      "tool": "cursor"
+    },
+    "docs/examples/github-actions.yml": {
+      "lines_total": 72,
+      "lines_ai_generated": 72,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T04:51:29Z",
+      "tool": "cursor"
+    },
+    "docs/examples/gitlab-ci.yml": {
+      "lines_total": 59,
+      "lines_ai_generated": 59,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T04:51:29Z",
+      "tool": "cursor"
+    },
+    "CONTRIBUTING.md": {
+      "lines_total": 233,
+      "lines_ai_generated": 233,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T04:51:29Z",
+      "tool": "cursor"
+    },
+    "CODE_OF_CONDUCT.md": {
+      "lines_total": 123,
+      "lines_ai_generated": 123,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T04:51:29Z",
       "tool": "cursor"
     }
   },

@@ -1,15 +1,23 @@
 # Terraflow CLI
 
+[![CI](https://github.com/yourusername/terraflow/workflows/CI/badge.svg)](https://github.com/yourusername/terraflow/actions)
+[![codecov](https://codecov.io/gh/yourusername/terraflow/branch/main/graph/badge.svg)](https://codecov.io/gh/yourusername/terraflow)
+[![npm version](https://badge.fury.io/js/terraflow.svg)](https://badge.fury.io/js/terraflow)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 An opinionated Node.js CLI wrapper for Terraform that provides intelligent workspace management, multi-cloud backend support, secrets integration, and git-aware workflows.
 
-## Overview
+## Features
 
-Terraflow enhances Terraform workflows by providing:
-- Intelligent workspace derivation from git context
-- Multi-cloud backend support (AWS S3, Azure RM, GCP GCS)
-- Secrets management integration
-- Git-aware validation and workflows
-- Convention-based plugin system
+- 🎯 **Intelligent Workspace Management** - Automatically derives workspace names from git context (branch, tag, or hostname)
+- ☁️ **Multi-Cloud Backend Support** - AWS S3, Azure RM, and GCP GCS backends with automatic configuration
+- 🔐 **Secrets Integration** - Supports AWS Secrets Manager, Azure Key Vault, and GCP Secret Manager
+- 🔑 **Authentication Plugins** - AWS IAM roles, Azure service principals, and GCP service accounts
+- 📝 **Git-Aware Workflows** - Automatically detects git repository context and validates working directory state
+- ⚙️ **Configuration Management** - Hierarchical configuration with environment variable support and template variables
+- 🔌 **Extensible Plugin System** - Convention-based plugin discovery and execution
+- ✅ **Comprehensive Validation** - Validates terraform installation, workspace names, and configuration before execution
+- 🧪 **Dry-Run Mode** - Preview what would be executed without running terraform commands
 
 ## Installation
 
@@ -17,34 +25,190 @@ Terraflow enhances Terraform workflows by providing:
 npm install -g terraflow
 ```
 
-## Quick Start
+Or use the `tf` alias:
 
 ```bash
-# Initialize configuration
-terraflow config init
-
-# Run terraform plan
-terraflow plan
-
-# Run terraform apply
-terraflow apply
+npm install -g terraflow
+# Then use 'tf' instead of 'terraflow'
 ```
 
 ## Requirements
 
-- Node.js >= 18.x
-- Terraform installed and available in PATH
+- **Node.js** >= 18.x
+- **Terraform** installed and available in PATH
 
-## Project Status
+## Quick Start
 
-This project is in active development. The foundation is set up with:
-- ✅ TypeScript configuration with strict mode
-- ✅ ESLint and Prettier configuration
-- ✅ Jest testing framework
-- ✅ Project structure and placeholder modules
-- ✅ Plugin system interfaces
+1. **Initialize configuration:**
 
-See [SPECIFICATION.md](./SPECIFICATION.md) for complete details.
+```bash
+terraflow config init
+```
+
+This creates a `.tfwconfig.yml` file with examples for all backends, secrets providers, and auth configurations.
+
+2. **Configure your backend and secrets** in `.tfwconfig.yml`:
+
+```yaml
+backend:
+  type: s3
+  config:
+    bucket: ${AWS_REGION}-${AWS_ACCOUNT_ID}-terraform-state
+    key: ${GITHUB_REPOSITORY}
+    region: ${AWS_REGION}
+
+secrets:
+  provider: aws-secrets
+  config:
+    secret_name: myapp/terraform-vars
+    region: ${AWS_REGION}
+```
+
+3. **Run terraform commands:**
+
+```bash
+# Plan changes
+terraflow plan
+
+# Apply changes
+terraflow apply
+
+# Destroy infrastructure
+terraflow destroy
+```
+
+## Basic Usage
+
+### Workspace Derivation
+
+Terraflow automatically derives workspace names from git context:
+
+```bash
+# On branch 'feature/new-api' → workspace: 'feature-new-api'
+terraflow plan
+
+# On tag 'v1.0.0' → workspace: 'v1-0-0'
+git checkout v1.0.0
+terraflow plan
+
+# Explicitly set workspace
+terraflow --workspace production plan
+```
+
+### Configuration Hierarchy
+
+Configuration is merged in this order (later overrides earlier):
+
+1. Default values
+2. Config file (`.tfwconfig.yml`)
+3. Environment variables (`TERRAFLOW_*`)
+4. CLI arguments (highest priority)
+
+### Template Variables
+
+Use template variables in your configuration:
+
+```yaml
+backend:
+  type: s3
+  config:
+    bucket: ${AWS_REGION}-${AWS_ACCOUNT_ID}-terraform-state
+    key: ${GITHUB_REPOSITORY}/terraform.tfstate
+```
+
+Available variables:
+- All environment variables
+- `AWS_ACCOUNT_ID`, `AWS_REGION`
+- `AZURE_SUBSCRIPTION_ID`, `AZURE_TENANT_ID`
+- `GCP_PROJECT_ID`
+- `GITHUB_REPOSITORY`, `GIT_BRANCH`, `GIT_TAG`, `GIT_COMMIT_SHA`
+- `HOSTNAME`, `WORKSPACE`
+
+### Dry-Run Mode
+
+Preview what would be executed:
+
+```bash
+terraflow --dry-run plan
+```
+
+### Show Configuration
+
+View resolved configuration with source tracking:
+
+```bash
+terraflow config show
+```
+
+This shows the final configuration after all merging, with sources (CLI, ENV, FILE, DEFAULT) and masked sensitive values.
+
+## Examples
+
+### AWS with S3 Backend and Secrets Manager
+
+```yaml
+# .tfwconfig.yml
+backend:
+  type: s3
+  config:
+    bucket: ${AWS_REGION}-${AWS_ACCOUNT_ID}-terraform-state
+    key: ${GITHUB_REPOSITORY}
+    region: ${AWS_REGION}
+    dynamodb_table: terraform-statelock
+
+secrets:
+  provider: aws-secrets
+  config:
+    secret_name: myapp/terraform-vars
+    region: ${AWS_REGION}
+
+auth:
+  assume_role:
+    role_arn: arn:aws:iam::123456789012:role/TerraformRole
+```
+
+### Azure with AzureRM Backend
+
+```yaml
+# .tfwconfig.yml
+backend:
+  type: azurerm
+  config:
+    storage_account_name: myterraformstate
+    container_name: tfstate
+    key: terraform.tfstate
+    resource_group_name: terraform-rg
+
+auth:
+  service_principal:
+    client_id: ${AZURE_CLIENT_ID}
+    tenant_id: ${AZURE_TENANT_ID}
+    client_secret: ${AZURE_CLIENT_SECRET}
+```
+
+### GCP with GCS Backend
+
+```yaml
+# .tfwconfig.yml
+backend:
+  type: gcs
+  config:
+    bucket: ${GCP_PROJECT_ID}-terraform-state
+    prefix: terraform/state
+
+secrets:
+  provider: gcp-secret-manager
+  config:
+    secret_name: terraform-vars
+    project_id: ${GCP_PROJECT_ID}
+```
+
+## Documentation
+
+- **[Configuration Reference](./docs/configuration.md)** - Complete configuration options and examples
+- **[Plugin Development Guide](./docs/plugins.md)** - How to develop and test plugins
+- **[CI/CD Setup](./docs/ci-cd.md)** - GitHub Actions workflows and secrets
+- **[Examples](./docs/examples/)** - Example configurations for common scenarios
 
 ## Development
 
@@ -54,6 +218,9 @@ npm install
 
 # Run tests
 npm test
+
+# Run tests with coverage
+npm run test:coverage
 
 # Lint code
 npm run lint
@@ -65,14 +232,19 @@ npm run format
 npm run build
 ```
 
-## CI/CD
+## Contributing
 
-This project uses GitHub Actions for CI/CD. See [docs/ci-cd.md](./docs/ci-cd.md) for details on:
-- Required secrets (`NPM_TOKEN`, `CODECOV_TOKEN`)
-- Branch protection rules
-- Workflow configuration
-- Troubleshooting
+We welcome contributions! Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
+
+## Code of Conduct
+
+This project adheres to a Code of Conduct. Please see [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md) for details.
 
 ## License
 
-MIT
+MIT - see [LICENSE](./LICENSE) file for details
+
+## See Also
+
+- [SPECIFICATION.md](./SPECIFICATION.md) - Complete development specification
+- [Terraform Documentation](https://www.terraform.io/docs)

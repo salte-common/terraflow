@@ -1,0 +1,35 @@
+# GCP Example: GCS Backend
+# This example shows a complete GCP setup with Google Cloud Storage backend.
+
+backend:
+  type: gcs
+  config:
+    bucket: ${GCP_PROJECT_ID}-terraform-state
+    prefix: terraform/state
+    project: ${GCP_PROJECT_ID}
+
+secrets:
+  provider: gcp-secret-manager
+  config:
+    secret_name: terraform-vars
+    project_id: ${GCP_PROJECT_ID}
+
+auth:
+  service_account:
+    key_file: /path/to/service-account-key.json
+
+variables:
+  environment: production
+  project_id: ${GCP_PROJECT_ID}
+  region: us-central1
+
+workspace_strategy:
+  - cli
+  - env
+  - tag
+  - branch
+  - hostname
+
+logging:
+  level: info
+

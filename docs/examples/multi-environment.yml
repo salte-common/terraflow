@@ -1,0 +1,49 @@
+# Multi-Environment Example
+# This example shows how to manage multiple environments using workspace strategy
+# and environment-specific variables.
+
+# Use workspace to differentiate environments
+# Workspace is derived from git branch/tag or can be set explicitly
+workspace: development  # Override with --workspace flag or TERRAFLOW_WORKSPACE env var
+
+backend:
+  type: s3
+  config:
+    # Environment-specific state files
+    bucket: ${AWS_REGION}-${AWS_ACCOUNT_ID}-terraform-state
+    key: ${GITHUB_REPOSITORY}/${WORKSPACE}/terraform.tfstate
+    region: ${AWS_REGION}
+    encrypt: true
+    dynamodb_table: terraform-statelock
+
+secrets:
+  provider: aws-secrets
+  config:
+    # Environment-specific secrets
+    secret_name: myapp/${WORKSPACE}/terraform-vars
+    region: ${AWS_REGION}
+
+variables:
+  # Environment-specific variables
+  environment: ${WORKSPACE}
+  instance_count: 2  # Development uses fewer instances
+
+workspace_strategy:
+  - cli
+  - env
+  - tag
+  - branch
+  - hostname
+
+validations:
+  require_git_commit: true
+  # Restrict allowed workspaces per environment
+  allowed_workspaces:
+    - production
+    - staging
+    - development
+    - qa
+
+logging:
+  level: info
+

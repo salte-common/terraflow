@@ -1,0 +1,41 @@
+# Azure Example: AzureRM Backend
+# This example shows a complete Azure setup with Azure Resource Manager backend.
+
+backend:
+  type: azurerm
+  config:
+    storage_account_name: myterraformstate
+    container_name: tfstate
+    key: terraform.tfstate
+    resource_group_name: terraform-rg
+    
+    # Subscription and tenant IDs can use template variables
+    subscription_id: ${AZURE_SUBSCRIPTION_ID}
+    tenant_id: ${AZURE_TENANT_ID}
+
+secrets:
+  provider: azure-keyvault
+  config:
+    vault_name: my-keyvault
+    secret_name: terraform-vars
+
+auth:
+  service_principal:
+    client_id: ${AZURE_CLIENT_ID}
+    tenant_id: ${AZURE_TENANT_ID}
+    client_secret: ${AZURE_CLIENT_SECRET}
+
+variables:
+  environment: production
+  location: eastus
+
+workspace_strategy:
+  - cli
+  - env
+  - tag
+  - branch
+  - hostname
+
+logging:
+  level: info
+

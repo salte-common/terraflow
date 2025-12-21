@@ -1,0 +1,72 @@
+# GitHub Actions Integration Example
+# This example shows how to configure Terraflow for use in GitHub Actions workflows
+
+backend:
+  type: s3
+  config:
+    # Use GitHub Actions environment variables
+    bucket: ${AWS_REGION}-${AWS_ACCOUNT_ID}-terraform-state
+    key: ${GITHUB_REPOSITORY}/${GITHUB_REF_NAME}/terraform.tfstate
+    region: ${AWS_REGION}
+    encrypt: true
+    dynamodb_table: terraform-statelock
+
+secrets:
+  provider: aws-secrets
+  config:
+    # Use GitHub repository name in secret path
+    secret_name: ${GITHUB_REPOSITORY}/terraform-vars
+    region: ${AWS_REGION}
+
+auth:
+  assume_role:
+    # Use OIDC role assumption in GitHub Actions
+    role_arn: arn:aws:iam::${AWS_ACCOUNT_ID}:role/GitHubActionsRole
+    session_name: ${GITHUB_RUN_ID}
+    duration: 3600
+
+variables:
+  # Use GitHub Actions context
+  environment: ${GITHUB_REF_NAME}
+  github_repository: ${GITHUB_REPOSITORY}
+  github_sha: ${GITHUB_SHA}
+
+workspace_strategy:
+  - cli
+  - env
+  - tag
+  - branch
+  - hostname
+
+# In GitHub Actions, skip commit check (CI environment is clean by default)
+validations:
+  require_git_commit: false
+
+logging:
+  level: info
+
+# Example GitHub Actions workflow:
+# name: Terraform
+# on:
+#   push:
+#     branches: [main]
+# jobs:
+#   terraform:
+#     runs-on: ubuntu-latest
+#     permissions:
+#       id-token: write
+#       contents: read
+#     steps:
+#       - uses: actions/checkout@v4
+#       - uses: actions/setup-node@v4
+#         with:
+#           node-version: '20.x'
+#       - run: npm install -g terraflow
+#       - uses: aws-actions/configure-aws-credentials@v4
+#         with:
+#           role-to-assume: arn:aws:iam::123456789012:role/GitHubActionsRole
+#           aws-region: us-east-1
+#       - run: terraflow plan
+#         env:
+#           TERRAFLOW_CONFIG: .github/workflows/.tfwconfig.yml
+
