@@ -3,319 +3,318 @@
     "package.json": {
       "lines_total": 58,
       "lines_ai_generated": 58,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:58:00Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "tsconfig.json": {
       "lines_total": 25,
       "lines_ai_generated": 25,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     ".eslintrc.js": {
       "lines_total": 31,
       "lines_ai_generated": 31,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     ".prettierrc": {
       "lines_total": 11,
       "lines_ai_generated": 11,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     ".eslintignore": {
       "lines_total": 5,
       "lines_ai_generated": 5,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "jest.config.js": {
       "lines_total": 22,
       "lines_ai_generated": 22,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:58:00Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     ".gitignore": {
       "lines_total": 41,
       "lines_ai_generated": 41,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "README.md": {
       "lines_total": 71,
       "lines_ai_generated": 71,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "bin/terraflow.js": {
       "lines_total": 3,
       "lines_ai_generated": 3,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "bin/tf.js": {
       "lines_total": 3,
       "lines_ai_generated": 3,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "src/index.ts": {
       "lines_total": 242,
       "lines_ai_generated": 242,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:58:00Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "src/types/config.ts": {
       "lines_total": 98,
       "lines_ai_generated": 98,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "src/types/context.ts": {
       "lines_total": 61,
       "lines_ai_generated": 61,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "src/types/plugins.ts": {
       "lines_total": 87,
       "lines_ai_generated": 87,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "src/types/index.ts": {
       "lines_total": 7,
       "lines_ai_generated": 7,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "src/core/config.ts": {
       "lines_total": 358,
       "lines_ai_generated": 358,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:58:00Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "src/core/context.ts": {
-      "lines_total": 219,
-      "lines_ai_generated": 219,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T02:06:59Z",
+      "lines_total": 216,
+      "lines_ai_generated": 216,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "src/core/environment.ts": {
       "lines_total": 30,
       "lines_ai_generated": 30,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "src/core/terraform.ts": {
       "lines_total": 29,
       "lines_ai_generated": 29,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "src/core/validator.ts": {
       "lines_total": 29,
       "lines_ai_generated": 29,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "src/commands/base.ts": {
       "lines_total": 10,
       "lines_ai_generated": 10,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "src/commands/plan.ts": {
       "lines_total": 10,
       "lines_ai_generated": 10,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "src/commands/apply.ts": {
       "lines_total": 10,
       "lines_ai_generated": 10,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "src/commands/destroy.ts": {
       "lines_total": 10,
       "lines_ai_generated": 10,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "src/commands/config.ts": {
       "lines_total": 10,
       "lines_ai_generated": 10,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "src/plugins/backends/local.ts": {
       "lines_total": 22,
       "lines_ai_generated": 22,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "src/plugins/backends/s3.ts": {
       "lines_total": 22,
       "lines_ai_generated": 22,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "src/plugins/backends/azurerm.ts": {
       "lines_total": 22,
       "lines_ai_generated": 22,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "src/plugins/backends/gcs.ts": {
       "lines_total": 22,
       "lines_ai_generated": 22,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "src/plugins/secrets/env.ts": {
       "lines_total": 22,
       "lines_ai_generated": 22,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "src/plugins/secrets/aws-secrets.ts": {
       "lines_total": 22,
       "lines_ai_generated": 22,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "src/plugins/secrets/azure-keyvault.ts": {
       "lines_total": 22,
       "lines_ai_generated": 22,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "src/plugins/secrets/gcp-secret-manager.ts": {
       "lines_total": 22,
       "lines_ai_generated": 22,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "src/plugins/auth/aws-assume-role.ts": {
       "lines_total": 22,
       "lines_ai_generated": 22,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "src/plugins/auth/azure-service-principal.ts": {
       "lines_total": 22,
       "lines_ai_generated": 22,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "src/plugins/auth/gcp-service-account.ts": {
       "lines_total": 22,
       "lines_ai_generated": 22,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "src/utils/git.ts": {
       "lines_total": 272,
       "lines_ai_generated": 272,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T02:07:00Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "src/utils/cloud.ts": {
       "lines_total": 36,
       "lines_ai_generated": 36,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "src/utils/templates.ts": {
       "lines_total": 28,
       "lines_ai_generated": 28,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "src/utils/logger.ts": {
-      "lines_total": 129,
+      "lines_total": 132,
       "lines_ai_generated": 129,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:58:00Z",
+      "ai_percentage": 97.73,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "tests/unit/example.test.ts": {
       "lines_total": 11,
       "lines_ai_generated": 11,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "tests/unit/config.test.ts": {
       "lines_total": 222,
       "lines_ai_generated": 222,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:58:00Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "tests/mocks/chalk.ts": {
       "lines_total": 8,
       "lines_ai_generated": 8,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:58:00Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "tests/unit/git.test.ts": {
       "lines_total": 296,
       "lines_ai_generated": 296,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T02:07:00Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "tests/integration/workspace-derivation.test.ts": {
       "lines_total": 276,
       "lines_ai_generated": 276,
-      "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T02:07:00Z",
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     }
   },
   "metadata_version": "1.0"
 }
-
