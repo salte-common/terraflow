@@ -14,6 +14,9 @@ module.exports = {
   transform: {
     '^.+\\.ts$': 'ts-jest',
   },
+  moduleNameMapper: {
+    '^chalk$': '<rootDir>/tests/mocks/chalk.ts',
+  },
   verbose: true,
 };
 

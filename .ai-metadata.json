@@ -1,10 +1,10 @@
 {
   "files": {
     "package.json": {
-      "lines_total": 59,
-      "lines_ai_generated": 59,
+      "lines_total": 58,
+      "lines_ai_generated": 58,
       "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "last_updated": "2025-12-21T01:58:00Z",
       "tool": "cursor"
     },
     "tsconfig.json": {
@@ -36,10 +36,10 @@
       "tool": "cursor"
     },
     "jest.config.js": {
-      "lines_total": 19,
-      "lines_ai_generated": 19,
+      "lines_total": 22,
+      "lines_ai_generated": 22,
       "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "last_updated": "2025-12-21T01:58:00Z",
       "tool": "cursor"
     },
     ".gitignore": {
@@ -71,10 +71,10 @@
       "tool": "cursor"
     },
     "src/index.ts": {
-      "lines_total": 9,
-      "lines_ai_generated": 9,
+      "lines_total": 242,
+      "lines_ai_generated": 242,
       "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "last_updated": "2025-12-21T01:58:00Z",
       "tool": "cursor"
     },
     "src/types/config.ts": {
@@ -106,17 +106,17 @@
       "tool": "cursor"
     },
     "src/core/config.ts": {
-      "lines_total": 18,
-      "lines_ai_generated": 18,
+      "lines_total": 358,
+      "lines_ai_generated": 358,
       "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "last_updated": "2025-12-21T01:58:00Z",
       "tool": "cursor"
     },
     "src/core/context.ts": {
-      "lines_total": 18,
-      "lines_ai_generated": 18,
+      "lines_total": 143,
+      "lines_ai_generated": 143,
       "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "last_updated": "2025-12-21T01:58:00Z",
       "tool": "cursor"
     },
     "src/core/environment.ts": {
@@ -274,10 +274,10 @@
       "tool": "cursor"
     },
     "src/utils/logger.ts": {
-      "lines_total": 42,
-      "lines_ai_generated": 42,
+      "lines_total": 129,
+      "lines_ai_generated": 129,
       "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "last_updated": "2025-12-21T01:58:00Z",
       "tool": "cursor"
     },
     "tests/unit/example.test.ts": {
@@ -285,6 +285,20 @@
       "lines_ai_generated": 11,
       "ai_percentage": 100.0,
       "last_updated": "2025-12-21T01:22:52Z",
+      "tool": "cursor"
+    },
+    "tests/unit/config.test.ts": {
+      "lines_total": 222,
+      "lines_ai_generated": 222,
+      "ai_percentage": 100.0,
+      "last_updated": "2025-12-21T01:58:00Z",
+      "tool": "cursor"
+    },
+    "tests/mocks/chalk.ts": {
+      "lines_total": 8,
+      "lines_ai_generated": 8,
+      "ai_percentage": 100.0,
+      "last_updated": "2025-12-21T01:58:00Z",
       "tool": "cursor"
     }
   },
