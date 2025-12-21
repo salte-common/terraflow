@@ -120,10 +120,10 @@
       "tool": "cursor"
     },
     "src/core/environment.ts": {
-      "lines_total": 30,
-      "lines_ai_generated": 30,
+      "lines_total": 229,
+      "lines_ai_generated": 229,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
+      "last_updated": "2025-12-21T02:54:07Z",
       "tool": "cursor"
     },
     "src/core/terraform.ts": {
@@ -267,17 +267,17 @@
       "tool": "cursor"
     },
     "src/utils/cloud.ts": {
-      "lines_total": 36,
-      "lines_ai_generated": 36,
+      "lines_total": 152,
+      "lines_ai_generated": 152,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
+      "last_updated": "2025-12-21T02:51:19Z",
       "tool": "cursor"
     },
     "src/utils/templates.ts": {
-      "lines_total": 28,
-      "lines_ai_generated": 28,
+      "lines_total": 73,
+      "lines_ai_generated": 73,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
+      "last_updated": "2025-12-21T02:51:19Z",
       "tool": "cursor"
     },
     "src/utils/logger.ts": {
@@ -327,6 +327,20 @@
       "lines_ai_generated": 276,
       "ai_percentage": 100,
       "last_updated": "2025-12-21T02:31:12Z",
+      "tool": "cursor"
+    },
+    "tests/unit/templates.test.ts": {
+      "lines_total": 195,
+      "lines_ai_generated": 195,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:54:07Z",
+      "tool": "cursor"
+    },
+    "tests/unit/environment.test.ts": {
+      "lines_total": 411,
+      "lines_ai_generated": 411,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:54:07Z",
       "tool": "cursor"
     }
   },
