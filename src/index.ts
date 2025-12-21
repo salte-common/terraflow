@@ -11,6 +11,7 @@ import { join } from 'path';
 import { ConfigManager, type CliOptions } from './core/config';
 import { ContextBuilder } from './core/context';
 import { TerraformExecutor } from './core/terraform';
+import { ConfigCommand } from './commands/config';
 import { Logger } from './utils/logger';
 
 const program = new Command();
@@ -59,35 +60,29 @@ async function main(): Promise<void> {
 
   configCommand
     .command('show')
-    .description('Show resolved configuration')
+    .description('Show resolved configuration with source tracking and masked sensitive values')
     .action(async () => {
       try {
-        const cliOptions = program.opts<CliOptions>();
-        const config = await ConfigManager.load(cliOptions);
-        console.log(JSON.stringify(config, null, 2));
+        const opts = program.opts<CliOptions>();
+        await ConfigCommand.show(opts);
       } catch (error) {
-        Logger.error(
-          `Failed to show configuration: ${error instanceof Error ? error.message : String(error)}`
-        );
         process.exit(1);
       }
     });
 
   configCommand
     .command('init')
-    .description('Generate skeleton config file')
-    .option('-o, --output <file>', 'Output file path (default: .tfwconfig.yml)')
+    .description(
+      'Generate skeleton config file with examples for all backend types, secrets providers, and auth configurations'
+    )
+    .option(
+      '-o, --output <file>',
+      'Output file path (default: .tfwconfig.yml in working directory)'
+    )
     .action(async (options: { output?: string }) => {
       try {
-        const outputPath = options.output || '.tfwconfig.yml';
-        const skeleton = generateConfigSkeleton();
-        const { writeFileSync } = await import('fs');
-        writeFileSync(outputPath, skeleton, 'utf8');
-        Logger.success(`Configuration skeleton created at ${outputPath}`);
+        await ConfigCommand.init(options.output);
       } catch (error) {
-        Logger.error(
-          `Failed to create config file: ${error instanceof Error ? error.message : String(error)}`
-        );
         process.exit(1);
       }
     });
@@ -170,70 +165,6 @@ async function main(): Promise<void> {
     Logger.error(`Execution failed: ${error instanceof Error ? error.message : String(error)}`);
     process.exit(1);
   }
-}
-
-/**
- * Generate skeleton configuration file
- * @returns YAML configuration skeleton
- */
-function generateConfigSkeleton(): string {
-  return `# Terraflow Configuration
-# See SPECIFICATION.md for complete documentation
-
-# Global settings
-workspace: development
-working-dir: ./terraform
-skip-commit-check: false
-
-# Backend configuration
-backend:
-  type: local  # local | s3 | azurerm | gcs
-  config:
-    # S3-specific example
-    # bucket: \${AWS_REGION}-\${AWS_ACCOUNT_ID}-terraform-state
-    # key: \${GITHUB_REPOSITORY}
-    # region: \${AWS_REGION}
-    # dynamodb_table: terraform-statelock
-    # encrypt: true
-
-# Secrets management
-secrets:
-  provider: env  # env | aws-secrets | azure-keyvault | gcp-secret-manager
-  config:
-    # Provider-specific configuration
-
-# Authentication
-auth:
-  # AWS assume role example
-  # assume_role:
-  #   role_arn: arn:aws:iam::123456789:role/TerraformRole
-  #   session_name: terraflow-session
-  #   duration: 3600
-
-# Terraform variables
-variables:
-  # environment: production
-  # instance_count: 3
-
-# Workspace derivation strategy
-workspace_strategy:
-  - cli
-  - env
-  - tag
-  - branch
-  - hostname
-
-# Validations
-validations:
-  require_git_commit: true
-  allowed_workspaces: []  # Empty = allow all
-
-# Logging
-logging:
-  level: info  # error | warn | info | debug
-  terraform_log: false
-  terraform_log_level: TRACE
-`;
 }
 
 // Run main

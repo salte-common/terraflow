@@ -1,0 +1,172 @@
+# Terraflow Configuration File
+# This file defines your Terraflow configuration
+# See https://github.com/your-org/terraflow for full documentation
+
+# Global Settings
+# ===============
+
+# Workspace name (optional - will be derived if not specified)
+# Priority: CLI > ENV > Tag > Branch > Hostname
+workspace: development
+
+# Terraform working directory (default: ./terraform)
+# This is where your Terraform files (.tf) should be located
+working-dir: ./terraform
+
+# Skip git commit check for destructive operations
+# Set to true to skip validation that requires a clean git working directory
+skip-commit-check: false
+
+# Backend Configuration
+# ====================
+# Terraform backend for state storage
+# Options: local | s3 | azurerm | gcs
+
+backend:
+  # Backend type
+  type: local
+
+  # Backend-specific configuration
+  config:
+    # Local backend (no additional config needed)
+    # State is stored in terraform.tfstate in the working directory
+
+    # S3 Backend Example:
+    # type: s3
+    # config:
+    #   bucket: my-terraform-state-bucket
+    #   key: terraform.tfstate
+    #   region: us-east-1
+    #   encrypt: true  # Always recommended
+    #   dynamodb_table: terraform-statelock  # For state locking
+    #   kms_key_id: arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012  # Optional: KMS encryption
+
+    # Azure RM Backend Example:
+    # type: azurerm
+    # config:
+    #   resource_group_name: terraform-state-rg
+    #   storage_account_name: terraformstate
+    #   container_name: terraform-state
+    #   key: terraform.tfstate
+
+    # GCS Backend Example:
+    # type: gcs
+    # config:
+    #   bucket: terraform-state-bucket
+    #   prefix: terraform/state
+    #   credentials: /path/to/service-account-key.json  # Optional: path to service account key
+
+# Secrets Management
+# ==================
+# Secrets provider for retrieving Terraform variables
+# Options: env | aws-secrets | azure-keyvault | gcp-secret-manager
+
+# secrets:
+#   # Secrets provider type
+#   provider: env
+#
+#   # Provider-specific configuration
+#   config:
+#     # Environment secrets (no additional config needed)
+#     # Secrets are loaded from .env file or existing environment variables
+#     # Use TF_VAR_* prefix in .env file for Terraform variables
+#
+#     # AWS Secrets Manager Example:
+#     # provider: aws-secrets
+#     # config:
+#     #   secret_name: myapp/terraform-vars
+#     #   region: us-east-1  # Optional: uses AWS_REGION if not specified
+#
+#     # Azure Key Vault Example:
+#     # provider: azure-keyvault
+#     # config:
+#     #   vault_name: my-keyvault
+#     #   secret_name: terraform-vars
+#
+#     # GCP Secret Manager Example:
+#     # provider: gcp-secret-manager
+#     # config:
+#     #   project_id: my-gcp-project
+#     #   secret_id: terraform-vars
+
+# Authentication
+# ==============
+# Cloud provider authentication configuration
+# Used to assume roles or authenticate with cloud providers
+
+# auth:
+#   # AWS Assume Role Example:
+#   # assume_role:
+#   #   role_arn: arn:aws:iam::123456789012:role/terraform-role
+#   #   session_name: terraflow-session  # Optional: default is "terraflow-session"
+#   #   duration: 3600  # Optional: session duration in seconds (default: 3600)
+#
+#   # Azure Service Principal Example:
+#   # service_principal:
+#   #   client_id: your-client-id
+#   #   tenant_id: your-tenant-id
+#   #   client_secret: your-client-secret  # Optional: can use Azure CLI or managed identity
+#
+#   # GCP Service Account Example:
+#   # service_account:
+#   #   key_file: /path/to/service-account-key.json
+
+# Terraform Variables
+# ===================
+# Variables passed to Terraform as TF_VAR_* environment variables
+# These are converted automatically - no TF_VAR_ prefix needed in config
+
+# variables:
+#   environment: development
+#   region: us-east-1
+#   instance_count: 3
+
+# Workspace Derivation Strategy
+# =============================
+# Order of precedence for workspace name resolution
+# Default: [cli, env, tag, branch, hostname]
+
+# workspace_strategy:
+#   - cli      # Command-line --workspace flag
+#   - env      # TERRAFLOW_WORKSPACE environment variable
+#   - tag      # Git tag (if on a tag)
+#   - branch   # Git branch (if not ephemeral)
+#   - hostname # System hostname (fallback)
+
+# Validation Configuration
+# ========================
+# Validation rules for Terraform operations
+
+# validations:
+#   # Require git commit before apply/destroy
+#   require_git_commit: true
+#
+#   # List of allowed workspace names (empty = allow all)
+#   allowed_workspaces:
+#     - development
+#     - staging
+#     - production
+
+# Logging Configuration
+# =====================
+# Control logging behavior
+
+# logging:
+#   # Log level: error | warn | info | debug
+#   level: info
+#
+#   # Enable Terraform log output
+#   terraform_log: false
+#
+#   # Terraform log level: TRACE | DEBUG | INFO | WARN | ERROR
+#   terraform_log_level: TRACE
+
+# Template Variables
+# ==================
+# Configuration values support template variables using ${VAR} syntax
+# Available variables:
+#   - Environment variables (e.g., ${AWS_REGION})
+#   - Cloud provider info (e.g., ${AWS_ACCOUNT_ID}, ${AZURE_SUBSCRIPTION_ID}, ${GCP_PROJECT_ID})
+#   - VCS info (e.g., ${GITHUB_REPOSITORY}, ${GIT_BRANCH}, ${GIT_COMMIT_SHA})
+# Example:
+#   bucket: ${AWS_REGION}-${AWS_ACCOUNT_ID}-terraform-state

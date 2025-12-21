@@ -183,10 +183,10 @@
       "tool": "cursor"
     },
     "src/commands/config.ts": {
-      "lines_total": 10,
-      "lines_ai_generated": 10,
+      "lines_total": 367,
+      "lines_ai_generated": 367,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
+      "last_updated": "2025-12-21T04:15:28Z",
       "tool": "cursor"
     },
     "src/plugins/backends/local.ts": {
@@ -432,6 +432,13 @@
       "lines_ai_generated": 536,
       "ai_percentage": 100,
       "last_updated": "2025-12-21T04:08:18Z",
+      "tool": "cursor"
+    },
+    "tests/unit/config-command.test.ts": {
+      "lines_total": 293,
+      "lines_ai_generated": 293,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T04:15:28Z",
       "tool": "cursor"
     }
   },
