@@ -629,6 +629,48 @@
       "ai_percentage": 100,
       "last_updated": "2025-12-21T04:51:29Z",
       "tool": "cursor"
+    },
+    "CHANGELOG.md": {
+      "lines_total": 167,
+      "lines_ai_generated": 167,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T05:00:00Z",
+      "tool": "cursor"
+    },
+    "LICENSE": {
+      "lines_total": 21,
+      "lines_ai_generated": 21,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T05:00:00Z",
+      "tool": "cursor"
+    },
+    ".npmignore": {
+      "lines_total": 48,
+      "lines_ai_generated": 48,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T05:00:00Z",
+      "tool": "cursor"
+    },
+    "STANDARDS_COMPLIANCE.md": {
+      "lines_total": 80,
+      "lines_ai_generated": 80,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T05:00:00Z",
+      "tool": "cursor"
+    },
+    "docs/examples/README.md": {
+      "lines_total": 39,
+      "lines_ai_generated": 39,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T05:00:00Z",
+      "tool": "cursor"
+    },
+    "docs/RELEASE.md": {
+      "lines_total": 66,
+      "lines_ai_generated": 66,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T05:00:00Z",
+      "tool": "cursor"
     }
   },
   "metadata_version": "1.0"

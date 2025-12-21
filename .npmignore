@@ -1,0 +1,46 @@
+# Source files
+src/
+tsconfig.json
+jest.config.js
+
+# Tests
+tests/
+coverage/
+
+# Development files
+*.test.ts
+*.spec.ts
+.eslintrc.js
+.eslintignore
+.prettierrc
+.github/
+.copilot-instructions.md
+
+# Documentation (keep README.md and LICENSE)
+docs/
+SPECIFICATION.md
+CONTRIBUTING.md
+CODE_OF_CONDUCT.md
+CHANGELOG.md
+
+# Example config (not needed in package)
+.tfwconfig.yml
+
+# Build artifacts that shouldn't be in package
+*.map
+*.tsbuildinfo
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Misc
+.ai-metadata.json
+

@@ -195,12 +195,31 @@ describe('gcpSecretManager', () => {
         },
       };
 
-      // Mock gcloud config get-value project
-      mockExecSync
-        .mockReturnValueOnce(Buffer.from('detected-project-id'))
-        .mockReturnValueOnce(Buffer.from('secret-value'));
+      // Mock gcloud config get-value project to return a project ID
+      // The mock needs to handle the execSync call inside getSecrets
+      // First call: gcloud config get-value project (detects project ID)
+      // Second call: gcloud secrets versions access (fetches secret)
+      const mockProjectId = 'detected-project-id';
+      const mockSecretValue = '{"key": "value"}';
+      
+      mockExecSync.mockImplementation((command: string, options?: any) => {
+        if (command.includes('gcloud config get-value project')) {
+          // Return string when encoding is specified, Buffer otherwise
+          return options?.encoding === 'utf8' ? `${mockProjectId}\n` : Buffer.from(`${mockProjectId}\n`);
+        }
+        if (command.includes('gcloud secrets versions access')) {
+          return options?.encoding === 'utf8' ? mockSecretValue : Buffer.from(mockSecretValue);
+        }
+        throw new Error(`Unexpected command: ${command}`);
+      });
 
-      await gcpSecretManager.getSecrets(config, contextWithoutProject);
+      const result = await gcpSecretManager.getSecrets(config, contextWithoutProject);
+      
+      expect(result).toHaveProperty('TF_VAR_key', 'value');
+      expect(mockExecSync).toHaveBeenCalledWith(
+        'gcloud config get-value project',
+        expect.anything()
+      );
 
       expect(mockExecSync).toHaveBeenCalledTimes(2);
       expect(mockExecSync).toHaveBeenNthCalledWith(

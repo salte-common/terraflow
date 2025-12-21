@@ -107,10 +107,8 @@ describe('azureServicePrincipal', () => {
         },
       };
 
-      // Empty tenant_id will fail validation
-      await expect(azureServicePrincipal.validate(config)).resolves.not.toThrow();
-      // But authenticate will fail
-      await expect(azureServicePrincipal.authenticate(config, mockContext)).rejects.toThrow();
+      // Empty tenant_id should fail validation
+      await expect(azureServicePrincipal.validate(config)).rejects.toThrow(ConfigError);
     });
 
     it('should throw if client_secret is empty string', async () => {
