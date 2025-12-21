@@ -65,7 +65,14 @@ npm run format
 npm run build
 ```
 
+## CI/CD
+
+This project uses GitHub Actions for CI/CD. See [docs/ci-cd.md](./docs/ci-cd.md) for details on:
+- Required secrets (`NPM_TOKEN`, `CODECOV_TOKEN`)
+- Branch protection rules
+- Workflow configuration
+- Troubleshooting
+
 ## License
 
 MIT
-
