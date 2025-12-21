@@ -10,8 +10,7 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import { ConfigManager, type CliOptions } from './core/config';
 import { ContextBuilder } from './core/context';
-import { Validator } from './core/validator';
-import { ValidationError } from './core/errors';
+import { TerraformExecutor } from './core/terraform';
 import { Logger } from './utils/logger';
 
 const program = new Command();
@@ -155,57 +154,22 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
-  // Extract terraform command (first argument)
-  const terraformCommand = terraformArgs[0] || '';
+  // Validations are now run inside TerraformExecutor.execute()
+  // along with environment setup and plugin execution
 
-  // Run validations
+  // Execute terraform command
   try {
-    const validationResult = await Validator.validate(terraformCommand, config, context, {
+    const terraformCommand = terraformArgs[0] || '';
+    const terraformCommandArgs = terraformArgs.slice(1);
+
+    await TerraformExecutor.execute(terraformCommand, terraformCommandArgs, config, context, {
       skipCommitCheck: opts.skipCommitCheck || config['skip-commit-check'] || false,
       dryRun: opts.dryRun || false,
     });
-
-    if (!validationResult.passed) {
-      Logger.error('Validation failed:');
-      for (const error of validationResult.errors) {
-        Logger.error(`  - ${error}`);
-      }
-      if (validationResult.warnings.length > 0) {
-        Logger.warn('Warnings:');
-        for (const warning of validationResult.warnings) {
-          Logger.warn(`  - ${warning}`);
-        }
-      }
-      process.exit(1);
-    }
-
-    if (validationResult.warnings.length > 0) {
-      for (const warning of validationResult.warnings) {
-        Logger.warn(warning);
-      }
-    }
   } catch (error) {
-    if (error instanceof ValidationError) {
-      Logger.error(`Validation error: ${error.message}`);
-    } else {
-      Logger.error(`Validation failed: ${error instanceof Error ? error.message : String(error)}`);
-    }
+    Logger.error(`Execution failed: ${error instanceof Error ? error.message : String(error)}`);
     process.exit(1);
   }
-
-  // If dry-run, show what would be executed
-  if (opts.dryRun) {
-    Logger.info('🔍 DRY RUN MODE - Terraform command will not be executed');
-    Logger.info(`Workspace:        ${context.workspace}`);
-    Logger.info(`Working dir:      ${context.workingDir}`);
-    Logger.info(`Backend:          ${config.backend?.type || 'local'}`);
-    Logger.info(`Terraform args:   ${terraformArgs.join(' ')}`);
-    return;
-  }
-
-  // TODO: Execute terraform command
-  Logger.info(`🚀 Executing: terraform ${terraformArgs.join(' ')}`);
-  Logger.warn('Terraform execution not yet implemented');
 }
 
 /**

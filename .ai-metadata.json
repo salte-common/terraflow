@@ -71,10 +71,10 @@
       "tool": "cursor"
     },
     "src/index.ts": {
-      "lines_total": 282,
-      "lines_ai_generated": 282,
+      "lines_total": 246,
+      "lines_ai_generated": 246,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:47:26Z",
+      "last_updated": "2025-12-21T04:08:18Z",
       "tool": "cursor"
     },
     "src/types/config.ts": {
@@ -127,10 +127,17 @@
       "tool": "cursor"
     },
     "src/core/terraform.ts": {
-      "lines_total": 104,
-      "lines_ai_generated": 104,
+      "lines_total": 284,
+      "lines_ai_generated": 284,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T03:03:15Z",
+      "last_updated": "2025-12-21T04:08:18Z",
+      "tool": "cursor"
+    },
+    "src/core/plugin-loader.ts": {
+      "lines_total": 127,
+      "lines_ai_generated": 127,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T04:08:18Z",
       "tool": "cursor"
     },
     "src/core/errors.ts": {
@@ -418,6 +425,13 @@
       "lines_ai_generated": 236,
       "ai_percentage": 100,
       "last_updated": "2025-12-21T03:23:50Z",
+      "tool": "cursor"
+    },
+    "tests/integration/terraform-executor.test.ts": {
+      "lines_total": 536,
+      "lines_ai_generated": 536,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T04:08:18Z",
       "tool": "cursor"
     }
   },
