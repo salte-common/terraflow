@@ -468,6 +468,62 @@
       "ai_percentage": 100,
       "last_updated": "2025-12-21T04:21:27Z",
       "tool": "cursor"
+    },
+    "src/plugins/secrets/azure-keyvault.ts": {
+      "lines_total": 232,
+      "lines_ai_generated": 232,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T04:36:58Z",
+      "tool": "cursor"
+    },
+    "src/plugins/secrets/gcp-secret-manager.ts": {
+      "lines_total": 201,
+      "lines_ai_generated": 201,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T04:36:58Z",
+      "tool": "cursor"
+    },
+    "src/plugins/auth/azure-service-principal.ts": {
+      "lines_total": 120,
+      "lines_ai_generated": 120,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T04:36:58Z",
+      "tool": "cursor"
+    },
+    "src/plugins/auth/gcp-service-account.ts": {
+      "lines_total": 140,
+      "lines_ai_generated": 140,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T04:36:58Z",
+      "tool": "cursor"
+    },
+    "tests/unit/azure-keyvault.test.ts": {
+      "lines_total": 270,
+      "lines_ai_generated": 270,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T04:36:58Z",
+      "tool": "cursor"
+    },
+    "tests/unit/gcp-secret-manager.test.ts": {
+      "lines_total": 348,
+      "lines_ai_generated": 348,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T04:36:58Z",
+      "tool": "cursor"
+    },
+    "tests/unit/azure-service-principal.test.ts": {
+      "lines_total": 234,
+      "lines_ai_generated": 234,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T04:36:58Z",
+      "tool": "cursor"
+    },
+    "tests/unit/gcp-service-account.test.ts": {
+      "lines_total": 332,
+      "lines_ai_generated": 332,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T04:36:58Z",
+      "tool": "cursor"
     }
   },
   "metadata_version": "1.0"
