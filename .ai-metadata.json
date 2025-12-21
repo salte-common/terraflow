@@ -113,10 +113,10 @@
       "tool": "cursor"
     },
     "src/core/context.ts": {
-      "lines_total": 143,
-      "lines_ai_generated": 143,
+      "lines_total": 219,
+      "lines_ai_generated": 219,
       "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:58:00Z",
+      "last_updated": "2025-12-21T02:06:59Z",
       "tool": "cursor"
     },
     "src/core/environment.ts": {
@@ -253,10 +253,10 @@
       "tool": "cursor"
     },
     "src/utils/git.ts": {
-      "lines_total": 48,
-      "lines_ai_generated": 48,
+      "lines_total": 272,
+      "lines_ai_generated": 272,
       "ai_percentage": 100.0,
-      "last_updated": "2025-12-21T01:22:52Z",
+      "last_updated": "2025-12-21T02:07:00Z",
       "tool": "cursor"
     },
     "src/utils/cloud.ts": {
@@ -299,6 +299,20 @@
       "lines_ai_generated": 8,
       "ai_percentage": 100.0,
       "last_updated": "2025-12-21T01:58:00Z",
+      "tool": "cursor"
+    },
+    "tests/unit/git.test.ts": {
+      "lines_total": 296,
+      "lines_ai_generated": 296,
+      "ai_percentage": 100.0,
+      "last_updated": "2025-12-21T02:07:00Z",
+      "tool": "cursor"
+    },
+    "tests/integration/workspace-derivation.test.ts": {
+      "lines_total": 276,
+      "lines_ai_generated": 276,
+      "ai_percentage": 100.0,
+      "last_updated": "2025-12-21T02:07:00Z",
       "tool": "cursor"
     }
   },

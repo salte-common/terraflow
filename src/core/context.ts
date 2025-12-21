@@ -7,6 +7,7 @@ import os from 'os';
 import type { ExecutionContext, CloudInfo, VcsInfo } from '../types/context';
 import type { TerraflowConfig } from '../types/config';
 import { ConfigManager } from './config';
+import { GitUtils } from '../utils/git';
 
 /**
  * Execution context builder for Terraflow
@@ -23,11 +24,11 @@ export class ContextBuilder {
     config: TerraflowConfig,
     cwd: string = process.cwd()
   ): Promise<ExecutionContext> {
-    const workspace = ConfigManager.getWorkspace(config) || 'default';
+    const workspace = await ContextBuilder.deriveWorkspace(config, cwd);
     const workingDir = ConfigManager.getWorkingDir(config, cwd);
 
     const cloud = await ContextBuilder.buildCloudInfo();
-    const vcs = await ContextBuilder.buildVcsInfo();
+    const vcs = await ContextBuilder.buildVcsInfo(cwd);
     const hostname = os.hostname();
 
     // Build template variables from environment and context
@@ -56,6 +57,59 @@ export class ContextBuilder {
   }
 
   /**
+   * Derive workspace name following priority strategy:
+   * 1. CLI parameter (--workspace)
+   * 2. Environment variable (TERRAFLOW_WORKSPACE)
+   * 3. Git tag (if on a tag)
+   * 4. Git branch (if not ephemeral)
+   * 5. Hostname
+   * @param config - Terraflow configuration
+   * @param cwd - Current working directory
+   * @returns Derived workspace name
+   */
+  private static async deriveWorkspace(config: TerraflowConfig, cwd: string): Promise<string> {
+    // 1. CLI parameter (highest priority) - already in config via ConfigManager
+    const cliWorkspace = ConfigManager.getWorkspace(config);
+    if (cliWorkspace) {
+      return GitUtils.sanitizeWorkspaceName(cliWorkspace);
+    }
+
+    // 2. Environment variable
+    const envWorkspace = process.env.TERRAFLOW_WORKSPACE;
+    if (envWorkspace) {
+      return GitUtils.sanitizeWorkspaceName(envWorkspace);
+    }
+
+    // Check if workspace_strategy is specified in config
+    const strategy = config.workspace_strategy || ['cli', 'env', 'tag', 'branch', 'hostname'];
+
+    // 3. Git tag (if on a tag)
+    if (strategy.includes('tag')) {
+      const tag = await GitUtils.getTag(cwd);
+      if (tag) {
+        return GitUtils.sanitizeWorkspaceName(tag);
+      }
+    }
+
+    // 4. Git branch (if not ephemeral)
+    if (strategy.includes('branch')) {
+      const branch = await GitUtils.getBranch(cwd);
+      if (branch && !GitUtils.isEphemeralBranch(branch)) {
+        return GitUtils.sanitizeWorkspaceName(branch);
+      }
+    }
+
+    // 5. Hostname (fallback)
+    if (strategy.includes('hostname')) {
+      const hostname = os.hostname();
+      return GitUtils.sanitizeWorkspaceName(hostname);
+    }
+
+    // Final fallback
+    return 'default';
+  }
+
+  /**
    * Build cloud provider information
    * @returns Cloud information
    */
@@ -69,12 +123,31 @@ export class ContextBuilder {
 
   /**
    * Build VCS information
+   * @param cwd - Current working directory
    * @returns VCS information
    */
-  private static async buildVcsInfo(): Promise<VcsInfo> {
-    // TODO: Implement git integration
-    // For now, return empty VCS info
-    return {};
+  private static async buildVcsInfo(cwd: string = process.cwd()): Promise<VcsInfo> {
+    if (!GitUtils.isGitRepository(cwd)) {
+      return {};
+    }
+
+    const branch = await GitUtils.getBranch(cwd);
+    const tag = await GitUtils.getTag(cwd);
+    const commitSha = await GitUtils.getCommitSha(cwd);
+    const shortSha = commitSha ? commitSha.substring(0, 7) : await GitUtils.getShortSha(cwd);
+    const isClean = await GitUtils.isClean(cwd);
+    const githubRepository = await GitUtils.getGithubRepository(cwd);
+    const gitlabProjectPath = await GitUtils.getGitlabProjectPath(cwd);
+
+    return {
+      branch,
+      tag,
+      commitSha,
+      shortSha,
+      isClean,
+      githubRepository,
+      gitlabProjectPath,
+    };
   }
 
   /**
@@ -129,7 +202,7 @@ export class ContextBuilder {
     }
     if (vcs.commitSha) {
       vars.GIT_COMMIT_SHA = vcs.commitSha;
-      vars.GIT_SHORT_SHA = vcs.commitSha.substring(0, 7);
+      vars.GIT_SHORT_SHA = vcs.shortSha || vcs.commitSha.substring(0, 7);
     }
     if (vcs.githubRepository) {
       vars.GITHUB_REPOSITORY = vcs.githubRepository;

@@ -59,7 +59,10 @@ export class Logger {
    * @param colorName - Color name (red, yellow, blue, green, gray)
    * @returns Formatted message
    */
-  private static format(message: string, colorName: 'red' | 'yellow' | 'blue' | 'green' | 'gray'): string {
+  private static format(
+    message: string,
+    colorName: 'red' | 'yellow' | 'blue' | 'green' | 'gray'
+  ): string {
     if (!Logger.colorEnabled) {
       return message;
     }
