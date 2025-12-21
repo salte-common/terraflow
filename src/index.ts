@@ -10,6 +10,8 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import { ConfigManager, type CliOptions } from './core/config';
 import { ContextBuilder } from './core/context';
+import { Validator } from './core/validator';
+import { ValidationError } from './core/errors';
 import { Logger } from './utils/logger';
 
 const program = new Command();
@@ -150,6 +152,44 @@ async function main(): Promise<void> {
     Logger.error(
       `Failed to build execution context: ${error instanceof Error ? error.message : String(error)}`
     );
+    process.exit(1);
+  }
+
+  // Extract terraform command (first argument)
+  const terraformCommand = terraformArgs[0] || '';
+
+  // Run validations
+  try {
+    const validationResult = await Validator.validate(terraformCommand, config, context, {
+      skipCommitCheck: opts.skipCommitCheck || config['skip-commit-check'] || false,
+      dryRun: opts.dryRun || false,
+    });
+
+    if (!validationResult.passed) {
+      Logger.error('Validation failed:');
+      for (const error of validationResult.errors) {
+        Logger.error(`  - ${error}`);
+      }
+      if (validationResult.warnings.length > 0) {
+        Logger.warn('Warnings:');
+        for (const warning of validationResult.warnings) {
+          Logger.warn(`  - ${warning}`);
+        }
+      }
+      process.exit(1);
+    }
+
+    if (validationResult.warnings.length > 0) {
+      for (const warning of validationResult.warnings) {
+        Logger.warn(warning);
+      }
+    }
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      Logger.error(`Validation error: ${error.message}`);
+    } else {
+      Logger.error(`Validation failed: ${error instanceof Error ? error.message : String(error)}`);
+    }
     process.exit(1);
   }
 

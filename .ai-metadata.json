@@ -71,10 +71,10 @@
       "tool": "cursor"
     },
     "src/index.ts": {
-      "lines_total": 242,
-      "lines_ai_generated": 242,
+      "lines_total": 282,
+      "lines_ai_generated": 282,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
+      "last_updated": "2025-12-21T02:47:26Z",
       "tool": "cursor"
     },
     "src/types/config.ts": {
@@ -133,11 +133,18 @@
       "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
-    "src/core/validator.ts": {
-      "lines_total": 29,
-      "lines_ai_generated": 29,
+    "src/core/errors.ts": {
+      "lines_total": 33,
+      "lines_ai_generated": 33,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
+      "last_updated": "2025-12-21T02:43:54Z",
+      "tool": "cursor"
+    },
+    "src/core/validator.ts": {
+      "lines_total": 366,
+      "lines_ai_generated": 366,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:43:54Z",
       "tool": "cursor"
     },
     "src/commands/base.ts": {
@@ -292,6 +299,13 @@
       "lines_ai_generated": 222,
       "ai_percentage": 100,
       "last_updated": "2025-12-21T02:31:12Z",
+      "tool": "cursor"
+    },
+    "tests/unit/validator.test.ts": {
+      "lines_total": 406,
+      "lines_ai_generated": 406,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T02:43:54Z",
       "tool": "cursor"
     },
     "tests/mocks/chalk.ts": {
