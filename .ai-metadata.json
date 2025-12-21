@@ -190,10 +190,10 @@
       "tool": "cursor"
     },
     "src/plugins/backends/s3.ts": {
-      "lines_total": 22,
-      "lines_ai_generated": 22,
+      "lines_total": 226,
+      "lines_ai_generated": 226,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
+      "last_updated": "2025-12-21T03:08:40Z",
       "tool": "cursor"
     },
     "src/plugins/backends/azurerm.ts": {
@@ -355,6 +355,34 @@
       "lines_ai_generated": 165,
       "ai_percentage": 100,
       "last_updated": "2025-12-21T03:03:15Z",
+      "tool": "cursor"
+    },
+    "src/core/backend-state.ts": {
+      "lines_total": 87,
+      "lines_ai_generated": 87,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T03:08:40Z",
+      "tool": "cursor"
+    },
+    "tests/unit/s3-backend.test.ts": {
+      "lines_total": 249,
+      "lines_ai_generated": 249,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T03:08:40Z",
+      "tool": "cursor"
+    },
+    "tests/unit/backend-state.test.ts": {
+      "lines_total": 137,
+      "lines_ai_generated": 137,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T03:08:40Z",
+      "tool": "cursor"
+    },
+    "tests/integration/s3-backend.test.ts": {
+      "lines_total": 144,
+      "lines_ai_generated": 144,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T03:08:40Z",
       "tool": "cursor"
     }
   },
