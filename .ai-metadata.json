@@ -204,17 +204,17 @@
       "tool": "cursor"
     },
     "src/plugins/backends/azurerm.ts": {
-      "lines_total": 22,
-      "lines_ai_generated": 22,
+      "lines_total": 165,
+      "lines_ai_generated": 165,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
+      "last_updated": "2025-12-21T04:21:27Z",
       "tool": "cursor"
     },
     "src/plugins/backends/gcs.ts": {
-      "lines_total": 22,
-      "lines_ai_generated": 22,
+      "lines_total": 105,
+      "lines_ai_generated": 105,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
+      "last_updated": "2025-12-21T04:21:27Z",
       "tool": "cursor"
     },
     "src/plugins/secrets/env.ts": {
@@ -439,6 +439,34 @@
       "lines_ai_generated": 293,
       "ai_percentage": 100,
       "last_updated": "2025-12-21T04:15:28Z",
+      "tool": "cursor"
+    },
+    "tests/unit/azurerm-backend.test.ts": {
+      "lines_total": 248,
+      "lines_ai_generated": 248,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T04:21:27Z",
+      "tool": "cursor"
+    },
+    "tests/unit/gcs-backend.test.ts": {
+      "lines_total": 236,
+      "lines_ai_generated": 236,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T04:21:27Z",
+      "tool": "cursor"
+    },
+    "tests/integration/azurerm-backend.test.ts": {
+      "lines_total": 199,
+      "lines_ai_generated": 199,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T04:21:27Z",
+      "tool": "cursor"
+    },
+    "tests/integration/gcs-backend.test.ts": {
+      "lines_total": 208,
+      "lines_ai_generated": 208,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T04:21:27Z",
       "tool": "cursor"
     }
   },
