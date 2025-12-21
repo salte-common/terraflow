@@ -218,10 +218,10 @@
       "tool": "cursor"
     },
     "src/plugins/secrets/aws-secrets.ts": {
-      "lines_total": 22,
-      "lines_ai_generated": 22,
+      "lines_total": 168,
+      "lines_ai_generated": 168,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
+      "last_updated": "2025-12-21T03:23:50Z",
       "tool": "cursor"
     },
     "src/plugins/secrets/azure-keyvault.ts": {
@@ -404,6 +404,20 @@
       "lines_ai_generated": 195,
       "ai_percentage": 100,
       "last_updated": "2025-12-21T03:18:48Z",
+      "tool": "cursor"
+    },
+    "tests/unit/aws-secrets.test.ts": {
+      "lines_total": 441,
+      "lines_ai_generated": 441,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T03:23:50Z",
+      "tool": "cursor"
+    },
+    "tests/integration/aws-secrets.test.ts": {
+      "lines_total": 236,
+      "lines_ai_generated": 236,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T03:23:50Z",
       "tool": "cursor"
     }
   },
