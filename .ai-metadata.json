@@ -239,10 +239,10 @@
       "tool": "cursor"
     },
     "src/plugins/auth/aws-assume-role.ts": {
-      "lines_total": 22,
-      "lines_ai_generated": 22,
+      "lines_total": 143,
+      "lines_ai_generated": 143,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
+      "last_updated": "2025-12-21T03:18:48Z",
       "tool": "cursor"
     },
     "src/plugins/auth/azure-service-principal.ts": {
@@ -390,6 +390,20 @@
       "lines_ai_generated": 155,
       "ai_percentage": 100,
       "last_updated": "2025-12-21T03:12:31Z",
+      "tool": "cursor"
+    },
+    "tests/unit/aws-assume-role.test.ts": {
+      "lines_total": 367,
+      "lines_ai_generated": 367,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T03:18:48Z",
+      "tool": "cursor"
+    },
+    "tests/integration/aws-assume-role.test.ts": {
+      "lines_total": 195,
+      "lines_ai_generated": 195,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-21T03:18:48Z",
       "tool": "cursor"
     }
   },
