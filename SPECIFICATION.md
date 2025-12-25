@@ -932,7 +932,3 @@ Follow all standards from https://github.com/salte-common/standards:
 - Deprecate features gracefully with warnings
 - Support migration paths for breaking changes
 - Document all breaking changes in changelog
-
----
-
-This specification should be comprehensive enough for Cursor to implement the entire Terraflow CLI. Let me know if you need any clarifications or additions!
