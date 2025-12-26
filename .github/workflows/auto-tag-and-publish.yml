@@ -156,3 +156,37 @@ jobs:
           npm publish --provenance --access public --tag "$DIST_TAG"
           echo "Published $VERSION with dist-tag: $DIST_TAG"
 
+      - name: Generate changelog
+        id: changelog
+        if: |
+          steps.version-check.outputs.changed == 'true' &&
+          steps.tag-check.outputs.exists == 'false'
+        uses: mikepenz/release-changelog-builder-action@v6
+        with:
+          toTag: ${{ steps.current-version.outputs.version }}
+          ignorePreReleases: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create GitHub Release
+        if: |
+          steps.version-check.outputs.changed == 'true' &&
+          steps.tag-check.outputs.exists == 'false'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.current-version.outputs.version }}
+          body: |
+            ${{ steps.changelog.outputs.changelog }}
+
+            ## Installation
+
+            ```bash
+            npm install -g @salte-common/terraflow@${{ steps.current-version.outputs.version }}
+            ```
+          files: |
+            dist/**/*
+          draft: false
+          prerelease: ${{ contains(steps.current-version.outputs.version, '-') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
