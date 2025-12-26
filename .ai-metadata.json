@@ -504,18 +504,11 @@
       "last_updated": "2025-12-26T02:42:53.786Z",
       "tool": "cursor"
     },
-    ".github/workflows/publish.yml": {
-      "lines_total": 89,
-      "lines_ai_generated": 89,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-26T03:01:44.687Z",
-      "tool": "cursor"
-    },
     ".github/workflows/release.yml": {
-      "lines_total": 60,
-      "lines_ai_generated": 58,
-      "ai_percentage": 96.66666666666667,
-      "last_updated": "2025-12-26T01:42:46.233Z",
+      "lines_total": 69,
+      "lines_ai_generated": 67,
+      "ai_percentage": 97.10144927536231,
+      "last_updated": "2025-12-26T03:42:12.937Z",
       "tool": "cursor"
     },
     "docs/ci-cd.md": {
@@ -651,18 +644,18 @@
       "last_updated": "2025-12-25T21:30:00Z",
       "tool": "cursor"
     },
-    ".github/workflows/auto-tag.yml": {
-      "lines_total": 96,
-      "lines_ai_generated": 96,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-26T03:18:18.524Z",
-      "tool": "cursor"
-    },
     "docs/releasing.md": {
       "lines_total": 248,
       "lines_ai_generated": 248,
       "ai_percentage": 100,
       "last_updated": "2025-12-26T01:42:46.233Z",
+      "tool": "cursor"
+    },
+    ".github/workflows/auto-tag-and-publish.yml": {
+      "lines_total": 151,
+      "lines_ai_generated": 151,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-26T03:42:12.937Z",
       "tool": "cursor"
     }
   },

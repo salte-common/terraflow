@@ -1,9 +1,10 @@
 name: Release
 
 on:
-  push:
-    tags:
-      - '[0-9]+.[0-9]+.[0-9]+*'
+  workflow_run:
+    workflows: ["Auto Tag and Publish"]
+    types: [completed]
+    branches: [main]
 
 permissions:
   contents: write
@@ -12,11 +13,13 @@ jobs:
   release:
     name: Create GitHub Release
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.workflow_run.head_sha }}
           fetch-depth: 0
 
       - name: Setup Node.js
@@ -31,11 +34,18 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Extract version from package.json
+        id: version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Version: $VERSION"
+
       - name: Generate changelog
         id: changelog
         uses: mikepenz/release-changelog-builder-action@v6
         with:
-          toTag: ${{ github.ref_name }}
+          toTag: ${{ steps.version.outputs.version }}
           ignorePreReleases: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -49,11 +59,11 @@ jobs:
             ## Installation
 
             ```bash
-            npm install -g terraflow@${{ github.ref_name }}
+            npm install -g terraflow@${{ steps.version.outputs.version }}
             ```
           files: |
             dist/**/*
           draft: false
-          prerelease: ${{ contains(github.ref_name, '-') }}
+          prerelease: ${{ contains(steps.version.outputs.version, '-') }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
