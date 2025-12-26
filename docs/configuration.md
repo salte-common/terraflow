@@ -2,9 +2,13 @@
 
 This document provides a complete reference for all Terraflow configuration options.
 
+> **Tip:** You can generate a pre-configured `.tfwconfig.yml` file using `terraflow init`. See the [Project Scaffolding Guide](scaffolding.md) for details.
+
 ## Configuration File
 
 Terraflow uses a `.tfwconfig.yml` file in your working directory (or specified via `--config` or `TERRAFLOW_CONFIG` environment variable).
+
+You can create this file manually or generate it using `terraflow init` which creates a complete project structure with a pre-configured `.tfwconfig.yml` file tailored to your cloud provider.
 
 ## Configuration Hierarchy
 

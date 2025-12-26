@@ -1,0 +1,14 @@
+/**
+ * Main application entry point
+ */
+
+function main() {
+  console.log('Hello from <project-name>!');
+}
+
+if (require.main === module) {
+  main();
+}
+
+module.exports = { main };
+

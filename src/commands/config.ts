@@ -196,7 +196,7 @@ export class ConfigCommand {
   static generateConfigSkeleton(): string {
     return `# Terraflow Configuration File
 # This file defines your Terraflow configuration
-# See https://github.com/your-org/terraflow for full documentation
+# See https://github.com/salte-common/terraflow/blob/main/docs/configuration.md for full documentation
 
 # Global Settings
 # ===============

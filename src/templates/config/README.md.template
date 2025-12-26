@@ -1,0 +1,82 @@
+# <project-name>
+
+Infrastructure as Code project managed with [Terraflow](https://github.com/salte-common/terraflow).
+
+## Prerequisites
+
+- [Terraform](https://www.terraform.io/downloads) >= 1.0
+- [Node.js](https://nodejs.org/) >= 18.x
+- [Terraflow](https://www.npmjs.com/package/terraflow): `npm install -g terraflow`
+- Cloud provider credentials (<provider>)
+
+## Getting Started
+
+1. Copy `.env.example` to `.env` and configure your credentials:
+   ```bash
+   cp .env.example .env
+   # Edit .env with your credentials
+   ```
+
+2. Review and update `.tfwconfig.yml` with your backend configuration
+
+3. Initialize Terraform:
+   ```bash
+   terraflow init
+   ```
+
+4. Plan your infrastructure:
+   ```bash
+   terraflow plan
+   ```
+
+5. Apply your infrastructure:
+   ```bash
+   terraflow apply
+   ```
+
+## Project Structure
+
+- `src/` - Application source code
+  - `main/` - Main application code
+  - `test/` - Test files
+- `terraform/` - Infrastructure as Code
+  - `modules/` - Reusable Terraform modules
+  - `_init.tf` - Provider and backend configuration
+  - `*.tf` - Main terraform configuration
+- `.tfwconfig.yml` - Terraflow configuration
+- `.env` - Local environment variables (not committed)
+
+## Terraflow Commands
+
+```bash
+# Initialize terraform and workspace
+terraflow init
+
+# Plan changes
+terraflow plan
+
+# Apply changes
+terraflow apply
+
+# Destroy infrastructure
+terraflow destroy
+
+# Show current configuration
+terraflow config show
+```
+
+## Workspace Management
+
+Terraflow automatically derives workspace names from your git branch:
+- Main branch → `main` workspace
+- Feature branches (e.g., `feature/new-api`) → hostname-based workspace
+- Can be overridden with `--workspace` flag
+
+## Configuration
+
+See `.tfwconfig.yml` for all available options and the [documentation](https://github.com/salte-common/terraflow/blob/main/docs/configuration.md) for detailed configuration reference.
+
+## License
+
+MIT
+

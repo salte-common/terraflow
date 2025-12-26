@@ -1,10 +1,10 @@
 {
   "files": {
     "package.json": {
-      "lines_total": 58,
-      "lines_ai_generated": 58,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
+      "lines_total": 59,
+      "lines_ai_generated": 2,
+      "ai_percentage": 3,
+      "last_updated": "2025-12-25T21:30:00Z",
       "tool": "cursor"
     },
     "tsconfig.json": {
@@ -50,10 +50,10 @@
       "tool": "cursor"
     },
     "README.md": {
-      "lines_total": 71,
-      "lines_ai_generated": 71,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
+      "lines_total": 279,
+      "lines_ai_generated": 36,
+      "ai_percentage": 12.903225806451612,
+      "last_updated": "2025-12-26T01:42:46.233Z",
       "tool": "cursor"
     },
     "bin/terraflow.js": {
@@ -71,10 +71,10 @@
       "tool": "cursor"
     },
     "src/index.ts": {
-      "lines_total": 246,
-      "lines_ai_generated": 246,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:08:18Z",
+      "lines_total": 200,
+      "lines_ai_generated": 20,
+      "ai_percentage": 10,
+      "last_updated": "2025-12-25T21:30:00Z",
       "tool": "cursor"
     },
     "src/types/config.ts": {
@@ -183,10 +183,10 @@
       "tool": "cursor"
     },
     "src/commands/config.ts": {
-      "lines_total": 367,
-      "lines_ai_generated": 367,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:15:28Z",
+      "lines_total": 372,
+      "lines_ai_generated": 1,
+      "ai_percentage": 0,
+      "last_updated": "2025-12-25T20:56:15Z",
       "tool": "cursor"
     },
     "src/plugins/backends/local.ts": {
@@ -232,17 +232,17 @@
       "tool": "cursor"
     },
     "src/plugins/secrets/azure-keyvault.ts": {
-      "lines_total": 22,
-      "lines_ai_generated": 22,
+      "lines_total": 232,
+      "lines_ai_generated": 232,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
+      "last_updated": "2025-12-21T04:36:58Z",
       "tool": "cursor"
     },
     "src/plugins/secrets/gcp-secret-manager.ts": {
-      "lines_total": 22,
-      "lines_ai_generated": 22,
+      "lines_total": 201,
+      "lines_ai_generated": 201,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
+      "last_updated": "2025-12-21T04:36:58Z",
       "tool": "cursor"
     },
     "src/plugins/auth/aws-assume-role.ts": {
@@ -253,17 +253,17 @@
       "tool": "cursor"
     },
     "src/plugins/auth/azure-service-principal.ts": {
-      "lines_total": 22,
-      "lines_ai_generated": 22,
+      "lines_total": 120,
+      "lines_ai_generated": 120,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
+      "last_updated": "2025-12-21T04:36:58Z",
       "tool": "cursor"
     },
     "src/plugins/auth/gcp-service-account.ts": {
-      "lines_total": 22,
-      "lines_ai_generated": 22,
+      "lines_total": 140,
+      "lines_ai_generated": 140,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
+      "last_updated": "2025-12-21T04:36:58Z",
       "tool": "cursor"
     },
     "src/utils/git.ts": {
@@ -469,34 +469,6 @@
       "last_updated": "2025-12-21T04:21:27Z",
       "tool": "cursor"
     },
-    "src/plugins/secrets/azure-keyvault.ts": {
-      "lines_total": 232,
-      "lines_ai_generated": 232,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:36:58Z",
-      "tool": "cursor"
-    },
-    "src/plugins/secrets/gcp-secret-manager.ts": {
-      "lines_total": 201,
-      "lines_ai_generated": 201,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:36:58Z",
-      "tool": "cursor"
-    },
-    "src/plugins/auth/azure-service-principal.ts": {
-      "lines_total": 120,
-      "lines_ai_generated": 120,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:36:58Z",
-      "tool": "cursor"
-    },
-    "src/plugins/auth/gcp-service-account.ts": {
-      "lines_total": 140,
-      "lines_ai_generated": 140,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:36:58Z",
-      "tool": "cursor"
-    },
     "tests/unit/azure-keyvault.test.ts": {
       "lines_total": 270,
       "lines_ai_generated": 270,
@@ -526,24 +498,24 @@
       "tool": "cursor"
     },
     ".github/workflows/ci.yml": {
-      "lines_total": 60,
-      "lines_ai_generated": 60,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:42:42Z",
+      "lines_total": 86,
+      "lines_ai_generated": 72,
+      "ai_percentage": 83.72093023255815,
+      "last_updated": "2025-12-26T01:42:46.233Z",
       "tool": "cursor"
     },
     ".github/workflows/publish.yml": {
-      "lines_total": 37,
-      "lines_ai_generated": 37,
+      "lines_total": 91,
+      "lines_ai_generated": 91,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:42:42Z",
+      "last_updated": "2025-12-26T01:42:46.233Z",
       "tool": "cursor"
     },
     ".github/workflows/release.yml": {
-      "lines_total": 56,
-      "lines_ai_generated": 56,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:42:42Z",
+      "lines_total": 60,
+      "lines_ai_generated": 58,
+      "ai_percentage": 96.66666666666667,
+      "last_updated": "2025-12-26T01:42:46.233Z",
       "tool": "cursor"
     },
     "docs/ci-cd.md": {
@@ -551,13 +523,6 @@
       "lines_ai_generated": 206,
       "ai_percentage": 100,
       "last_updated": "2025-12-21T04:42:42Z",
-      "tool": "cursor"
-    },
-    "README.md": {
-      "lines_total": 250,
-      "lines_ai_generated": 178,
-      "ai_percentage": 71,
-      "last_updated": "2025-12-21T04:51:29Z",
       "tool": "cursor"
     },
     "docs/configuration.md": {
@@ -617,10 +582,10 @@
       "tool": "cursor"
     },
     "CONTRIBUTING.md": {
-      "lines_total": 233,
-      "lines_ai_generated": 233,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:51:29Z",
+      "lines_total": 355,
+      "lines_ai_generated": 139,
+      "ai_percentage": 39.154929577464785,
+      "last_updated": "2025-12-26T01:42:46.233Z",
       "tool": "cursor"
     },
     "CODE_OF_CONDUCT.md": {
@@ -632,9 +597,9 @@
     },
     "CHANGELOG.md": {
       "lines_total": 167,
-      "lines_ai_generated": 167,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T05:00:00Z",
+      "lines_ai_generated": 1,
+      "ai_percentage": 1,
+      "last_updated": "2025-12-25T20:56:15Z",
       "tool": "cursor"
     },
     "LICENSE": {
@@ -660,9 +625,9 @@
     },
     "docs/examples/README.md": {
       "lines_total": 39,
-      "lines_ai_generated": 39,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T05:00:00Z",
+      "lines_ai_generated": 1,
+      "ai_percentage": 3,
+      "last_updated": "2025-12-25T20:56:15Z",
       "tool": "cursor"
     },
     "docs/RELEASE.md": {
@@ -670,6 +635,34 @@
       "lines_ai_generated": 66,
       "ai_percentage": 100,
       "last_updated": "2025-12-21T05:00:00Z",
+      "tool": "cursor"
+    },
+    "src/commands/init.ts": {
+      "lines_total": 444,
+      "lines_ai_generated": 444,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-25T21:30:00Z",
+      "tool": "cursor"
+    },
+    "tests/unit/init-command.test.ts": {
+      "lines_total": 200,
+      "lines_ai_generated": 200,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-25T21:30:00Z",
+      "tool": "cursor"
+    },
+    ".github/workflows/auto-tag.yml": {
+      "lines_total": 106,
+      "lines_ai_generated": 106,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-26T01:42:46.233Z",
+      "tool": "cursor"
+    },
+    "docs/releasing.md": {
+      "lines_total": 248,
+      "lines_ai_generated": 248,
+      "ai_percentage": 100,
+      "last_updated": "2025-12-26T01:42:46.233Z",
       "tool": "cursor"
     }
   },

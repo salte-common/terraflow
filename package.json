@@ -9,7 +9,8 @@
     "tf": "./bin/tf.js"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && npm run copy-templates",
+    "copy-templates": "cp -r src/templates dist/templates",
     "test": "jest",
     "test:coverage": "jest --coverage",
     "lint": "eslint src --ext .ts",
@@ -30,7 +31,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/terraflow.git"
+    "url": "https://github.com/salte-common/terraflow.git"
   },
   "engines": {
     "node": ">=18.0.0"

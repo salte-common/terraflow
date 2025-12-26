@@ -1,3 +1,6 @@
+Here's the complete updated SPECIFICATION.md with the correct GitHub repository URLs:
+
+```markdown
 # Terraflow CLI - Development Specification
 
 ## Project Overview
@@ -6,6 +9,7 @@
 **Description:** An opinionated Node.js CLI wrapper for Terraform that provides intelligent workspace management, multi-cloud backend support, secrets integration, and git-aware workflows.
 **Language:** Node.js (TypeScript preferred)
 **License:** MIT
+**Repository:** https://github.com/salte-common/terraflow
 **Repository Standards:** Follow https://github.com/salte-common/standards recursively
 
 ## Core Principles
@@ -42,7 +46,8 @@ terraflow/
 │   │   ├── plan.ts
 │   │   ├── apply.ts
 │   │   ├── destroy.ts
-│   │   └── config.ts
+│   │   ├── config.ts
+│   │   └── init.ts              # Project scaffolding
 │   ├── core/
 │   │   ├── config.ts            # Configuration manager
 │   │   ├── context.ts           # Execution context
@@ -64,6 +69,10 @@ terraflow/
 │   │       ├── aws-assume-role.ts
 │   │       ├── azure-service-principal.ts
 │   │       └── gcp-service-account.ts
+│   ├── templates/               # Project scaffolding templates
+│   │   ├── terraform/
+│   │   ├── application/
+│   │   └── config/
 │   ├── utils/
 │   │   ├── git.ts               # Git operations
 │   │   ├── cloud.ts             # Cloud provider detection
@@ -84,6 +93,7 @@ terraflow/
 │   ├── README.md
 │   ├── configuration.md
 │   ├── plugins.md
+│   ├── scaffolding.md
 │   └── examples/
 ├── .eslintrc.js
 ├── .prettierrc
@@ -137,7 +147,533 @@ Boolean handling: `true|1|yes` enables, anything else disables
 ```bash
 terraflow config show              # Show resolved configuration
 terraflow config init [-o file]    # Generate skeleton config file
+terraflow init [project-name]      # Scaffold new project
 ```
+
+## Project Scaffolding
+
+### Init Command
+
+The `terraflow init` command scaffolds a new infrastructure project with opinionated defaults and best practices.
+
+#### Command Syntax
+```bash
+terraflow init [project-name] [options]
+```
+
+#### Options
+- `--provider <name>` or `-p <name>`: Cloud provider (aws|azure|gcp), default: aws
+- `--language <name>` or `-l <name>`: Application language (javascript|typescript|python|go), default: javascript
+- `--working-dir <path>` or `-d <path>`: Where to create the project, default: current directory
+- `--force` or `-f`: Overwrite existing files if present
+
+#### Generated Project Structure
+
+```
+<project-name>/
+├── src/
+│   ├── main/
+│   │   └── index.js (or .ts, .py, .go based on --language)
+│   └── test/
+│       └── index.spec.js (or appropriate test file)
+├── terraform/
+│   ├── modules/
+│   │   ├── inputs.tf
+│   │   ├── main.tf
+│   │   └── outputs.tf
+│   ├── _init.tf
+│   ├── inputs.tf
+│   ├── locals.tf
+│   ├── main.tf
+│   └── outputs.tf
+├── .tfwconfig.yml
+├── .env.example
+├── .gitignore
+└── README.md
+```
+
+#### File Templates
+
+**terraform/_init.tf** - Provider and backend configuration:
+
+For AWS:
+```hcl
+terraform {
+  required_version = ">= 1.0"
+  
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+  
+  backend "s3" {
+    # Backend configuration provided via:
+    # - terraflow CLI flags
+    # - environment variables (TERRAFLOW_*)
+    # - .tfwconfig.yml
+    # 
+    # Do not hardcode values here
+  }
+}
+
+provider "aws" {
+  region = var.aws_region
+}
+```
+
+For Azure:
+```hcl
+terraform {
+  required_version = ">= 1.0"
+  
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 3.0"
+    }
+  }
+  
+  backend "azurerm" {
+    # Backend configuration provided via terraflow
+  }
+}
+
+provider "azurerm" {
+  features {}
+}
+```
+
+For GCP:
+```hcl
+terraform {
+  required_version = ">= 1.0"
+  
+  required_providers {
+    google = {
+      source  = "hashicorp/google"
+      version = "~> 5.0"
+    }
+  }
+  
+  backend "gcs" {
+    # Backend configuration provided via terraflow
+  }
+}
+
+provider "google" {
+  project = var.gcp_project_id
+  region  = var.gcp_region
+}
+```
+
+**terraform/inputs.tf** - Provider-specific variables:
+
+For AWS:
+```hcl
+variable "aws_region" {
+  description = "AWS region for resources"
+  type        = string
+  default     = "us-east-1"
+}
+
+variable "environment" {
+  description = "Environment name (e.g., dev, staging, prod)"
+  type        = string
+}
+```
+
+For Azure:
+```hcl
+variable "azure_location" {
+  description = "Azure region for resources"
+  type        = string
+  default     = "eastus"
+}
+
+variable "environment" {
+  description = "Environment name"
+  type        = string
+}
+```
+
+For GCP:
+```hcl
+variable "gcp_project_id" {
+  description = "GCP project ID"
+  type        = string
+}
+
+variable "gcp_region" {
+  description = "GCP region for resources"
+  type        = string
+  default     = "us-central1"
+}
+
+variable "environment" {
+  description = "Environment name"
+  type        = string
+}
+```
+
+**terraform/locals.tf**:
+```hcl
+locals {
+  # Common tags/labels for all resources
+  common_tags = {
+    Environment = var.environment
+    ManagedBy   = "terraform"
+    Project     = "<project-name>"
+  }
+}
+```
+
+**terraform/main.tf**:
+```hcl
+# Main infrastructure resources go here
+# Example module usage:
+# module "example" {
+#   source = "./modules"
+#   
+#   environment = var.environment
+# }
+```
+
+**terraform/outputs.tf**:
+```hcl
+# Output values from your infrastructure
+# output "example_output" {
+#   description = "Example output description"
+#   value       = module.example.output_value
+# }
+```
+
+**terraform/modules/inputs.tf**:
+```hcl
+variable "environment" {
+  description = "Environment name"
+  type        = string
+}
+```
+
+**terraform/modules/main.tf**:
+```hcl
+# Module resources go here
+```
+
+**terraform/modules/outputs.tf**:
+```hcl
+# Module outputs go here
+```
+
+**src/main/index.js** (for JavaScript):
+```javascript
+/**
+ * Main application entry point
+ */
+
+function main() {
+  console.log('Hello from <project-name>!');
+}
+
+if (require.main === module) {
+  main();
+}
+
+module.exports = { main };
+```
+
+**src/test/index.spec.js** (for JavaScript):
+```javascript
+const { main } = require('../main/index');
+
+describe('<project-name>', () => {
+  it('should run main function', () => {
+    expect(() => main()).not.toThrow();
+  });
+});
+```
+
+**.tfwconfig.yml**:
+```yaml
+# Terraflow configuration
+# See: https://github.com/salte-common/terraflow/blob/main/docs/configuration.md
+
+# Working directory for terraform files
+working-dir: ./terraform
+
+# Workspace derivation strategy
+workspace_strategy:
+  - cli
+  - env
+  - tag
+  - branch
+  - hostname
+
+# Backend configuration (adjust for your provider)
+backend:
+  type: <provider>  # local, s3, azurerm, or gcs
+  config:
+    # Template variables are supported: ${VAR_NAME}
+    # See documentation for available template variables
+    
+    # Uncomment and configure based on your provider:
+    
+    # AWS S3 Backend:
+    # bucket: ${AWS_REGION}-${AWS_ACCOUNT_ID}-terraform-state
+    # key: ${GITHUB_REPOSITORY}
+    # region: ${AWS_REGION}
+    # dynamodb_table: terraform-statelock
+    # encrypt: true
+    
+    # Azure Backend:
+    # storage_account_name: mystorageaccount
+    # container_name: tfstate
+    # key: terraform.tfstate
+    
+    # GCP Backend:
+    # bucket: my-gcs-bucket
+    # prefix: terraform/state
+
+# Uncomment to configure secrets from secret manager
+# secrets:
+#   provider: env  # env | aws-secrets | azure-keyvault | gcp-secret-manager
+#   config:
+#     # AWS Secrets Manager:
+#     # region: us-east-1
+#     # secret_name: <project-name>/terraform-vars
+#     
+#     # Azure Key Vault:
+#     # vault_name: my-keyvault
+#     
+#     # GCP Secret Manager:
+#     # project_id: my-project
+
+# Terraform variables
+variables:
+  environment: development
+
+# Validations
+validations:
+  require_git_commit: true
+  # allowed_workspaces:
+  #   - development
+  #   - staging
+  #   - production
+
+# Logging
+logging:
+  level: info
+```
+
+**.env.example**:
+```bash
+# AWS Credentials (for S3 backend and AWS provider)
+# AWS_ACCESS_KEY_ID=your_access_key
+# AWS_SECRET_ACCESS_KEY=your_secret_key
+# AWS_REGION=us-east-1
+
+# Azure Credentials (for Azure backend and provider)
+# ARM_CLIENT_ID=your_client_id
+# ARM_CLIENT_SECRET=your_client_secret
+# ARM_SUBSCRIPTION_ID=your_subscription_id
+# ARM_TENANT_ID=your_tenant_id
+
+# GCP Credentials (for GCS backend and GCP provider)
+# GOOGLE_APPLICATION_CREDENTIALS=/path/to/key.json
+# GCP_PROJECT_ID=your-project-id
+
+# Terraflow Configuration
+# TERRAFLOW_WORKSPACE=development
+# TERRAFLOW_SKIP_COMMIT_CHECK=false
+
+# Terraform Variables (TF_VAR_*)
+# TF_VAR_environment=development
+```
+
+**.gitignore**:
+```
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfvars
+.terraform.lock.hcl
+
+# Terraflow
+.terraflow/
+
+# Environment
+.env
+
+# Language-specific (adjust based on --language)
+# Node.js:
+node_modules/
+npm-debug.log*
+dist/
+
+# Python:
+__pycache__/
+*.py[cod]
+venv/
+.pytest_cache/
+
+# Go:
+*.exe
+*.dll
+*.so
+*.dylib
+vendor/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+```
+
+**README.md**:
+```markdown
+# <project-name>
+
+Infrastructure as Code project managed with [Terraflow](https://github.com/salte-common/terraflow).
+
+## Prerequisites
+
+- [Terraform](https://www.terraform.io/downloads) >= 1.0
+- [Node.js](https://nodejs.org/) >= 18.x
+- [Terraflow](https://www.npmjs.com/package/terraflow): `npm install -g terraflow`
+- Cloud provider credentials (<provider>)
+
+## Getting Started
+
+1. Copy `.env.example` to `.env` and configure your credentials:
+   ```bash
+   cp .env.example .env
+   # Edit .env with your credentials
+   ```
+
+2. Review and update `.tfwconfig.yml` with your backend configuration
+
+3. Initialize Terraform:
+   ```bash
+   terraflow init
+   ```
+
+4. Plan your infrastructure:
+   ```bash
+   terraflow plan
+   ```
+
+5. Apply your infrastructure:
+   ```bash
+   terraflow apply
+   ```
+
+## Project Structure
+
+- `src/` - Application source code
+  - `main/` - Main application code
+  - `test/` - Test files
+- `terraform/` - Infrastructure as Code
+  - `modules/` - Reusable Terraform modules
+  - `_init.tf` - Provider and backend configuration
+  - `*.tf` - Main terraform configuration
+- `.tfwconfig.yml` - Terraflow configuration
+- `.env` - Local environment variables (not committed)
+
+## Terraflow Commands
+
+```bash
+# Initialize terraform and workspace
+terraflow init
+
+# Plan changes
+terraflow plan
+
+# Apply changes
+terraflow apply
+
+# Destroy infrastructure
+terraflow destroy
+
+# Show current configuration
+terraflow config show
+```
+
+## Workspace Management
+
+Terraflow automatically derives workspace names from your git branch:
+- Main branch → `main` workspace
+- Feature branches (e.g., `feature/new-api`) → hostname-based workspace
+- Can be overridden with `--workspace` flag
+
+## Configuration
+
+See `.tfwconfig.yml` for all available options and the [documentation](https://github.com/salte-common/terraflow/blob/main/docs/configuration.md) for detailed configuration reference.
+
+## License
+
+MIT
+```
+
+#### Implementation Details
+
+1. **Create src/commands/init.ts**:
+   - Implement the init command handler
+   - Validate that target directory is empty or --force is used
+   - Create the complete project structure
+   - Populate files with appropriate content based on provider and language
+
+2. **Create src/templates/ directory** with template files:
+   - Organize by category (terraform, application, config)
+   - Use string replacement for dynamic content (e.g., `<project-name>`)
+   - Support multiple provider versions (AWS, Azure, GCP)
+   - Support multiple languages (JavaScript, TypeScript, Python, Go)
+
+3. **Template Processing**:
+   - Replace `<project-name>` placeholder throughout files
+   - Select appropriate provider configuration
+   - Adjust .gitignore based on selected language
+   - Use latest stable provider versions
+
+4. **Validation**:
+   - Project name must be valid (alphanumeric, hyphens, underscores)
+   - Target directory must be empty unless --force is specified
+   - Provider must be one of: aws, azure, gcp
+   - Language must be one of: javascript, typescript, python, go
+
+5. **Output on Success**:
+```
+✅ Project <project-name> initialized successfully!
+
+Next steps:
+  1. cd <project-name>
+  2. cp .env.example .env
+  3. Edit .env with your credentials
+  4. Review and update .tfwconfig.yml
+  5. terraflow init
+  6. terraflow plan
+
+Documentation: ./README.md
+```
+
+#### Testing Requirements
+
+- Unit tests for template generation
+- Integration test that creates a project and verifies structure
+- Test with different provider combinations (AWS, Azure, GCP)
+- Test with different language combinations
+- Test --force flag behavior
+- Test validation errors
+
+#### Documentation Updates
+
+- Add `terraflow init` command to main README.md
+- Create docs/scaffolding.md with detailed init command documentation
+- Add examples for each provider type
+- Document template customization options
 
 ## Configuration Schema
 
@@ -539,6 +1075,7 @@ Command: terraform apply -auto-approve
 - Workspace derivation logic
 - Validation rules
 - Plugin interface contracts
+- Project scaffolding templates
 
 ### Integration Tests
 
@@ -546,6 +1083,7 @@ Command: terraform apply -auto-approve
 - Plugin loading and execution
 - Environment setup
 - Git integration
+- Project scaffolding with different providers/languages
 
 ### Test Coverage
 
@@ -572,6 +1110,13 @@ Minimum 80% code coverage required
 - Plugin development guide
 - Plugin interface specifications
 - Example plugin implementations
+
+### docs/scaffolding.md
+
+- Project scaffolding guide
+- Init command reference
+- Template customization
+- Provider-specific examples
 
 ### docs/examples/
 
@@ -617,7 +1162,7 @@ Minimum 80% code coverage required
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/terraflow.git"
+    "url": "https://github.com/salte-common/terraflow.git"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -850,6 +1395,7 @@ Follow all standards from https://github.com/salte-common/standards:
 6. Basic validation (terraform installed, workspace valid)
 7. Terraform command passthrough
 8. Environment variable handling
+9. Project scaffolding (init command)
 
 ### Phase 2: Cloud Backends (v1.1.0)
 

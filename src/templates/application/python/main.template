@@ -1,0 +1,13 @@
+"""
+Main application entry point
+"""
+
+
+def main():
+    """Main function"""
+    print('Hello from <project-name>!')
+
+
+if __name__ == '__main__':
+    main()
+

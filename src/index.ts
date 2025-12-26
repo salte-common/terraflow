@@ -12,6 +12,7 @@ import { ConfigManager, type CliOptions } from './core/config';
 import { ContextBuilder } from './core/context';
 import { TerraformExecutor } from './core/terraform';
 import { ConfigCommand } from './commands/config';
+import { InitCommand } from './commands/init';
 import { Logger } from './utils/logger';
 
 const program = new Command();
@@ -87,13 +88,60 @@ async function main(): Promise<void> {
       }
     });
 
+  // Init command for project scaffolding
+  program
+    .command('init [project-name]')
+    .description('Scaffold a new infrastructure project with opinionated defaults')
+    .option('-p, --provider <name>', 'Cloud provider: aws, azure, or gcp (default: aws)', 'aws')
+    .option(
+      '-l, --language <name>',
+      'Application language: javascript, typescript, python, or go (default: javascript)',
+      'javascript'
+    )
+    .option(
+      '-d, --working-dir <path>',
+      'Directory where to create the project (default: current directory)',
+      process.cwd()
+    )
+    .option('-f, --force', 'Overwrite existing files if present (default: false)', false)
+    .addHelpText(
+      'after',
+      `
+Examples:
+  $ terraflow init my-project
+  $ terraflow init my-project --provider azure --language typescript
+  $ terraflow init --provider gcp --language python
+  $ terraflow init my-project --force
+`
+    )
+    .action(
+      async (
+        projectName: string | undefined,
+        options: { provider?: string; language?: string; workingDir?: string; force?: boolean }
+      ) => {
+        try {
+          await InitCommand.execute(projectName, {
+            provider: options.provider,
+            language: options.language,
+            workingDir: options.workingDir,
+            force: options.force,
+          });
+        } catch (error) {
+          Logger.error(
+            `Failed to initialize project: ${error instanceof Error ? error.message : String(error)}`
+          );
+          process.exit(1);
+        }
+      }
+    );
+
   // Parse arguments
   program.parse();
 
-  // Check if config command was executed (handle early to avoid loading config)
+  // Check if config or init command was executed (handle early to avoid loading config)
   const command = program.args[0];
-  if (command === 'config') {
-    // Config command handles its own execution, so we're done here
+  if (command === 'config' || command === 'init') {
+    // Config and init commands handle their own execution, so we're done here
     return;
   }
 

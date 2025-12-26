@@ -120,5 +120,5 @@ None. This is the initial release.
 - Secure defaults (encryption enabled, state locking enabled)
 - NPM package published with provenance for supply chain security
 
-[1.0.0]: https://github.com/yourusername/terraflow/releases/tag/v1.0.0
+[1.0.0]: https://github.com/salte-common/terraflow/releases/tag/v1.0.0
 

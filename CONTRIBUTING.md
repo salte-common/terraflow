@@ -11,7 +11,7 @@ This project adheres to a Code of Conduct. By participating, you are expected to
 1. **Fork the repository** on GitHub
 2. **Clone your fork** locally:
    ```bash
-   git clone https://github.com/yourusername/terraflow.git
+   git clone https://github.com/salte-common/terraflow.git
    cd terraflow
    ```
 3. **Install dependencies**:
@@ -148,6 +148,127 @@ For feature requests:
 - Provide examples if possible
 - Consider implementation complexity
 
+## Adding New Templates
+
+Terraflow uses a template-based system for project scaffolding. Templates are located in `src/templates/` and organized by category.
+
+### Template Structure
+
+```
+src/templates/
+├── terraform/          # Terraform configuration templates
+│   ├── aws/           # AWS-specific templates
+│   ├── azure/         # Azure-specific templates
+│   ├── gcp/           # GCP-specific templates
+│   └── modules/       # Module templates
+├── application/       # Application code templates
+│   ├── javascript/    # JavaScript templates
+│   ├── typescript/    # TypeScript templates
+│   ├── python/        # Python templates
+│   └── go/            # Go templates
+└── config/            # Configuration file templates
+```
+
+### Template Variable System
+
+Templates use placeholder variables that are replaced during project generation:
+
+- `<project-name>` - Replaced with the actual project name
+- `<provider>` - Replaced with the backend type (s3, azurerm, gcs)
+
+**Example:**
+```hcl
+# Template file (terraform/locals.tf.template)
+locals {
+  common_tags = {
+    Project = "<project-name>"
+  }
+}
+
+# Generated file (terraform/locals.tf)
+locals {
+  common_tags = {
+    Project = "my-project"
+  }
+}
+```
+
+### Adding Support for New Languages
+
+1. **Create language directory:**
+   ```bash
+   mkdir -p src/templates/application/newlanguage
+   ```
+
+2. **Create template files:**
+   - `main.template` - Main application file
+   - `test.template` - Test file
+   - Language-specific config files (e.g., `package.json.template`, `Cargo.toml.template`)
+
+3. **Update scaffolding utilities:**
+   - Add language to `validateLanguage()` in `src/utils/scaffolding.ts`
+   - Add file extension logic in `getMainExtension()` and `getTestFileName()`
+   - Add language-specific config file generation in `generateApplicationFiles()`
+
+4. **Update `.gitignore` template:**
+   - Add language-specific ignore patterns in `src/templates/config/gitignore.template`
+
+5. **Add tests:**
+   - Add integration test in `tests/integration/init.test.ts`
+   - Verify all files are generated correctly
+
+### Adding Support for New Providers
+
+1. **Create provider directory:**
+   ```bash
+   mkdir -p src/templates/terraform/newprovider
+   ```
+
+2. **Create provider-specific templates:**
+   - `_init.tf.template` - Provider and backend configuration
+   - `inputs.tf.template` - Provider-specific variables
+
+3. **Update scaffolding utilities:**
+   - Add provider to `validateProvider()` in `src/utils/scaffolding.ts`
+   - Add backend type mapping in `getBackendType()` in `src/utils/scaffolding.ts`
+   - Update `generateTerraformFiles()` to handle new provider
+
+4. **Update configuration template:**
+   - Add provider-specific backend config examples in `src/templates/config/tfwconfig.yml.template`
+
+5. **Add tests:**
+   - Add integration test in `tests/integration/init.test.ts`
+   - Verify provider-specific files are generated correctly
+
+### Template Best Practices
+
+1. **Use descriptive placeholders:** Always use `<project-name>` format for variables
+2. **Include comments:** Add helpful comments explaining configuration options
+3. **Follow conventions:** Match existing template structure and naming
+4. **Test thoroughly:** Verify templates work with all supported combinations
+5. **Document changes:** Update relevant documentation when adding templates
+
+### Testing Templates
+
+After adding or modifying templates:
+
+1. **Run unit tests:**
+   ```bash
+   npm test -- tests/unit/scaffolding.test.ts
+   ```
+
+2. **Run integration tests:**
+   ```bash
+   npm test -- tests/integration/init.test.ts
+   ```
+
+3. **Test manually:**
+   ```bash
+   terraflow init test-project --provider <provider> --language <language>
+   cd test-project
+   # Verify all files exist and content is correct
+   ```
+
 ## Project Structure
 
 ```
@@ -214,12 +335,17 @@ npm test -- --watch
 
 ## Release Process
 
-Releases are managed by maintainers. The process:
+Releases are managed by maintainers. See [Releasing Guide](./docs/releasing.md) for complete documentation.
 
-1. Version bump in package.json
-2. Update CHANGELOG.md
-3. Create git tag (v*.*.*)
-4. GitHub Actions automatically publishes to NPM
+Quick summary:
+1. Update version in `package.json` (must follow semver format)
+2. Commit and push to `main` branch
+3. GitHub Actions automatically:
+   - Creates git tag matching the version
+   - Publishes to NPM with appropriate dist-tag
+   - Creates GitHub release with changelog
+
+For detailed instructions on publishing alpha, beta, rc, and production releases, see [docs/releasing.md](./docs/releasing.md).
 
 ## Questions?
 

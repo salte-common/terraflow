@@ -1,0 +1,105 @@
+name: Auto Tag
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - package.json
+
+permissions:
+  contents: write
+
+jobs:
+  create-tag:
+    name: Create Git Tag
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Extract current version
+        id: current-version
+        run: |
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+          echo "Current version: $CURRENT_VERSION"
+
+      - name: Extract previous version
+        id: previous-version
+        run: |
+          if git rev-parse HEAD~1 >/dev/null 2>&1; then
+            git show HEAD~1:package.json > /tmp/prev-package.json \
+              2>/dev/null || true
+            if [ -f /tmp/prev-package.json ] && \
+               [ -s /tmp/prev-package.json ]; then
+              cat > /tmp/get-version.js << 'EOF'
+              try {
+                const pkg = require('/tmp/prev-package.json');
+                console.log(pkg.version || '');
+              } catch (e) {
+                console.log('');
+              }
+              EOF
+              PREVIOUS_VERSION=$(
+                node /tmp/get-version.js 2>/dev/null || echo ""
+              )
+              rm -f /tmp/prev-package.json /tmp/get-version.js
+            else
+              PREVIOUS_VERSION=""
+            fi
+            echo "previous=$PREVIOUS_VERSION" >> $GITHUB_OUTPUT
+            echo "Previous version: $PREVIOUS_VERSION"
+          else
+            echo "previous=" >> $GITHUB_OUTPUT
+            echo "No previous commit found, assuming first commit"
+          fi
+
+      - name: Check if version changed
+        id: version-check
+        run: |
+          CURRENT="${{ steps.current-version.outputs.version }}"
+          PREVIOUS="${{ steps.previous-version.outputs.previous }}"
+
+          if [ "$CURRENT" = "$PREVIOUS" ]; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "Version unchanged ($CURRENT), skipping tag creation"
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "Version changed from $PREVIOUS to $CURRENT"
+          fi
+
+      - name: Check if tag exists
+        id: tag-check
+        if: steps.version-check.outputs.changed == 'true'
+        run: |
+          VERSION="${{ steps.current-version.outputs.version }}"
+          if git rev-parse "$VERSION" >/dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "Tag $VERSION already exists, skipping tag creation"
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "Tag $VERSION does not exist, will create tag"
+          fi
+
+      - name: Create and push tag
+        if: |
+          steps.version-check.outputs.changed == 'true' &&
+          steps.tag-check.outputs.exists == 'false'
+        run: |
+          VERSION="${{ steps.current-version.outputs.version }}"
+          echo "Creating tag: $VERSION"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "$VERSION" -m "Release $VERSION"
+          git push origin "$VERSION"
+          echo "Tag $VERSION created and pushed successfully"

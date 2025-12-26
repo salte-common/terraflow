@@ -1,0 +1,8 @@
+import { main } from '../main/index';
+
+describe('<project-name>', () => {
+  it('should run main function', () => {
+    expect(() => main()).not.toThrow();
+  });
+});
+

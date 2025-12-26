@@ -1,7 +1,7 @@
 # Terraflow CLI
 
-[![CI](https://github.com/yourusername/terraflow/workflows/CI/badge.svg)](https://github.com/yourusername/terraflow/actions)
-[![codecov](https://codecov.io/gh/yourusername/terraflow/branch/main/graph/badge.svg)](https://codecov.io/gh/yourusername/terraflow)
+[![CI](https://github.com/salte-common/terraflow/workflows/CI/badge.svg)](https://github.com/salte-common/terraflow/actions)
+[![codecov](https://codecov.io/gh/salte-common/terraflow/branch/main/graph/badge.svg)](https://codecov.io/gh/salte-common/terraflow)
 [![npm version](https://badge.fury.io/js/terraflow.svg)](https://badge.fury.io/js/terraflow)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -38,6 +38,32 @@ npm install -g terraflow
 - **Terraform** installed and available in PATH
 
 ## Quick Start
+
+### Option 1: Scaffold a New Project (Recommended)
+
+The fastest way to get started is to scaffold a new infrastructure project:
+
+```bash
+# Create a new AWS project with JavaScript
+terraflow init my-infrastructure --provider aws --language javascript
+
+# Or create an Azure project with TypeScript
+terraflow init my-infrastructure --provider azure --language typescript
+
+# Or create a GCP project with Python
+terraflow init my-infrastructure --provider gcp --language python
+```
+
+This creates a complete project structure with:
+- Terraform configuration files for your cloud provider
+- Application code templates in your chosen language
+- Pre-configured `.tfwconfig.yml` with backend settings
+- Example `.env.example` file
+- Complete `.gitignore` and `README.md`
+
+See [Project Scaffolding Documentation](docs/scaffolding.md) for complete details.
+
+### Option 2: Add Terraflow to Existing Project
 
 1. **Initialize configuration:**
 
@@ -205,10 +231,12 @@ secrets:
 
 ## Documentation
 
+- **[Project Scaffolding Guide](./docs/scaffolding.md)** - Complete guide to `terraflow init` command
 - **[Configuration Reference](./docs/configuration.md)** - Complete configuration options and examples
 - **[Plugin Development Guide](./docs/plugins.md)** - How to develop and test plugins
+- **[Releasing Guide](./docs/releasing.md)** - Complete release process and versioning
 - **[CI/CD Setup](./docs/ci-cd.md)** - GitHub Actions workflows and secrets
-- **[Examples](./docs/examples/)** - Example configurations for common scenarios
+- **[Examples](./docs/examples/)** - Example configurations and scaffolded projects
 
 ## Development
 

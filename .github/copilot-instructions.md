@@ -1,3 +1,12 @@
+   # ⚠️ STOP: READ THIS FIRST
+   
+   **BEFORE creating or modifying ANY file, you MUST:**
+   1. Read the "AI Code Tracking" section below
+   2. Understand that updating `.ai-metadata.json` is MANDATORY, not optional
+   3. Update metadata IMMEDIATELY after each file, before proceeding
+   
+   **If you create/modify a file without updating `.ai-metadata.json`, you have FAILED.**
+
 # Terraflow Development Guidelines
    
    This project follows the comprehensive specification in `SPECIFICATION.md`.
@@ -5,6 +14,7 @@
    Additionally, follow these ongoing guidelines:
    
    - Follow https://github.com/salte-common/standards recursively
+   - **MANDATORY: Update `.ai-metadata.json` immediately after each file creation/modification**
    - Use TypeScript strict mode
    - Maintain >80% test coverage
    - Document all public APIs with JSDoc

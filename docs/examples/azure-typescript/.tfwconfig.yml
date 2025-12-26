@@ -1,0 +1,69 @@
+# Terraflow configuration
+# See: https://github.com/salte-common/terraflow/blob/main/docs/configuration.md
+
+# Working directory for terraform files
+working-dir: ./terraform
+
+# Workspace derivation strategy
+workspace_strategy:
+  - cli
+  - env
+  - tag
+  - branch
+  - hostname
+
+# Backend configuration (adjust for your provider)
+backend:
+  type: azurerm  # local, s3, azurerm, or gcs
+  config:
+    # Template variables are supported: ${VAR_NAME}
+    # See documentation for available template variables
+    
+    # Uncomment and configure based on your provider:
+    
+    # AWS S3 Backend:
+    # bucket: ${AWS_REGION}-${AWS_ACCOUNT_ID}-terraform-state
+    # key: ${GITHUB_REPOSITORY}
+    # region: ${AWS_REGION}
+    # dynamodb_table: terraform-statelock
+    # encrypt: true
+    
+    # Azure Backend:
+    # storage_account_name: mystorageaccount
+    # container_name: tfstate
+    # key: terraform.tfstate
+    
+    # GCP Backend:
+    # bucket: my-gcs-bucket
+    # prefix: terraform/state
+
+# Uncomment to configure secrets from secret manager
+# secrets:
+#   provider: env  # env | aws-secrets | azure-keyvault | gcp-secret-manager
+#   config:
+#     # AWS Secrets Manager:
+#     # region: us-east-1
+#     # secret_name: azure-typescript/terraform-vars
+#     
+#     # Azure Key Vault:
+#     # vault_name: my-keyvault
+#     
+#     # GCP Secret Manager:
+#     # project_id: my-project
+
+# Terraform variables
+variables:
+  environment: development
+
+# Validations
+validations:
+  require_git_commit: true
+  # allowed_workspaces:
+  #   - development
+  #   - staging
+  #   - production
+
+# Logging
+logging:
+  level: info
+
