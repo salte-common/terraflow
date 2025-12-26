@@ -110,6 +110,14 @@ jobs:
           steps.tag-check.outputs.exists == 'false'
         run: npm ci
 
+      - name: Setup Terraform
+        if: |
+          steps.version-check.outputs.changed == 'true' &&
+          steps.tag-check.outputs.exists == 'false'
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.6.0"
+
       - name: Run tests
         if: |
           steps.version-check.outputs.changed == 'true' &&
