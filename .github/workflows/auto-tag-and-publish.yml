@@ -168,25 +168,33 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create GitHub Release
+      - name: Create GitHub Release with CLI
         if: |
           steps.version-check.outputs.changed == 'true' &&
           steps.tag-check.outputs.exists == 'false'
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ steps.current-version.outputs.version }}
-          body: |
-            ${{ steps.changelog.outputs.changelog }}
-
-            ## Installation
-
-            ```bash
-            npm install -g @salte-common/terraflow@${{ steps.current-version.outputs.version }}
-            ```
-          files: |
-            dist/**/*
-          draft: false
-          prerelease: ${{ contains(steps.current-version.outputs.version, '-') }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION="${{ steps.current-version.outputs.version }}"
+          CHANGELOG="${{ steps.changelog.outputs.changelog }}"
+          
+          # Determine if prerelease
+          if echo "$VERSION" | grep -q "-"; then
+            PRERELEASE_FLAG="--prerelease"
+          else
+            PRERELEASE_FLAG=""
+          fi
+          
+          # Create release with notes
+          gh release create "$VERSION" \
+            --title "Release $VERSION" \
+            --notes "$CHANGELOG
+
+          ## Installation
+
+          \`\`\`bash
+          npm install -g @salte-common/terraflow@$VERSION
+          \`\`\`" \
+            $PRERELEASE_FLAG \
+            dist/**/*
 
