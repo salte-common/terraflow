@@ -505,10 +505,10 @@
       "tool": "cursor"
     },
     ".github/workflows/release.yml": {
-      "lines_total": 69,
-      "lines_ai_generated": 67,
-      "ai_percentage": 97.10144927536231,
-      "last_updated": "2025-12-26T03:42:12.937Z",
+      "lines_total": 70,
+      "lines_ai_generated": 68,
+      "ai_percentage": 97.14285714285714,
+      "last_updated": "2025-12-26T05:34:50.561Z",
       "tool": "cursor"
     },
     "docs/ci-cd.md": {
