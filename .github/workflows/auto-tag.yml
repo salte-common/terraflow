@@ -34,41 +34,32 @@ jobs:
           echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
           echo "Current version: $CURRENT_VERSION"
 
-      - name: Extract previous version
-        id: previous-version
+      - name: Get previous version
+        id: prev-version
         run: |
           if git rev-parse HEAD~1 >/dev/null 2>&1; then
-            git show HEAD~1:package.json > /tmp/prev-package.json \
-              2>/dev/null || true
-            if [ -f /tmp/prev-package.json ] && \
-               [ -s /tmp/prev-package.json ]; then
-              cat > /tmp/get-version.js << 'EOF'
+            PREVIOUS_VERSION=$(git show HEAD~1:package.json 2>/dev/null | node -e "
+              const fs = require('fs');
+              const stdin = fs.readFileSync(0, 'utf-8');
               try {
-                const pkg = require('/tmp/prev-package.json');
+                const pkg = JSON.parse(stdin);
                 console.log(pkg.version || '');
               } catch (e) {
                 console.log('');
               }
-              EOF
-              PREVIOUS_VERSION=$(
-                node /tmp/get-version.js 2>/dev/null || echo ""
-              )
-              rm -f /tmp/prev-package.json /tmp/get-version.js
-            else
-              PREVIOUS_VERSION=""
-            fi
+            " || echo "")
             echo "previous=$PREVIOUS_VERSION" >> $GITHUB_OUTPUT
             echo "Previous version: $PREVIOUS_VERSION"
           else
             echo "previous=" >> $GITHUB_OUTPUT
-            echo "No previous commit found, assuming first commit"
+            echo "No previous commit found"
           fi
 
       - name: Check if version changed
         id: version-check
         run: |
           CURRENT="${{ steps.current-version.outputs.version }}"
-          PREVIOUS="${{ steps.previous-version.outputs.previous }}"
+          PREVIOUS="${{ steps.prev-version.outputs.previous }}"
 
           if [ "$CURRENT" = "$PREVIOUS" ]; then
             echo "changed=false" >> $GITHUB_OUTPUT
