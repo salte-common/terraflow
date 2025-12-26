@@ -1,24 +1,24 @@
 name: Auto Tag
 
 on:
-  push:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
     branches: [main]
-    paths:
-      - package.json
 
 permissions:
   contents: write
 
 jobs:
-  create-tag:
-    name: Create Git Tag
+  auto-tag:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.workflow_run.head_sha }}
           fetch-depth: 2
           token: ${{ secrets.GITHUB_TOKEN }}
 
