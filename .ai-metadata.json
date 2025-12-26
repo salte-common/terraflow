@@ -498,10 +498,10 @@
       "tool": "cursor"
     },
     ".github/workflows/ci.yml": {
-      "lines_total": 86,
-      "lines_ai_generated": 72,
-      "ai_percentage": 83.72093023255815,
-      "last_updated": "2025-12-26T01:42:46.233Z",
+      "lines_total": 90,
+      "lines_ai_generated": 76,
+      "ai_percentage": 84.44444444444444,
+      "last_updated": "2025-12-26T02:42:53.786Z",
       "tool": "cursor"
     },
     ".github/workflows/publish.yml": {
