@@ -195,6 +195,5 @@ jobs:
           \`\`\`bash
           npm install -g @salte-common/terraflow@$VERSION
           \`\`\`" \
-            $PRERELEASE_FLAG \
-            dist/**/*
+            $PRERELEASE_FLAG
 
