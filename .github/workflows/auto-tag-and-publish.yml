@@ -1,4 +1,4 @@
-name: Auto Tag
+name: Auto Tag and Publish
 
 on:
   workflow_run:
@@ -8,9 +8,10 @@ on:
 
 permissions:
   contents: write
+  id-token: write
 
 jobs:
-  auto-tag:
+  auto-tag-and-publish:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
@@ -26,6 +27,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20.x'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
 
       - name: Extract current version
         id: current-version
@@ -63,7 +66,7 @@ jobs:
 
           if [ "$CURRENT" = "$PREVIOUS" ]; then
             echo "changed=false" >> $GITHUB_OUTPUT
-            echo "Version unchanged ($CURRENT), skipping tag creation"
+            echo "Version unchanged ($CURRENT), skipping tag creation and publish"
           else
             echo "changed=true" >> $GITHUB_OUTPUT
             echo "Version changed from $PREVIOUS to $CURRENT"
@@ -82,6 +85,43 @@ jobs:
             echo "Tag $VERSION does not exist, will create tag"
           fi
 
+      - name: Determine npm dist-tag
+        id: dist-tag
+        if: |
+          steps.version-check.outputs.changed == 'true' &&
+          steps.tag-check.outputs.exists == 'false'
+        run: |
+          VERSION="${{ steps.current-version.outputs.version }}"
+          if echo "$VERSION" | grep -q "-alpha"; then
+            DIST_TAG="alpha"
+          elif echo "$VERSION" | grep -q "-beta"; then
+            DIST_TAG="beta"
+          elif echo "$VERSION" | grep -q "-rc"; then
+            DIST_TAG="next"
+          else
+            DIST_TAG="latest"
+          fi
+          echo "tag=$DIST_TAG" >> $GITHUB_OUTPUT
+          echo "NPM dist-tag: $DIST_TAG"
+
+      - name: Install dependencies
+        if: |
+          steps.version-check.outputs.changed == 'true' &&
+          steps.tag-check.outputs.exists == 'false'
+        run: npm ci
+
+      - name: Run tests
+        if: |
+          steps.version-check.outputs.changed == 'true' &&
+          steps.tag-check.outputs.exists == 'false'
+        run: npm test
+
+      - name: Build
+        if: |
+          steps.version-check.outputs.changed == 'true' &&
+          steps.tag-check.outputs.exists == 'false'
+        run: npm run build
+
       - name: Create and push tag
         if: |
           steps.version-check.outputs.changed == 'true' &&
@@ -94,3 +134,18 @@ jobs:
           git tag -a "$VERSION" -m "Release $VERSION"
           git push origin "$VERSION"
           echo "Tag $VERSION created and pushed successfully"
+
+      - name: Publish to NPM
+        if: |
+          steps.version-check.outputs.changed == 'true' &&
+          steps.tag-check.outputs.exists == 'false'
+        run: |
+          VERSION="${{ steps.current-version.outputs.version }}"
+          DIST_TAG="${{ steps.dist-tag.outputs.tag }}"
+          if [ "$DIST_TAG" = "latest" ]; then
+            npm publish --provenance --access public
+          else
+            npm publish --provenance --access public --tag "$DIST_TAG"
+          fi
+          echo "Published $VERSION with dist-tag: $DIST_TAG"
+
