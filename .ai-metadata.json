@@ -505,10 +505,10 @@
       "tool": "cursor"
     },
     ".github/workflows/publish.yml": {
-      "lines_total": 91,
-      "lines_ai_generated": 91,
+      "lines_total": 89,
+      "lines_ai_generated": 89,
       "ai_percentage": 100,
-      "last_updated": "2025-12-26T01:42:46.233Z",
+      "last_updated": "2025-12-26T03:01:44.687Z",
       "tool": "cursor"
     },
     ".github/workflows/release.yml": {

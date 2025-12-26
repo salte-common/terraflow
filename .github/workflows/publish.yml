@@ -87,5 +87,3 @@ jobs:
             npm publish --provenance --access public --tag "$DIST_TAG"
           fi
           echo "Published $VERSION with dist-tag: $DIST_TAG"
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
