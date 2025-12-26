@@ -1,6 +1,6 @@
 {
   "name": "@salte-common/terraflow",
-  "version": "0.1.0-alpha.14",
+  "version": "0.1.0-alpha.15",
   "description": "Opinionated Terraform workflow CLI with multi-cloud support",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
