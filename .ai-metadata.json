@@ -652,10 +652,10 @@
       "tool": "cursor"
     },
     ".github/workflows/auto-tag-and-publish.yml": {
-      "lines_total": 162,
-      "lines_ai_generated": 161,
-      "ai_percentage": 99.38271604938271,
-      "last_updated": "2025-12-26T05:14:37.950Z",
+      "lines_total": 158,
+      "lines_ai_generated": 156,
+      "ai_percentage": 98.73417721518987,
+      "last_updated": "2025-12-26T05:22:30.420Z",
       "tool": "cursor"
     }
   },
