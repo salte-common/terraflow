@@ -3,12 +3,6 @@ variable "gcp_project_id" {
   type        = string
 }
 
-variable "gcp_region" {
-  description = "GCP region for resources"
-  type        = string
-  default     = "us-central1"
-}
-
 variable "environment" {
   description = "Environment name"
   type        = string
