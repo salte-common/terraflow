@@ -12,10 +12,25 @@ import { ConfigManager, type CliOptions } from './core/config';
 import { ContextBuilder } from './core/context';
 import { TerraformExecutor } from './core/terraform';
 import { ConfigCommand } from './commands/config';
-import { InitCommand } from './commands/init';
+import { NewCommand } from './commands/new';
 import { Logger } from './utils/logger';
 
 const program = new Command();
+
+/**
+ * Workspace-sensitive terraform commands that need init and workspace setup
+ */
+const WORKSPACE_SENSITIVE_COMMANDS = [
+  'plan',
+  'apply',
+  'destroy',
+  'init',
+  'state',
+  'output',
+  'show',
+  'import',
+  'refresh',
+];
 
 /**
  * Main CLI entry point
@@ -31,13 +46,43 @@ async function main(): Promise<void> {
     // Use default version if package.json can't be read
   }
 
-  // Set up program
+  // Use Commander.js for all command routing
+  await handleCommanderParsing(version);
+}
+
+/**
+ * Handle Commander.js parsing for special commands (config, new) and help
+ */
+async function handleCommanderParsing(version: string): Promise<void> {
+
+  // Set up program for special commands
   program
     .name('terraflow')
-    .description('Opinionated Terraform workflow CLI with multi-cloud support')
+    .description(
+      'Opinionated Terraform workflow CLI with multi-cloud support. Automatically handles init and workspace selection for terraform commands.'
+    )
     .version(version, '-V, --version', 'Show version number')
     .allowExcessArguments(true) // Allow terraform arguments to pass through
-    .passThroughOptions(); // Pass unknown options through to terraform
+    .passThroughOptions() // Pass unknown options through to terraform
+    .addHelpText(
+      'after',
+      `
+Examples:
+  $ terraflow plan                    # Auto init + workspace, then terraform plan
+  $ terraflow apply --auto-approve    # Auto init + workspace, then terraform apply
+  $ terraflow init                    # Run terraform init (with backend config)
+  $ terraflow fmt                     # Run terraform fmt (direct, no init)
+  $ terraflow new my-project          # Scaffold a new project
+  $ terraflow config show             # Show resolved configuration
+
+Special Commands:
+  new <project-name>    Scaffold a new infrastructure project
+  config <subcommand>   Manage Terraflow configuration (show, init)
+
+Note: Workspace-sensitive commands (plan, apply, destroy, etc.) automatically
+run 'terraform init' and select/create the workspace before executing.
+`
+    );
 
   // Global options
   program
@@ -88,9 +133,9 @@ async function main(): Promise<void> {
       }
     });
 
-  // Init command for project scaffolding
+  // New command for project scaffolding
   program
-    .command('init [project-name]')
+    .command('new [project-name]')
     .description('Scaffold a new infrastructure project with opinionated defaults')
     .option('-p, --provider <name>', 'Cloud provider: aws, azure, or gcp (default: aws)', 'aws')
     .option(
@@ -108,10 +153,10 @@ async function main(): Promise<void> {
       'after',
       `
 Examples:
-  $ terraflow init my-project
-  $ terraflow init my-project --provider azure --language typescript
-  $ terraflow init --provider gcp --language python
-  $ terraflow init my-project --force
+  $ terraflow new my-project
+  $ terraflow new my-project --provider azure --language typescript
+  $ terraflow new --provider gcp --language python
+  $ terraflow new my-project --force
 `
     )
     .action(
@@ -120,7 +165,7 @@ Examples:
         options: { provider?: string; language?: string; workingDir?: string; force?: boolean }
       ) => {
         try {
-          await InitCommand.execute(projectName, {
+          await NewCommand.execute(projectName, {
             provider: options.provider,
             language: options.language,
             workingDir: options.workingDir,
@@ -128,25 +173,43 @@ Examples:
           });
         } catch (error) {
           Logger.error(
-            `Failed to initialize project: ${error instanceof Error ? error.message : String(error)}`
+            `Failed to create project: ${error instanceof Error ? error.message : String(error)}`
           );
           process.exit(1);
         }
       }
     );
 
-  // Parse arguments
-  program.parse();
-
-  // Check if config or init command was executed (handle early to avoid loading config)
-  const command = program.args[0];
-  if (command === 'config' || command === 'init') {
-    // Config and init commands handle their own execution, so we're done here
-    return;
+  // Register workspace-sensitive terraform commands
+  for (const cmd of WORKSPACE_SENSITIVE_COMMANDS) {
+    program
+      .command(cmd)
+      .description(`Run terraform ${cmd} with automatic init and workspace selection`)
+      .allowExcessArguments(true)
+      .passThroughOptions()
+      .action(async () => {
+        await handleWorkspaceSensitiveCommand(cmd);
+      });
   }
 
-  // Get parsed options
+  // Handle unknown commands - pass through directly to terraform (no init/workspace)
+  program.on('command:*', async (operands) => {
+    const unknownCommand = operands[0];
+    await handleUnknownCommand(unknownCommand);
+  });
+
+  // Parse arguments with Commander.js
+  await program.parseAsync();
+}
+
+/**
+ * Handle workspace-sensitive terraform command (plan, apply, destroy, etc.)
+ * These commands go through full workflow: init + workspace selection + terraform command
+ */
+async function handleWorkspaceSensitiveCommand(command: string): Promise<void> {
   const opts = program.opts<CliOptions>();
+  // Get remaining arguments after the command
+  const terraformArgs = program.args;
 
   // Configure logger
   if (opts.debug) {
@@ -161,57 +224,92 @@ Examples:
     Logger.setColor(false);
   }
 
-  // If no terraform command specified, show help
-  const terraformArgs = program.args;
-  if (terraformArgs.length === 0) {
-    program.help();
-    return;
-  }
-
   // Load configuration
   let config;
   try {
     config = await ConfigManager.load(opts);
-    Logger.debug('Configuration loaded successfully');
   } catch (error) {
-    Logger.error(
-      `Failed to load configuration: ${error instanceof Error ? error.message : String(error)}`
-    );
+    Logger.error(`Failed to load configuration: ${error instanceof Error ? error.message : String(error)}`);
     process.exit(1);
-  }
-
-  // Update logger level from config if set
-  if (config.logging?.level) {
-    Logger.setLevel(config.logging.level);
+    return;
   }
 
   // Build execution context
   let context;
   try {
     context = await ContextBuilder.build(config);
-    Logger.debug(`Execution context built for workspace: ${context.workspace}`);
   } catch (error) {
-    Logger.error(
-      `Failed to build execution context: ${error instanceof Error ? error.message : String(error)}`
-    );
+    Logger.error(`Failed to build execution context: ${error instanceof Error ? error.message : String(error)}`);
     process.exit(1);
+    return;
   }
 
-  // Validations are now run inside TerraformExecutor.execute()
-  // along with environment setup and plugin execution
-
-  // Execute terraform command
+  // Execute through TerraformExecutor (handles init + workspace + command)
   try {
-    const terraformCommand = terraformArgs[0] || '';
-    const terraformCommandArgs = terraformArgs.slice(1);
-
-    await TerraformExecutor.execute(terraformCommand, terraformCommandArgs, config, context, {
-      skipCommitCheck: opts.skipCommitCheck || config['skip-commit-check'] || false,
-      dryRun: opts.dryRun || false,
+    await TerraformExecutor.execute(command, terraformArgs, config, context, {
+      skipCommitCheck: opts.skipCommitCheck,
+      dryRun: opts.dryRun,
     });
   } catch (error) {
-    Logger.error(`Execution failed: ${error instanceof Error ? error.message : String(error)}`);
+    Logger.error(`Terraform execution failed: ${error instanceof Error ? error.message : String(error)}`);
     process.exit(1);
+    return;
+  }
+}
+
+/**
+ * Handle unknown terraform command - pass through directly to terraform (no init/workspace)
+ * This allows any terraform command to work without needing to be explicitly registered
+ */
+async function handleUnknownCommand(command: string): Promise<void> {
+  const opts = program.opts<CliOptions>();
+  // Get remaining arguments after the unknown command
+  // program.args contains the command name and remaining args, so skip the first element
+  const terraformArgs = program.args.slice(1);
+
+  // Configure logger
+  if (opts.debug) {
+    Logger.setLevel('debug');
+  } else if (opts.verbose) {
+    Logger.setLevel('info');
+  } else {
+    Logger.setLevel('info');
+  }
+
+  if (opts.noColor) {
+    Logger.setColor(false);
+  }
+
+  // Load configuration (for working dir and other settings)
+  let config;
+  try {
+    config = await ConfigManager.load(opts);
+  } catch (error) {
+    Logger.error(`Failed to load configuration: ${error instanceof Error ? error.message : String(error)}`);
+    process.exit(1);
+    return;
+  }
+
+  // Minimal validation - just check terraform is installed
+  try {
+    const { Validator } = await import('./core/validator');
+    await Validator.validateTerraformInstalled();
+  } catch (error) {
+    Logger.error(`Validation failed: ${error instanceof Error ? error.message : String(error)}`);
+    process.exit(1);
+    return;
+  }
+
+  // Get working directory from config
+  const workingDir = ConfigManager.getWorkingDir(config, process.cwd());
+
+  // Execute terraform command directly (no init, no workspace setup)
+  try {
+    await TerraformExecutor.runCommand(command, terraformArgs, workingDir);
+  } catch (error) {
+    Logger.error(`Terraform command failed: ${error instanceof Error ? error.message : String(error)}`);
+    process.exit(1);
+    return;
   }
 }
 

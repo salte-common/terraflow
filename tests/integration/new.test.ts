@@ -2,12 +2,12 @@
  * Integration tests for init command
  */
 
-import { InitCommand } from '../../src/commands/init';
+import { NewCommand } from '../../src/commands/new';
 import { ConfigError } from '../../src/core/errors';
 import { existsSync, readFileSync, rmSync, mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
-describe('InitCommand Integration Tests', () => {
+describe('NewCommand Integration Tests', () => {
   const testBaseDir = join(__dirname, '..', '..', 'tmp', 'init-integration-test');
 
   /**
@@ -63,7 +63,7 @@ describe('InitCommand Integration Tests', () => {
       const testDir = createTestDir('aws-js');
       const projectName = 'test-aws-js';
 
-      await InitCommand.execute(projectName, {
+      await NewCommand.execute(projectName, {
         provider: 'aws',
         language: 'javascript',
         workingDir: testDir,
@@ -111,7 +111,7 @@ describe('InitCommand Integration Tests', () => {
       const testDir = createTestDir('azure-ts');
       const projectName = 'test-azure-ts';
 
-      await InitCommand.execute(projectName, {
+      await NewCommand.execute(projectName, {
         provider: 'azure',
         language: 'typescript',
         workingDir: testDir,
@@ -140,7 +140,7 @@ describe('InitCommand Integration Tests', () => {
       const testDir = createTestDir('gcp-py');
       const projectName = 'test-gcp-py';
 
-      await InitCommand.execute(projectName, {
+      await NewCommand.execute(projectName, {
         provider: 'gcp',
         language: 'python',
         workingDir: testDir,
@@ -170,7 +170,7 @@ describe('InitCommand Integration Tests', () => {
       const testDir = createTestDir('go-project');
       const projectName = 'test-go';
 
-      await InitCommand.execute(projectName, {
+      await NewCommand.execute(projectName, {
         provider: 'aws',
         language: 'go',
         workingDir: testDir,
@@ -192,7 +192,7 @@ describe('InitCommand Integration Tests', () => {
       const testDir = createTestDir('invalid-name');
 
       await expect(
-        InitCommand.execute('invalid name!', {
+        NewCommand.execute('invalid name!', {
           workingDir: testDir,
         })
       ).rejects.toThrow(ConfigError);
@@ -202,7 +202,7 @@ describe('InitCommand Integration Tests', () => {
       const testDir = createTestDir('invalid-provider');
 
       await expect(
-        InitCommand.execute('test-project', {
+        NewCommand.execute('test-project', {
           provider: 'invalid',
           workingDir: testDir,
         })
@@ -213,7 +213,7 @@ describe('InitCommand Integration Tests', () => {
       const testDir = createTestDir('invalid-language');
 
       await expect(
-        InitCommand.execute('test-project', {
+        NewCommand.execute('test-project', {
           language: 'invalid',
           workingDir: testDir,
         })
@@ -227,7 +227,7 @@ describe('InitCommand Integration Tests', () => {
       writeFileSync(join(projectDir, 'existing.txt'), 'content');
 
       await expect(
-        InitCommand.execute('test-project', {
+        NewCommand.execute('test-project', {
           workingDir: testDir,
           force: false,
         })
@@ -240,7 +240,7 @@ describe('InitCommand Integration Tests', () => {
       mkdirSync(projectDir, { recursive: true });
       writeFileSync(join(projectDir, 'existing.txt'), 'content');
 
-      await InitCommand.execute('test-project', {
+      await NewCommand.execute('test-project', {
         workingDir: testDir,
         force: true,
       });
@@ -255,7 +255,7 @@ describe('InitCommand Integration Tests', () => {
     it('should create project in current directory when no project name provided', async () => {
       const testDir = createTestDir('current-dir');
 
-      await InitCommand.execute(undefined, {
+      await NewCommand.execute(undefined, {
         provider: 'aws',
         language: 'javascript',
         workingDir: testDir,
@@ -274,7 +274,7 @@ describe('InitCommand Integration Tests', () => {
       const testDir = createTestDir('template-vars');
       const projectName = 'my-awesome-project';
 
-      await InitCommand.execute(projectName, {
+      await NewCommand.execute(projectName, {
         provider: 'aws',
         language: 'javascript',
         workingDir: testDir,

@@ -1,5 +1,5 @@
 /**
- * Init command handler
+ * New command handler
  * Scaffolds a new infrastructure project with opinionated defaults
  */
 
@@ -18,9 +18,9 @@ import {
 } from '../utils/scaffolding';
 
 /**
- * Init command options
+ * New command options
  */
-export interface InitOptions {
+export interface NewOptions {
   provider?: string;
   language?: string;
   workingDir?: string;
@@ -28,26 +28,26 @@ export interface InitOptions {
 }
 
 /**
- * Init command handler for project scaffolding
+ * New command handler for project scaffolding
  *
  * @example
  * ```typescript
  * // Create AWS project with JavaScript
- * await InitCommand.execute('my-project', {
+ * await NewCommand.execute('my-project', {
  *   provider: 'aws',
  *   language: 'javascript'
  * });
  *
  * // Create Azure project with TypeScript
- * await InitCommand.execute('my-project', {
+ * await NewCommand.execute('my-project', {
  *   provider: 'azure',
  *   language: 'typescript'
  * });
  * ```
  */
-export class InitCommand {
+export class NewCommand {
   /**
-   * Execute the init command to scaffold a new infrastructure project
+   * Execute the new command to scaffold a new infrastructure project
    *
    * Creates a complete project structure with:
    * - Terraform configuration files for the specified cloud provider
@@ -57,7 +57,7 @@ export class InitCommand {
    * - Complete `.gitignore` and `README.md`
    *
    * @param projectName - Name of the project to create (optional, defaults to current directory)
-   * @param options - Init command options
+   * @param options - New command options
    * @param options.provider - Cloud provider: 'aws', 'azure', or 'gcp' (default: 'aws')
    * @param options.language - Application language: 'javascript', 'typescript', 'python', or 'go' (default: 'javascript')
    * @param options.workingDir - Directory where to create the project (default: current directory)
@@ -67,19 +67,19 @@ export class InitCommand {
    * @example
    * ```typescript
    * // Create project in current directory
-   * await InitCommand.execute(undefined, { provider: 'aws' });
+   * await NewCommand.execute(undefined, { provider: 'aws' });
    *
    * // Create named project
-   * await InitCommand.execute('my-infrastructure', {
+   * await NewCommand.execute('my-infrastructure', {
    *   provider: 'gcp',
    *   language: 'python'
    * });
    *
    * // Force overwrite existing files
-   * await InitCommand.execute('my-project', { force: true });
+   * await NewCommand.execute('my-project', { force: true });
    * ```
    */
-  static async execute(projectName: string | undefined, options: InitOptions = {}): Promise<void> {
+  static async execute(projectName: string | undefined, options: NewOptions = {}): Promise<void> {
     const provider = options.provider || 'aws';
     const language = options.language || 'javascript';
     const workingDir = options.workingDir || process.cwd();
@@ -89,7 +89,7 @@ export class InitCommand {
     if (!validateProvider(provider)) {
       throw new ConfigError(
         `Invalid provider "${provider}". Must be one of: aws, azure, gcp.\n` +
-          `Example: terraflow init my-project --provider aws`
+          `Example: terraflow new my-project --provider aws`
       );
     }
 
@@ -97,7 +97,7 @@ export class InitCommand {
     if (!validateLanguage(language)) {
       throw new ConfigError(
         `Invalid language "${language}". Must be one of: javascript, typescript, python, go.\n` +
-          `Example: terraflow init my-project --language typescript`
+          `Example: terraflow new my-project --language typescript`
       );
     }
 
@@ -119,11 +119,11 @@ export class InitCommand {
       throw new ConfigError(
         `Directory "${projectDir}" is not empty. Use --force to overwrite existing files.\n` +
           `Warning: Using --force will overwrite existing files in the target directory.\n` +
-          `Example: terraflow init ${projectName || 'my-project'} --force`
+          `Example: terraflow new ${projectName || 'my-project'} --force`
       );
     }
 
-    Logger.info(`🚀 Initializing project "${projectName || 'current directory'}"...`);
+    Logger.info(`🚀 Creating project "${projectName || 'current directory'}"...`);
     Logger.info(`   Provider: ${provider}`);
     Logger.info(`   Language: ${language}`);
 
@@ -136,7 +136,7 @@ export class InitCommand {
     await generateApplicationFiles(projectDir, language, finalProjectName);
     await generateConfigFiles(projectDir, provider, language, finalProjectName);
 
-    Logger.info(`✅ Project "${projectName || 'current directory'}" initialized successfully!`);
+    Logger.info(`✅ Project "${projectName || 'current directory'}" created successfully!`);
     Logger.info('');
     Logger.info('Next steps:');
     if (projectName) {
@@ -149,12 +149,12 @@ export class InitCommand {
     if (projectName) {
       Logger.info('  3. Edit .env with your credentials');
       Logger.info('  4. Review and update .tfwconfig.yml');
-      Logger.info('  5. terraflow init');
-      Logger.info('  6. terraflow plan');
+      Logger.info('  5. terraflow init    # Initialize terraform with backend');
+      Logger.info('  6. terraflow plan    # Plan changes (auto init + workspace)');
     } else {
       Logger.info('  3. Review and update .tfwconfig.yml');
-      Logger.info('  4. terraflow init');
-      Logger.info('  5. terraflow plan');
+      Logger.info('  4. terraflow init    # Initialize terraform with backend');
+      Logger.info('  5. terraflow plan    # Plan changes (auto init + workspace)');
     }
     Logger.info('');
     Logger.info('Documentation: ./README.md');

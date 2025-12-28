@@ -1,13 +1,13 @@
 /**
- * Unit tests for InitCommand
+ * Unit tests for NewCommand
  */
 
 import { existsSync, readFileSync, rmSync, mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
-import { InitCommand } from '../../src/commands/init';
+import { NewCommand } from '../../src/commands/new';
 import { ConfigError } from '../../src/core/errors';
 
-describe('InitCommand', () => {
+describe('NewCommand', () => {
   const testDir = join(__dirname, '..', '..', 'tmp', 'init-test');
   const projectName = 'test-project';
 
@@ -29,7 +29,7 @@ describe('InitCommand', () => {
   describe('execute', () => {
     it('should create project structure with default options', async () => {
       const projectDir = join(testDir, projectName);
-      await InitCommand.execute(projectName, {
+      await NewCommand.execute(projectName, {
         workingDir: testDir,
       });
 
@@ -45,7 +45,7 @@ describe('InitCommand', () => {
 
     it('should create AWS provider files', async () => {
       const projectDir = join(testDir, projectName);
-      await InitCommand.execute(projectName, {
+      await NewCommand.execute(projectName, {
         provider: 'aws',
         workingDir: testDir,
       });
@@ -61,7 +61,7 @@ describe('InitCommand', () => {
 
     it('should create Azure provider files', async () => {
       const projectDir = join(testDir, projectName);
-      await InitCommand.execute(projectName, {
+      await NewCommand.execute(projectName, {
         provider: 'azure',
         workingDir: testDir,
       });
@@ -77,7 +77,7 @@ describe('InitCommand', () => {
 
     it('should create GCP provider files', async () => {
       const projectDir = join(testDir, projectName);
-      await InitCommand.execute(projectName, {
+      await NewCommand.execute(projectName, {
         provider: 'gcp',
         workingDir: testDir,
       });
@@ -93,7 +93,7 @@ describe('InitCommand', () => {
 
     it('should create JavaScript application files', async () => {
       const projectDir = join(testDir, projectName);
-      await InitCommand.execute(projectName, {
+      await NewCommand.execute(projectName, {
         language: 'javascript',
         workingDir: testDir,
       });
@@ -107,7 +107,7 @@ describe('InitCommand', () => {
 
     it('should create TypeScript application files', async () => {
       const projectDir = join(testDir, projectName);
-      await InitCommand.execute(projectName, {
+      await NewCommand.execute(projectName, {
         language: 'typescript',
         workingDir: testDir,
       });
@@ -119,7 +119,7 @@ describe('InitCommand', () => {
 
     it('should create Python application files', async () => {
       const projectDir = join(testDir, projectName);
-      await InitCommand.execute(projectName, {
+      await NewCommand.execute(projectName, {
         language: 'python',
         workingDir: testDir,
       });
@@ -131,7 +131,7 @@ describe('InitCommand', () => {
 
     it('should create Go application files', async () => {
       const projectDir = join(testDir, projectName);
-      await InitCommand.execute(projectName, {
+      await NewCommand.execute(projectName, {
         language: 'go',
         workingDir: testDir,
       });
@@ -146,7 +146,7 @@ describe('InitCommand', () => {
 
     it('should replace project name in templates', async () => {
       const projectDir = join(testDir, projectName);
-      await InitCommand.execute(projectName, {
+      await NewCommand.execute(projectName, {
         workingDir: testDir,
       });
 
@@ -161,7 +161,7 @@ describe('InitCommand', () => {
 
     it('should throw ConfigError for invalid provider', async () => {
       await expect(
-        InitCommand.execute(projectName, {
+        NewCommand.execute(projectName, {
           provider: 'invalid',
           workingDir: testDir,
         })
@@ -170,7 +170,7 @@ describe('InitCommand', () => {
 
     it('should throw ConfigError for invalid language', async () => {
       await expect(
-        InitCommand.execute(projectName, {
+        NewCommand.execute(projectName, {
           language: 'invalid',
           workingDir: testDir,
         })
@@ -179,7 +179,7 @@ describe('InitCommand', () => {
 
     it('should throw ConfigError for invalid project name', async () => {
       await expect(
-        InitCommand.execute('invalid name!', {
+        NewCommand.execute('invalid name!', {
           workingDir: testDir,
         })
       ).rejects.toThrow(ConfigError);
@@ -191,7 +191,7 @@ describe('InitCommand', () => {
       writeFileSync(join(projectDir, 'existing-file.txt'), 'content');
 
       await expect(
-        InitCommand.execute(projectName, {
+        NewCommand.execute(projectName, {
           workingDir: testDir,
           force: false,
         })
@@ -203,7 +203,7 @@ describe('InitCommand', () => {
       mkdirSync(projectDir, { recursive: true });
       writeFileSync(join(projectDir, 'existing-file.txt'), 'content');
 
-      await InitCommand.execute(projectName, {
+      await NewCommand.execute(projectName, {
         workingDir: testDir,
         force: true,
       });
@@ -218,7 +218,7 @@ describe('InitCommand', () => {
       mkdirSync(currentDir, { recursive: true });
       process.chdir(currentDir);
 
-      await InitCommand.execute(undefined, {
+      await NewCommand.execute(undefined, {
         workingDir: currentDir,
       });
 

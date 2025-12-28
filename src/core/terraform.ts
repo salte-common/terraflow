@@ -7,11 +7,24 @@ import { execSync } from 'child_process';
 import type { TerraflowConfig } from '../types/config';
 import type { ExecutionContext } from '../types/context';
 import { Logger } from '../utils/logger';
-import { Validator } from './validator';
+import {
+  Validator,
+  FULL_VALIDATION_COMMANDS,
+  BACKEND_REQUIRED_COMMANDS,
+} from './validator';
 import { EnvironmentSetup } from './environment';
 import { loadAuthPlugin, loadSecretsPlugin, loadBackendPlugin } from './plugin-loader';
 import { saveBackendState, detectBackendMigration } from './backend-state';
 import { ConfigError } from './errors';
+
+/**
+ * Commands that require workspace and init
+ */
+const WORKSPACE_SENSITIVE_COMMANDS = [
+  ...FULL_VALIDATION_COMMANDS,
+  ...BACKEND_REQUIRED_COMMANDS,
+  'init', // terraform init also needs backend setup
+];
 
 /**
  * Terraform executor for running terraform commands
@@ -158,28 +171,37 @@ export class TerraformExecutor {
         saveBackendState(updatedContext.workingDir, config.backend);
       }
 
+      // Determine if this command needs init and workspace
+      const needsInitAndWorkspace = WORKSPACE_SENSITIVE_COMMANDS.includes(command);
+
       if (options.dryRun) {
         Logger.info('🔍 DRY RUN MODE - Terraform commands will not be executed');
         Logger.info('═══════════════════════════════════════════════════════');
         Logger.info('Would execute:');
         Logger.info('═══════════════════════════════════════════════════════');
-        Logger.info(`Workspace:        ${updatedContext.workspace}`);
-        Logger.info(`Working dir:      ${updatedContext.workingDir}`);
-        Logger.info(`Backend:          ${backendType}`);
-        if (backendArgs.length > 0) {
-          Logger.info('Backend init args:');
-          for (const arg of backendArgs) {
-            Logger.info(`  ${arg}`);
+        if (needsInitAndWorkspace) {
+          Logger.info(`Workspace:        ${updatedContext.workspace}`);
+          Logger.info(`Working dir:      ${updatedContext.workingDir}`);
+          Logger.info(`Backend:          ${backendType}`);
+          if (backendArgs.length > 0) {
+            Logger.info('Backend init args:');
+            for (const arg of backendArgs) {
+              Logger.info(`  ${arg}`);
+            }
           }
         }
         Logger.info(`Terraform command: terraform ${command} ${args.join(' ')}`);
         Logger.info('═══════════════════════════════════════════════════════');
       } else {
-        // 7. Run terraform init with backend config
-        await TerraformExecutor.init(backendType, backendArgs, updatedContext.workingDir);
+        if (needsInitAndWorkspace) {
+          // 7. Run terraform init with backend config (only for workspace-sensitive commands)
+          await TerraformExecutor.init(backendType, backendArgs, updatedContext.workingDir);
 
-        // 8. Select/create workspace
-        await TerraformExecutor.workspace(updatedContext.workspace, updatedContext.workingDir);
+          // 8. Select/create workspace (only for workspace-sensitive commands, except terraform init itself)
+          if (command !== 'init') {
+            await TerraformExecutor.workspace(updatedContext.workspace, updatedContext.workingDir);
+          }
+        }
 
         // 9. Execute terraform command
         await TerraformExecutor.runCommand(command, args, updatedContext.workingDir);
