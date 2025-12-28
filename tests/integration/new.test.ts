@@ -2,12 +2,12 @@
  * Integration tests for init command
  */
 
-import { InitCommand } from '../../src/commands/init';
+import { NewCommand } from '../../src/commands/new';
 import { ConfigError } from '../../src/core/errors';
 import { existsSync, readFileSync, rmSync, mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
-describe('InitCommand Integration Tests', () => {
+describe('NewCommand Integration Tests', () => {
   const testBaseDir = join(__dirname, '..', '..', 'tmp', 'init-integration-test');
 
   /**
@@ -63,7 +63,7 @@ describe('InitCommand Integration Tests', () => {
       const testDir = createTestDir('aws-js');
       const projectName = 'test-aws-js';
 
-      await InitCommand.execute(projectName, {
+      await NewCommand.execute(projectName, {
         provider: 'aws',
         language: 'javascript',
         workingDir: testDir,
@@ -83,7 +83,7 @@ describe('InitCommand Integration Tests', () => {
       verifyFileContent(projectDir, 'terraform/_init.tf', 'backend "s3"');
       verifyFileExists(projectDir, 'terraform/inputs.tf');
       verifyFileExists(projectDir, 'terraform/locals.tf');
-      verifyFileContent(projectDir, 'terraform/locals.tf', projectName);
+      verifyFileContent(projectDir, 'terraform/locals.tf', 'terraform.workspace');
       verifyFileExists(projectDir, 'terraform/main.tf');
       verifyFileExists(projectDir, 'terraform/outputs.tf');
       verifyFileExists(projectDir, 'terraform/modules/inputs.tf');
@@ -111,7 +111,7 @@ describe('InitCommand Integration Tests', () => {
       const testDir = createTestDir('azure-ts');
       const projectName = 'test-azure-ts';
 
-      await InitCommand.execute(projectName, {
+      await NewCommand.execute(projectName, {
         provider: 'azure',
         language: 'typescript',
         workingDir: testDir,
@@ -140,7 +140,7 @@ describe('InitCommand Integration Tests', () => {
       const testDir = createTestDir('gcp-py');
       const projectName = 'test-gcp-py';
 
-      await InitCommand.execute(projectName, {
+      await NewCommand.execute(projectName, {
         provider: 'gcp',
         language: 'python',
         workingDir: testDir,
@@ -170,7 +170,7 @@ describe('InitCommand Integration Tests', () => {
       const testDir = createTestDir('go-project');
       const projectName = 'test-go';
 
-      await InitCommand.execute(projectName, {
+      await NewCommand.execute(projectName, {
         provider: 'aws',
         language: 'go',
         workingDir: testDir,
@@ -192,7 +192,7 @@ describe('InitCommand Integration Tests', () => {
       const testDir = createTestDir('invalid-name');
 
       await expect(
-        InitCommand.execute('invalid name!', {
+        NewCommand.execute('invalid name!', {
           workingDir: testDir,
         })
       ).rejects.toThrow(ConfigError);
@@ -202,7 +202,7 @@ describe('InitCommand Integration Tests', () => {
       const testDir = createTestDir('invalid-provider');
 
       await expect(
-        InitCommand.execute('test-project', {
+        NewCommand.execute('test-project', {
           provider: 'invalid',
           workingDir: testDir,
         })
@@ -213,7 +213,7 @@ describe('InitCommand Integration Tests', () => {
       const testDir = createTestDir('invalid-language');
 
       await expect(
-        InitCommand.execute('test-project', {
+        NewCommand.execute('test-project', {
           language: 'invalid',
           workingDir: testDir,
         })
@@ -227,7 +227,7 @@ describe('InitCommand Integration Tests', () => {
       writeFileSync(join(projectDir, 'existing.txt'), 'content');
 
       await expect(
-        InitCommand.execute('test-project', {
+        NewCommand.execute('test-project', {
           workingDir: testDir,
           force: false,
         })
@@ -240,7 +240,7 @@ describe('InitCommand Integration Tests', () => {
       mkdirSync(projectDir, { recursive: true });
       writeFileSync(join(projectDir, 'existing.txt'), 'content');
 
-      await InitCommand.execute('test-project', {
+      await NewCommand.execute('test-project', {
         workingDir: testDir,
         force: true,
       });
@@ -255,7 +255,7 @@ describe('InitCommand Integration Tests', () => {
     it('should create project in current directory when no project name provided', async () => {
       const testDir = createTestDir('current-dir');
 
-      await InitCommand.execute(undefined, {
+      await NewCommand.execute(undefined, {
         provider: 'aws',
         language: 'javascript',
         workingDir: testDir,
@@ -265,7 +265,7 @@ describe('InitCommand Integration Tests', () => {
       expect(existsSync(join(testDir, 'terraform'))).toBe(true);
       expect(existsSync(join(testDir, 'src'))).toBe(true);
       expect(existsSync(join(testDir, '.tfwconfig.yml'))).toBe(true);
-      verifyFileContent(testDir, 'terraform/locals.tf', 'project'); // default name
+      verifyFileContent(testDir, 'terraform/locals.tf', 'terraform.workspace');
     });
   });
 
@@ -274,7 +274,7 @@ describe('InitCommand Integration Tests', () => {
       const testDir = createTestDir('template-vars');
       const projectName = 'my-awesome-project';
 
-      await InitCommand.execute(projectName, {
+      await NewCommand.execute(projectName, {
         provider: 'aws',
         language: 'javascript',
         workingDir: testDir,
@@ -282,10 +282,11 @@ describe('InitCommand Integration Tests', () => {
 
       const projectDir = join(testDir, projectName);
 
-      // Check locals.tf has project name
+      // Check locals.tf has correct structure (workspace, repository, commit hash)
       const localsContent = readFileSync(join(projectDir, 'terraform', 'locals.tf'), 'utf8');
-      expect(localsContent).toContain(`Project     = "${projectName}"`);
-      expect(localsContent).not.toContain('<project-name>');
+      expect(localsContent).toContain('Workspace   = terraform.workspace');
+      expect(localsContent).toContain('Repository  = var.git_repository');
+      expect(localsContent).toContain('CommitHash  = var.git_commit_sha');
 
       // Check README has project name
       const readmeContent = readFileSync(join(projectDir, 'README.md'), 'utf8');

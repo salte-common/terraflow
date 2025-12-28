@@ -1,9 +1,10 @@
 locals {
   # Common tags/labels for all resources
   common_tags = {
-    Environment = var.environment
+    Workspace   = terraform.workspace
     ManagedBy   = "terraform"
-    Project     = "<project-name>"
+    Repository  = var.git_repository
+    CommitHash  = var.git_commit_sha
   }
 }
 

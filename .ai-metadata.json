@@ -71,10 +71,10 @@
       "tool": "cursor"
     },
     "src/index.ts": {
-      "lines_total": 200,
+      "lines_total": 284,
       "lines_ai_generated": 20,
-      "ai_percentage": 10,
-      "last_updated": "2025-12-25T21:30:00Z",
+      "ai_percentage": 7,
+      "last_updated": "2025-12-28T03:11:06.521Z",
       "tool": "cursor"
     },
     "src/types/config.ts": {
@@ -152,34 +152,6 @@
       "lines_ai_generated": 366,
       "ai_percentage": 100,
       "last_updated": "2025-12-21T02:43:54Z",
-      "tool": "cursor"
-    },
-    "src/commands/base.ts": {
-      "lines_total": 10,
-      "lines_ai_generated": 10,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
-      "tool": "cursor"
-    },
-    "src/commands/plan.ts": {
-      "lines_total": 10,
-      "lines_ai_generated": 10,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
-      "tool": "cursor"
-    },
-    "src/commands/apply.ts": {
-      "lines_total": 10,
-      "lines_ai_generated": 10,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
-      "tool": "cursor"
-    },
-    "src/commands/destroy.ts": {
-      "lines_total": 10,
-      "lines_ai_generated": 10,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
       "tool": "cursor"
     },
     "src/commands/config.ts": {
