@@ -4,7 +4,7 @@ Terraflow provides a powerful project scaffolding feature that generates complet
 
 ## Overview
 
-The `terraflow init` command scaffolds a new infrastructure project with:
+The `terraflow new` command scaffolds a new infrastructure project with:
 - Pre-configured Terraform files for your cloud provider
 - Application code templates in your chosen language
 - Complete configuration files (`.tfwconfig.yml`, `.env.example`, `.gitignore`, `README.md`)
@@ -13,7 +13,7 @@ The `terraflow init` command scaffolds a new infrastructure project with:
 ## Command Syntax
 
 ```bash
-terraflow init [project-name] [options]
+terraflow new [project-name] [options]
 ```
 
 ### Options
@@ -27,22 +27,22 @@ terraflow init [project-name] [options]
 
 ```bash
 # Create AWS project with JavaScript in current directory
-terraflow init
+terraflow new
 
 # Create named project with default options (AWS + JavaScript)
-terraflow init my-infrastructure
+terraflow new my-infrastructure
 
 # Create Azure project with TypeScript
-terraflow init my-infrastructure --provider azure --language typescript
+terraflow new my-infrastructure --provider azure --language typescript
 
 # Create GCP project with Python
-terraflow init my-infrastructure --provider gcp --language python
+terraflow new my-infrastructure --provider gcp --language python
 
 # Create project in specific directory
-terraflow init my-infrastructure --working-dir ~/projects
+terraflow new my-infrastructure --working-dir ~/projects
 
 # Overwrite existing files
-terraflow init my-infrastructure --force
+terraflow new my-infrastructure --force
 ```
 
 ## Generated Project Structure
@@ -75,7 +75,7 @@ terraflow init my-infrastructure --force
 ### AWS Project
 
 ```bash
-terraflow init my-aws-project --provider aws --language javascript
+terraflow new my-aws-project --provider aws --language javascript
 ```
 
 **Generated Terraform Configuration:**
@@ -92,7 +92,7 @@ terraflow init my-aws-project --provider aws --language javascript
 ### Azure Project
 
 ```bash
-terraflow init my-azure-project --provider azure --language typescript
+terraflow new my-azure-project --provider azure --language typescript
 ```
 
 **Generated Terraform Configuration:**
@@ -110,7 +110,7 @@ terraflow init my-azure-project --provider azure --language typescript
 ### GCP Project
 
 ```bash
-terraflow init my-gcp-project --provider gcp --language python
+terraflow new my-gcp-project --provider gcp --language python
 ```
 
 **Generated Terraform Configuration:**
@@ -130,7 +130,7 @@ terraflow init my-gcp-project --provider gcp --language python
 ### JavaScript
 
 ```bash
-terraflow init my-project --language javascript
+terraflow new my-project --language javascript
 ```
 
 **Generated Files:**
@@ -141,7 +141,7 @@ terraflow init my-project --language javascript
 ### TypeScript
 
 ```bash
-terraflow init my-project --language typescript
+terraflow new my-project --language typescript
 ```
 
 **Generated Files:**
@@ -153,7 +153,7 @@ terraflow init my-project --language typescript
 ### Python
 
 ```bash
-terraflow init my-project --language python
+terraflow new my-project --language python
 ```
 
 **Generated Files:**
@@ -165,7 +165,7 @@ terraflow init my-project --language python
 ### Go
 
 ```bash
-terraflow init my-project --language go
+terraflow new my-project --language go
 ```
 
 **Generated Files:**
@@ -198,13 +198,13 @@ By default, the project is created in the current directory. You can specify a d
 
 ```bash
 # Create in current directory
-terraflow init my-project
+terraflow new my-project
 
 # Create in specific directory
-terraflow init my-project --working-dir ~/projects
+terraflow new my-project --working-dir ~/projects
 
 # Create in current directory without project name
-terraflow init
+terraflow new
 ```
 
 ## Force Flag
@@ -213,17 +213,17 @@ If the target directory is not empty, Terraflow will refuse to create the projec
 
 ```bash
 # This will fail if directory exists and is not empty
-terraflow init my-project
+terraflow new my-project
 
 # This will overwrite existing files
-terraflow init my-project --force
+terraflow new my-project --force
 ```
 
 **Warning:** Using `--force` will overwrite existing files. Use with caution!
 
 ## Next Steps After Scaffolding
 
-After running `terraflow init`, follow these steps:
+After running `terraflow new`, follow these steps:
 
 1. **Navigate to project directory** (if you created a named project):
    ```bash
@@ -274,10 +274,10 @@ Terraflow templates are located in `src/templates/` and can be customized for yo
 
 ```bash
 # ❌ Invalid
-terraflow init "my project"
+terraflow new "my project"
 
 # ✅ Valid
-terraflow init my-project
+terraflow new my-project
 ```
 
 ### Error: "Directory is not empty"
@@ -288,10 +288,10 @@ terraflow init my-project
 
 ```bash
 # Option 1: Use --force
-terraflow init my-project --force
+terraflow new my-project --force
 
 # Option 2: Use different directory
-terraflow init my-project --working-dir ~/other-location
+terraflow new my-project --working-dir ~/other-location
 ```
 
 ### Error: "Invalid provider"
@@ -302,10 +302,10 @@ terraflow init my-project --working-dir ~/other-location
 
 ```bash
 # ❌ Invalid
-terraflow init my-project --provider amazon
+terraflow new my-project --provider amazon
 
 # ✅ Valid
-terraflow init my-project --provider aws
+terraflow new my-project --provider aws
 ```
 
 ### Error: "Invalid language"
@@ -316,10 +316,10 @@ terraflow init my-project --provider aws
 
 ```bash
 # ❌ Invalid
-terraflow init my-project --language js
+terraflow new my-project --language js
 
 # ✅ Valid
-terraflow init my-project --language javascript
+terraflow new my-project --language javascript
 ```
 
 ### Template files not found

@@ -45,13 +45,13 @@ The fastest way to get started is to scaffold a new infrastructure project:
 
 ```bash
 # Create a new AWS project with JavaScript
-terraflow init my-infrastructure --provider aws --language javascript
+terraflow new my-infrastructure --provider aws --language javascript
 
 # Or create an Azure project with TypeScript
-terraflow init my-infrastructure --provider azure --language typescript
+terraflow new my-infrastructure --provider azure --language typescript
 
 # Or create a GCP project with Python
-terraflow init my-infrastructure --provider gcp --language python
+terraflow new my-infrastructure --provider gcp --language python
 ```
 
 This creates a complete project structure with:
@@ -231,7 +231,7 @@ secrets:
 
 ## Documentation
 
-- **[Project Scaffolding Guide](./docs/scaffolding.md)** - Complete guide to `terraflow init` command
+- **[Project Scaffolding Guide](./docs/scaffolding.md)** - Complete guide to `terraflow new` command
 - **[Configuration Reference](./docs/configuration.md)** - Complete configuration options and examples
 - **[Plugin Development Guide](./docs/plugins.md)** - How to develop and test plugins
 - **[Releasing Guide](./docs/releasing.md)** - Complete release process and versioning

@@ -214,7 +214,7 @@ locals {
    - Add language-specific ignore patterns in `src/templates/config/gitignore.template`
 
 5. **Add tests:**
-   - Add integration test in `tests/integration/init.test.ts`
+   - Add integration test in `tests/integration/new.test.ts`
    - Verify all files are generated correctly
 
 ### Adding Support for New Providers
@@ -237,7 +237,7 @@ locals {
    - Add provider-specific backend config examples in `src/templates/config/tfwconfig.yml.template`
 
 5. **Add tests:**
-   - Add integration test in `tests/integration/init.test.ts`
+   - Add integration test in `tests/integration/new.test.ts`
    - Verify provider-specific files are generated correctly
 
 ### Template Best Practices
@@ -259,12 +259,12 @@ After adding or modifying templates:
 
 2. **Run integration tests:**
    ```bash
-   npm test -- tests/integration/init.test.ts
+   npm test -- tests/integration/new.test.ts
    ```
 
 3. **Test manually:**
    ```bash
-   terraflow init test-project --provider <provider> --language <language>
+   terraflow new test-project --provider <provider> --language <language>
    cd test-project
    # Verify all files exist and content is correct
    ```

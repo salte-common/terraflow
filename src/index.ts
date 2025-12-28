@@ -43,9 +43,10 @@ async function handleCommanderParsing(version: string): Promise<void> {
   program
     .name('terraflow')
     .description(
-      'Opinionated Terraform workflow CLI with multi-cloud support. Automatically handles init and workspace selection for terraform commands.'
+      'Opinionated Terraform workflow CLI with multi-cloud support. Automatically runs terraform init and workspace selection for workspace-sensitive commands (plan, apply, destroy, etc.). All other terraform commands are passed through directly.'
     )
     .version(version, '-V, --version', 'Show version number')
+    .enablePositionalOptions() // Required for passThroughOptions
     .allowExcessArguments(true) // Allow terraform arguments to pass through
     .passThroughOptions() // Pass unknown options through to terraform
     .addHelpText(
