@@ -4,13 +4,13 @@
 # Working directory for terraform files
 working-dir: ./terraform
 
-# Workspace derivation strategy
-workspace_strategy:
-  - cli
-  - env
-  - tag
-  - branch
-  - hostname
+# Workspace derivation strategy (optional - uses sensible default)
+# workspace_strategy:
+#   - cli
+#   - env
+#   - tag
+#   - branch
+#   - hostname
 
 # Backend configuration (adjust for your provider)
 backend:
