@@ -7,11 +7,7 @@ import { execSync } from 'child_process';
 import type { TerraflowConfig } from '../types/config';
 import type { ExecutionContext } from '../types/context';
 import { Logger } from '../utils/logger';
-import {
-  Validator,
-  FULL_VALIDATION_COMMANDS,
-  BACKEND_REQUIRED_COMMANDS,
-} from './validator';
+import { Validator, FULL_VALIDATION_COMMANDS, BACKEND_REQUIRED_COMMANDS } from './validator';
 import { EnvironmentSetup } from './environment';
 import { loadAuthPlugin, loadSecretsPlugin, loadBackendPlugin } from './plugin-loader';
 import { saveBackendState, detectBackendMigration } from './backend-state';

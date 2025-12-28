@@ -39,7 +39,6 @@ async function main(): Promise<void> {
  * Handle Commander.js parsing for special commands (config, new) and help
  */
 async function handleCommanderParsing(version: string): Promise<void> {
-
   // Set up program for special commands
   program
     .name('terraflow')
@@ -217,7 +216,9 @@ async function handleWorkspaceSensitiveCommand(command: string): Promise<void> {
   try {
     config = await ConfigManager.load(opts);
   } catch (error) {
-    Logger.error(`Failed to load configuration: ${error instanceof Error ? error.message : String(error)}`);
+    Logger.error(
+      `Failed to load configuration: ${error instanceof Error ? error.message : String(error)}`
+    );
     process.exit(1);
     return;
   }
@@ -227,7 +228,9 @@ async function handleWorkspaceSensitiveCommand(command: string): Promise<void> {
   try {
     context = await ContextBuilder.build(config);
   } catch (error) {
-    Logger.error(`Failed to build execution context: ${error instanceof Error ? error.message : String(error)}`);
+    Logger.error(
+      `Failed to build execution context: ${error instanceof Error ? error.message : String(error)}`
+    );
     process.exit(1);
     return;
   }
@@ -239,7 +242,9 @@ async function handleWorkspaceSensitiveCommand(command: string): Promise<void> {
       dryRun: opts.dryRun,
     });
   } catch (error) {
-    Logger.error(`Terraform execution failed: ${error instanceof Error ? error.message : String(error)}`);
+    Logger.error(
+      `Terraform execution failed: ${error instanceof Error ? error.message : String(error)}`
+    );
     process.exit(1);
     return;
   }
@@ -273,7 +278,9 @@ async function handleUnknownCommand(command: string): Promise<void> {
   try {
     config = await ConfigManager.load(opts);
   } catch (error) {
-    Logger.error(`Failed to load configuration: ${error instanceof Error ? error.message : String(error)}`);
+    Logger.error(
+      `Failed to load configuration: ${error instanceof Error ? error.message : String(error)}`
+    );
     process.exit(1);
     return;
   }
@@ -295,7 +302,9 @@ async function handleUnknownCommand(command: string): Promise<void> {
   try {
     await TerraformExecutor.runCommand(command, terraformArgs, workingDir);
   } catch (error) {
-    Logger.error(`Terraform command failed: ${error instanceof Error ? error.message : String(error)}`);
+    Logger.error(
+      `Terraform command failed: ${error instanceof Error ? error.message : String(error)}`
+    );
     process.exit(1);
     return;
   }
