@@ -19,8 +19,9 @@ import { ConfigError } from './errors';
 
 /**
  * Commands that require workspace and init
+ * Exported so it can be used by the CLI for command registration
  */
-const WORKSPACE_SENSITIVE_COMMANDS = [
+export const WORKSPACE_SENSITIVE_COMMANDS = [
   ...FULL_VALIDATION_COMMANDS,
   ...BACKEND_REQUIRED_COMMANDS,
   'init', // terraform init also needs backend setup

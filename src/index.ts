@@ -10,27 +10,12 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import { ConfigManager, type CliOptions } from './core/config';
 import { ContextBuilder } from './core/context';
-import { TerraformExecutor } from './core/terraform';
+import { TerraformExecutor, WORKSPACE_SENSITIVE_COMMANDS } from './core/terraform';
 import { ConfigCommand } from './commands/config';
 import { NewCommand } from './commands/new';
 import { Logger } from './utils/logger';
 
 const program = new Command();
-
-/**
- * Workspace-sensitive terraform commands that need init and workspace setup
- */
-const WORKSPACE_SENSITIVE_COMMANDS = [
-  'plan',
-  'apply',
-  'destroy',
-  'init',
-  'state',
-  'output',
-  'show',
-  'import',
-  'refresh',
-];
 
 /**
  * Main CLI entry point
@@ -181,7 +166,10 @@ Examples:
     );
 
   // Register workspace-sensitive terraform commands
-  for (const cmd of WORKSPACE_SENSITIVE_COMMANDS) {
+  // Exclude 'workspace' as it's for workspace management (list, show, select, etc.)
+  // and shouldn't auto-select a workspace before running
+  const commandsToRegister = WORKSPACE_SENSITIVE_COMMANDS.filter((cmd) => cmd !== 'workspace');
+  for (const cmd of commandsToRegister) {
     program
       .command(cmd)
       .description(`Run terraform ${cmd} with automatic init and workspace selection`)
