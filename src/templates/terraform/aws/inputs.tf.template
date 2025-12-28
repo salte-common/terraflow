@@ -1,8 +1,3 @@
-variable "environment" {
-  description = "Environment name (e.g., dev, staging, prod)"
-  type        = string
-}
-
 variable "git_repository" {
   description = "Git repository name (e.g., org/repo)"
   type        = string

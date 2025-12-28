@@ -3,11 +3,6 @@ variable "gcp_project_id" {
   type        = string
 }
 
-variable "environment" {
-  description = "Environment name"
-  type        = string
-}
-
 variable "git_repository" {
   description = "Git repository name (e.g., org/repo)"
   type        = string
