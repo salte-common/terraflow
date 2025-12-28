@@ -155,8 +155,9 @@ describe('NewCommand', () => {
       expect(readme).not.toContain('<project-name>');
 
       const localsTf = readFileSync(join(projectDir, 'terraform', 'locals.tf'), 'utf8');
-      expect(localsTf).toContain(`Project     = "${projectName}"`);
-      expect(localsTf).not.toContain('<project-name>');
+      expect(localsTf).toContain('Workspace   = terraform.workspace');
+      expect(localsTf).toContain('Repository  = var.git_repository');
+      expect(localsTf).toContain('CommitHash  = var.git_commit_sha');
     });
 
     it('should throw ConfigError for invalid provider', async () => {

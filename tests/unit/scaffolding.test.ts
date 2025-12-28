@@ -111,7 +111,8 @@ describe('Scaffolding Utilities', () => {
     it('should load existing template file', () => {
       const content = loadTemplate('terraform/locals.tf.template');
       expect(content).toContain('locals');
-      expect(content).toContain('<project-name>');
+      expect(content).toContain('terraform.workspace');
+      expect(content).toContain('var.git_repository');
     });
 
     it('should throw ConfigError for non-existent template', () => {

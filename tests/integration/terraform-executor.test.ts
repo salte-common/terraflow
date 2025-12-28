@@ -101,6 +101,25 @@ jest.mock('../../src/core/validator', () => {
         warnings: [],
       })),
     },
+    FULL_VALIDATION_COMMANDS: ['apply', 'destroy', 'import', 'refresh'],
+    BACKEND_REQUIRED_COMMANDS: ['plan', 'state', 'workspace', 'output', 'show'],
+  };
+});
+
+// Mock ContextBuilder to avoid git command execution
+jest.mock('../../src/core/context', () => {
+  return {
+    ContextBuilder: {
+      build: jest.fn(async (_config, _cwd) => ({
+        workspace: 'test-workspace',
+        workingDir: '/tmp/test-terraform',
+        cloud: { provider: 'none' },
+        vcs: {},
+        hostname: 'test-host',
+        env: {},
+        templateVars: {},
+      })),
+    },
   };
 });
 

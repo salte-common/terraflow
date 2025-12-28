@@ -83,7 +83,7 @@ describe('NewCommand Integration Tests', () => {
       verifyFileContent(projectDir, 'terraform/_init.tf', 'backend "s3"');
       verifyFileExists(projectDir, 'terraform/inputs.tf');
       verifyFileExists(projectDir, 'terraform/locals.tf');
-      verifyFileContent(projectDir, 'terraform/locals.tf', projectName);
+      verifyFileContent(projectDir, 'terraform/locals.tf', 'terraform.workspace');
       verifyFileExists(projectDir, 'terraform/main.tf');
       verifyFileExists(projectDir, 'terraform/outputs.tf');
       verifyFileExists(projectDir, 'terraform/modules/inputs.tf');
@@ -265,7 +265,7 @@ describe('NewCommand Integration Tests', () => {
       expect(existsSync(join(testDir, 'terraform'))).toBe(true);
       expect(existsSync(join(testDir, 'src'))).toBe(true);
       expect(existsSync(join(testDir, '.tfwconfig.yml'))).toBe(true);
-      verifyFileContent(testDir, 'terraform/locals.tf', 'project'); // default name
+      verifyFileContent(testDir, 'terraform/locals.tf', 'terraform.workspace');
     });
   });
 
@@ -282,10 +282,11 @@ describe('NewCommand Integration Tests', () => {
 
       const projectDir = join(testDir, projectName);
 
-      // Check locals.tf has project name
+      // Check locals.tf has correct structure (workspace, repository, commit hash)
       const localsContent = readFileSync(join(projectDir, 'terraform', 'locals.tf'), 'utf8');
-      expect(localsContent).toContain(`Project     = "${projectName}"`);
-      expect(localsContent).not.toContain('<project-name>');
+      expect(localsContent).toContain('Workspace   = terraform.workspace');
+      expect(localsContent).toContain('Repository  = var.git_repository');
+      expect(localsContent).toContain('CommitHash  = var.git_commit_sha');
 
       // Check README has project name
       const readmeContent = readFileSync(join(projectDir, 'README.md'), 'utf8');
