@@ -1,5 +1,16 @@
 # Terraflow configuration
 # See: https://github.com/salte-common/terraflow/blob/main/docs/configuration.md
+#
+# All configuration options can also be set via environment variables with TERRAFLOW_ prefix:
+#   TERRAFLOW_CONFIG=/path/to/config.yml          # Path to config file
+#   TERRAFLOW_WORKSPACE=development               # Workspace name
+#   TERRAFLOW_WORKING_DIR=./terraform            # Terraform working directory
+#   TERRAFLOW_SKIP_COMMIT_CHECK=false            # Skip git commit validation
+#   TERRAFLOW_BACKEND=s3                         # Backend type (local, s3, azurerm, gcs)
+#   TERRAFLOW_SECRETS=aws-secrets                # Secrets provider (env, aws-secrets, azure-keyvault, gcp-secret-manager)
+#   TERRAFLOW_ASSUME_ROLE=arn:aws:iam::...       # AWS role ARN for assume role authentication
+#
+# Environment variables take precedence over this config file.
 
 # Working directory for terraform files
 working-dir: ./terraform
@@ -23,19 +34,22 @@ backend:
     
     # AWS S3 Backend:
     # bucket: ${AWS_REGION}-${AWS_ACCOUNT_ID}-terraform-state
-    # key: ${GITHUB_REPOSITORY}
+    # key: ${GIT_REPOSITORY}
     # region: ${AWS_REGION}
     # dynamodb_table: terraform-statelock
     # encrypt: true
+    # kms_key_id: arn:aws:kms:${AWS_REGION}:${AWS_ACCOUNT_ID}:key/your-key-id  # Optional: Customer-managed KMS key for encryption
     
     # Azure Backend:
     # storage_account_name: mystorageaccount
     # container_name: tfstate
     # key: terraform.tfstate
+    # encryption: true  # Optional: Enable encryption (customer-managed keys configured at storage account level)
     
     # GCP Backend:
     # bucket: my-gcs-bucket
     # prefix: terraform/state
+    # encryption_key: projects/PROJECT_ID/locations/LOCATION/keyRings/RING_NAME/cryptoKeys/KEY_NAME  # Optional: Customer-managed encryption key (CMEK)
 
 # Uncomment to configure secrets from secret manager
 # secrets:
@@ -51,9 +65,10 @@ backend:
 #     # GCP Secret Manager:
 #     # project_id: my-project
 
-# Terraform variables
-variables:
-  environment: development
+# Terraform variables (optional)
+# Variables defined here are automatically converted to TF_VAR_* environment variables
+# variables:
+#   environment: development
 
 # Validations
 validations:

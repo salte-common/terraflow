@@ -111,14 +111,14 @@ export class ContextBuilder {
 
   /**
    * Build cloud provider information
+   * Detects cloud provider from environment (AWS, Azure, GCP)
    * @returns Cloud information
    */
   private static async buildCloudInfo(): Promise<CloudInfo> {
-    // TODO: Implement cloud detection (AWS, Azure, GCP)
-    // For now, return default
-    return {
-      provider: 'none',
-    };
+    // Use CloudUtils to detect cloud provider
+    // This needs to happen early so validation can check it
+    const { CloudUtils } = await import('../utils/cloud');
+    return await CloudUtils.detectCloud();
   }
 
   /**
@@ -128,7 +128,11 @@ export class ContextBuilder {
    */
   private static async buildVcsInfo(cwd: string = process.cwd()): Promise<VcsInfo> {
     if (!GitUtils.isGitRepository(cwd)) {
-      return {};
+      // Default to all zeros for commit SHA when git is not initialized (similar to workspace defaulting to "local")
+      return {
+        commitSha: '0000000000000000000000000000000000000000',
+        shortSha: '0000000',
+      };
     }
 
     const branch = await GitUtils.getBranch(cwd);
@@ -142,8 +146,8 @@ export class ContextBuilder {
     return {
       branch,
       tag,
-      commitSha,
-      shortSha,
+      commitSha: commitSha || '0000000000000000000000000000000000000000',
+      shortSha: shortSha || '0000000',
       isClean,
       githubRepository,
       gitlabProjectPath,
@@ -200,15 +204,17 @@ export class ContextBuilder {
     if (vcs.tag) {
       vars.GIT_TAG = vcs.tag;
     }
-    if (vcs.commitSha) {
-      vars.GIT_COMMIT_SHA = vcs.commitSha;
-      vars.GIT_SHORT_SHA = vcs.shortSha || vcs.commitSha.substring(0, 7);
-    }
+    // Always set commit SHA (defaults to all zeros if git is not initialized)
+    vars.GIT_COMMIT_SHA = vcs.commitSha || '0000000000000000000000000000000000000000';
+    vars.GIT_SHORT_SHA = vcs.shortSha || '0000000';
+    // Map both GitHub and GitLab to generic GIT_REPOSITORY
+    // Default to "local" if no repository is detected
     if (vcs.githubRepository) {
-      vars.GITHUB_REPOSITORY = vcs.githubRepository;
-    }
-    if (vcs.gitlabProjectPath) {
-      vars.GITLAB_PROJECT_PATH = vcs.gitlabProjectPath;
+      vars.GIT_REPOSITORY = vcs.githubRepository;
+    } else if (vcs.gitlabProjectPath) {
+      vars.GIT_REPOSITORY = vcs.gitlabProjectPath;
+    } else {
+      vars.GIT_REPOSITORY = 'local';
     }
 
     return vars;

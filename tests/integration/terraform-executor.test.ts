@@ -33,11 +33,14 @@ jest.mock('../../src/utils/logger', () => {
 
 // Mock environment setup
 jest.mock('../../src/core/environment', () => {
+  const actualEnv = jest.requireActual('../../src/core/environment');
   return {
     EnvironmentSetup: {
+      ...actualEnv.EnvironmentSetup,
       setup: jest.fn(async (_config, context) => {
-        return context;
+        return { context, resolvedConfig: _config };
       }),
+      loadEnvFile: jest.fn(() => ({})), // Mock loadEnvFile to return empty object
     },
   };
 });
@@ -138,12 +141,12 @@ describe('TerraformExecutor - Integration', () => {
 
   describe('Full execution flow', () => {
     it('should execute full flow with local backend', async () => {
-      const config = await ConfigManager.load({});
+      const { config } = await ConfigManager.load({});
       const context = await ContextBuilder.build(config);
       context.workingDir = mockWorkingDir;
       context.workspace = 'test-workspace';
 
-      await TerraformExecutor.execute('plan', [], config, context, {});
+      await TerraformExecutor.execute('plan', [], config, context, { configFileDir: process.cwd() });
 
       // Verify terraform init was called
       expect(mockExecSync).toHaveBeenCalledWith(
@@ -174,7 +177,7 @@ describe('TerraformExecutor - Integration', () => {
     });
 
     it('should execute full flow with auth plugin', async () => {
-      const config = await ConfigManager.load({});
+      const { config } = await ConfigManager.load({});
       config.auth = {
         assume_role: {
           role_arn: 'arn:aws:iam::123456789012:role/test-role',
@@ -187,7 +190,7 @@ describe('TerraformExecutor - Integration', () => {
       const { loadAuthPlugin } = require('../../src/core/plugin-loader');
       const mockAuthPlugin = await loadAuthPlugin('aws-assume-role');
 
-      await TerraformExecutor.execute('plan', [], config, context, {});
+      await TerraformExecutor.execute('plan', [], config, context, { configFileDir: process.cwd() });
 
       // Verify auth plugin was called
       expect(mockAuthPlugin.validate).toHaveBeenCalled();
@@ -200,7 +203,7 @@ describe('TerraformExecutor - Integration', () => {
     });
 
     it('should execute full flow with secrets plugin', async () => {
-      const config = await ConfigManager.load({});
+      const { config } = await ConfigManager.load({});
       config.secrets = {
         provider: 'env',
         config: {},
@@ -212,7 +215,7 @@ describe('TerraformExecutor - Integration', () => {
       const { loadSecretsPlugin } = require('../../src/core/plugin-loader');
       const mockSecretsPlugin = await loadSecretsPlugin('env');
 
-      await TerraformExecutor.execute('plan', [], config, context, {});
+      await TerraformExecutor.execute('plan', [], config, context, { configFileDir: process.cwd() });
 
       // Verify secrets plugin was called
       expect(mockSecretsPlugin.validate).toHaveBeenCalled();
@@ -220,7 +223,7 @@ describe('TerraformExecutor - Integration', () => {
     });
 
     it('should execute plugins in correct order: auth -> secrets -> backend', async () => {
-      const config = await ConfigManager.load({});
+      const { config } = await ConfigManager.load({});
       config.auth = {
         assume_role: {
           role_arn: 'arn:aws:iam::123456789012:role/test-role',
@@ -244,7 +247,7 @@ describe('TerraformExecutor - Integration', () => {
       const secretsValidateSpy = jest.spyOn(mockSecretsPlugin, 'validate');
       const backendValidateSpy = jest.spyOn(mockBackendPlugin, 'validate');
 
-      await TerraformExecutor.execute('plan', [], config, context, {});
+      await TerraformExecutor.execute('plan', [], config, context, { configFileDir: process.cwd() });
 
       // Verify order: auth -> secrets -> backend
       const authCallIndex = authValidateSpy.mock.invocationCallOrder[0];
@@ -256,7 +259,7 @@ describe('TerraformExecutor - Integration', () => {
     });
 
     it('should create workspace if it does not exist', async () => {
-      const config = await ConfigManager.load({});
+      const { config } = await ConfigManager.load({});
       const context = await ContextBuilder.build(config);
       context.workingDir = mockWorkingDir;
       context.workspace = 'new-workspace';
@@ -272,7 +275,7 @@ describe('TerraformExecutor - Integration', () => {
         return Buffer.from('');
       });
 
-      await TerraformExecutor.execute('plan', [], config, context, {});
+      await TerraformExecutor.execute('plan', [], config, context, { configFileDir: process.cwd() });
 
       // Verify workspace select was attempted
       expect(mockExecSync).toHaveBeenCalledWith(
@@ -291,7 +294,7 @@ describe('TerraformExecutor - Integration', () => {
     });
 
     it('should handle workspace creation failure', async () => {
-      const config = await ConfigManager.load({});
+      const { config } = await ConfigManager.load({});
       const context = await ContextBuilder.build(config);
       context.workingDir = mockWorkingDir;
       context.workspace = 'new-workspace';
@@ -305,14 +308,14 @@ describe('TerraformExecutor - Integration', () => {
       });
 
       await expect(
-        TerraformExecutor.execute('plan', [], config, context, {})
+        TerraformExecutor.execute('plan', [], config, context, { configFileDir: process.cwd() })
       ).rejects.toThrow();
     });
   });
 
   describe('Dry-run mode', () => {
     it('should run all validations and plugins but not execute terraform commands', async () => {
-      const config = await ConfigManager.load({});
+      const { config } = await ConfigManager.load({});
       config.auth = {
         assume_role: {
           role_arn: 'arn:aws:iam::123456789012:role/test-role',
@@ -334,6 +337,7 @@ describe('TerraformExecutor - Integration', () => {
 
       await TerraformExecutor.execute('plan', ['-var', 'test=value'], config, context, {
         dryRun: true,
+        configFileDir: process.cwd(),
       });
 
       // Verify validations ran
@@ -360,7 +364,7 @@ describe('TerraformExecutor - Integration', () => {
     });
 
     it('should display what would be executed in dry-run mode', async () => {
-      const config = await ConfigManager.load({});
+      const { config } = await ConfigManager.load({});
       config.backend = {
         type: 's3',
         config: {
@@ -374,6 +378,7 @@ describe('TerraformExecutor - Integration', () => {
 
       await TerraformExecutor.execute('apply', ['-auto-approve'], config, context, {
         dryRun: true,
+        configFileDir: process.cwd(),
       });
 
       // Verify dry-run output includes workspace, working dir, backend, and command
@@ -394,13 +399,13 @@ describe('TerraformExecutor - Integration', () => {
         warnings: [],
       });
 
-      const config = await ConfigManager.load({});
+      const { config } = await ConfigManager.load({});
       const context = await ContextBuilder.build(config);
       context.workingDir = mockWorkingDir;
       context.workspace = 'test-workspace';
 
       await expect(
-        TerraformExecutor.execute('plan', [], config, context, {})
+        TerraformExecutor.execute('plan', [], config, context, { configFileDir: process.cwd() })
       ).rejects.toThrow('Validation failed');
     });
 
@@ -409,7 +414,7 @@ describe('TerraformExecutor - Integration', () => {
       const mockAuthPlugin = await loadAuthPlugin('aws-assume-role');
       mockAuthPlugin.validate.mockRejectedValueOnce(new Error('Invalid role ARN'));
 
-      const config = await ConfigManager.load({});
+      const { config } = await ConfigManager.load({});
       config.auth = {
         assume_role: {
           role_arn: 'invalid-arn',
@@ -420,7 +425,7 @@ describe('TerraformExecutor - Integration', () => {
       context.workspace = 'test-workspace';
 
       await expect(
-        TerraformExecutor.execute('plan', [], config, context, {})
+        TerraformExecutor.execute('plan', [], config, context, { configFileDir: process.cwd() })
       ).rejects.toThrow('Invalid role ARN');
     });
 
@@ -429,7 +434,7 @@ describe('TerraformExecutor - Integration', () => {
       const mockSecretsPlugin = await loadSecretsPlugin('env');
       mockSecretsPlugin.getSecrets.mockRejectedValueOnce(new Error('Secret not found'));
 
-      const config = await ConfigManager.load({});
+      const { config } = await ConfigManager.load({});
       config.secrets = {
         provider: 'env',
         config: {},
@@ -439,7 +444,7 @@ describe('TerraformExecutor - Integration', () => {
       context.workspace = 'test-workspace';
 
       await expect(
-        TerraformExecutor.execute('plan', [], config, context, {})
+        TerraformExecutor.execute('plan', [], config, context, { configFileDir: process.cwd() })
       ).rejects.toThrow('Secret not found');
     });
 
@@ -448,7 +453,7 @@ describe('TerraformExecutor - Integration', () => {
       const mockBackendPlugin = await loadBackendPlugin('local');
       mockBackendPlugin.validate.mockRejectedValueOnce(new Error('Invalid backend config'));
 
-      const config = await ConfigManager.load({});
+      const { config } = await ConfigManager.load({});
       config.backend = {
         type: 'local',
         config: {},
@@ -458,7 +463,7 @@ describe('TerraformExecutor - Integration', () => {
       context.workspace = 'test-workspace';
 
       await expect(
-        TerraformExecutor.execute('plan', [], config, context, {})
+        TerraformExecutor.execute('plan', [], config, context, { configFileDir: process.cwd() })
       ).rejects.toThrow('Invalid backend config');
     });
 
@@ -470,13 +475,13 @@ describe('TerraformExecutor - Integration', () => {
         return Buffer.from('');
       });
 
-      const config = await ConfigManager.load({});
+      const { config } = await ConfigManager.load({});
       const context = await ContextBuilder.build(config);
       context.workingDir = mockWorkingDir;
       context.workspace = 'test-workspace';
 
       await expect(
-        TerraformExecutor.execute('plan', [], config, context, {})
+        TerraformExecutor.execute('plan', [], config, context, { configFileDir: process.cwd() })
       ).rejects.toThrow();
     });
 
@@ -488,20 +493,20 @@ describe('TerraformExecutor - Integration', () => {
         return Buffer.from('');
       });
 
-      const config = await ConfigManager.load({});
+      const { config } = await ConfigManager.load({});
       const context = await ContextBuilder.build(config);
       context.workingDir = mockWorkingDir;
       context.workspace = 'test-workspace';
 
       await expect(
-        TerraformExecutor.execute('plan', [], config, context, {})
+        TerraformExecutor.execute('plan', [], config, context, { configFileDir: process.cwd() })
       ).rejects.toThrow();
     });
   });
 
   describe('Backend configuration', () => {
     it('should skip backend-config args for local backend', async () => {
-      const config = await ConfigManager.load({});
+      const { config } = await ConfigManager.load({});
       config.backend = {
         type: 'local',
         config: {},
@@ -510,7 +515,7 @@ describe('TerraformExecutor - Integration', () => {
       context.workingDir = mockWorkingDir;
       context.workspace = 'test-workspace';
 
-      await TerraformExecutor.execute('plan', [], config, context, {});
+      await TerraformExecutor.execute('plan', [], config, context, { configFileDir: process.cwd() });
 
       // Verify init was called without backend-config flags
       expect(mockExecSync).toHaveBeenCalledWith(
@@ -526,7 +531,7 @@ describe('TerraformExecutor - Integration', () => {
     });
 
     it('should include backend-config args for remote backends', async () => {
-      const config = await ConfigManager.load({});
+      const { config } = await ConfigManager.load({});
       config.backend = {
         type: 's3',
         config: {
@@ -545,7 +550,7 @@ describe('TerraformExecutor - Integration', () => {
         '-backend-config=key=test-key',
       ]);
 
-      await TerraformExecutor.execute('plan', [], config, context, {});
+      await TerraformExecutor.execute('plan', [], config, context, { configFileDir: process.cwd() });
 
       // Verify backend plugin's getBackendConfig was called
       expect(mockBackendPlugin.getBackendConfig).toHaveBeenCalled();

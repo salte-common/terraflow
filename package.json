@@ -1,6 +1,6 @@
 {
   "name": "@salte-common/terraflow",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.3",
   "description": "Opinionated Terraform workflow CLI with multi-cloud support",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -10,7 +10,7 @@
   },
   "scripts": {
     "build": "tsc && npm run copy-templates",
-    "copy-templates": "cp -r src/templates dist/templates",
+    "copy-templates": "rm -rf dist/templates && cp -r src/templates dist/templates",
     "test": "jest",
     "test:coverage": "jest --coverage",
     "lint": "eslint src --ext .ts",

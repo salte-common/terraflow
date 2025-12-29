@@ -43,8 +43,18 @@ export class TerraformExecutor {
     options: {
       skipCommitCheck?: boolean;
       dryRun?: boolean;
+      configFileDir?: string;
     } = {}
   ): Promise<void> {
+    // 0. Load .env file early so cloud detection can use credentials from it
+    // This needs to happen before validation so AWS credentials are available
+    const configFileDir = options.configFileDir || process.cwd();
+    EnvironmentSetup.loadEnvFile(configFileDir);
+
+    // Re-detect cloud after .env is loaded (credentials might be in .env)
+    const { CloudUtils } = await import('../utils/cloud');
+    context.cloud = await CloudUtils.detectCloud();
+
     // 1. Run validations
     Logger.info('🔍 Running validations...');
     const validationResult = await Validator.validate(command, config, context, {
@@ -75,39 +85,47 @@ export class TerraformExecutor {
 
     // 2. Setup environment
     Logger.info('🔧 Setting up environment...');
-    const updatedContext = await EnvironmentSetup.setup(config, context);
+    // .env file already loaded above, pass configFileDir to avoid double-loading
+    const { context: updatedContext, resolvedConfig } = await EnvironmentSetup.setup(
+      config,
+      context,
+      configFileDir
+    );
     Logger.info('✅ Environment setup complete');
 
     // 3. Detect backend migration
-    if (config.backend) {
-      const previousBackendType = detectBackendMigration(updatedContext.workingDir, config.backend);
-      if (previousBackendType && previousBackendType !== config.backend.type) {
+    if (resolvedConfig.backend) {
+      const previousBackendType = detectBackendMigration(
+        updatedContext.workingDir,
+        resolvedConfig.backend
+      );
+      if (previousBackendType && previousBackendType !== resolvedConfig.backend.type) {
         Logger.warn(
-          `⚠️  Backend changed from '${previousBackendType}' to '${config.backend.type}'. Terraform will prompt to migrate state.`
+          `⚠️  Backend changed from '${previousBackendType}' to '${resolvedConfig.backend.type}'. Terraform will prompt to migrate state.`
         );
       }
     }
 
     // 4. Execute auth plugin (if configured)
     if (
-      config.auth?.assume_role ||
-      config.auth?.service_principal ||
-      config.auth?.service_account
+      resolvedConfig.auth?.assume_role ||
+      resolvedConfig.auth?.service_principal ||
+      resolvedConfig.auth?.service_account
     ) {
       Logger.info('🔐 Authenticating...');
       try {
         let authPlugin;
-        if (config.auth.assume_role) {
+        if (resolvedConfig.auth.assume_role) {
           authPlugin = await loadAuthPlugin('aws-assume-role');
-        } else if (config.auth.service_principal) {
+        } else if (resolvedConfig.auth.service_principal) {
           authPlugin = await loadAuthPlugin('azure-service-principal');
-        } else if (config.auth.service_account) {
+        } else if (resolvedConfig.auth.service_account) {
           authPlugin = await loadAuthPlugin('gcp-service-account');
         }
 
         if (authPlugin) {
-          await authPlugin.validate(config.auth);
-          const credentials = await authPlugin.authenticate(config.auth, updatedContext);
+          await authPlugin.validate(resolvedConfig.auth);
+          const credentials = await authPlugin.authenticate(resolvedConfig.auth, updatedContext);
           // Set credentials as environment variables
           for (const key in credentials) {
             if (Object.prototype.hasOwnProperty.call(credentials, key)) {
@@ -115,6 +133,30 @@ export class TerraformExecutor {
             }
           }
           Logger.info('✅ Authentication successful');
+
+          // If AWS assume role was used, detect account ID from the assumed role credentials
+          if (resolvedConfig.auth.assume_role && updatedContext.cloud.provider === 'aws') {
+            try {
+              const { CloudUtils } = await import('../utils/cloud');
+              const accountId = await CloudUtils.getAwsAccountId();
+              if (accountId) {
+                updatedContext.cloud.awsAccountId = accountId;
+                process.env.AWS_ACCOUNT_ID = accountId;
+                // Rebuild template variables to include the new account ID
+                updatedContext.templateVars = EnvironmentSetup.buildTemplateVars(
+                  updatedContext.cloud,
+                  updatedContext.vcs,
+                  updatedContext.hostname,
+                  updatedContext.workspace
+                );
+                Logger.debug(`Detected AWS account ID from assumed role: ${accountId}`);
+              }
+            } catch (error) {
+              Logger.warn(
+                `Failed to detect AWS account ID from assumed role: ${error instanceof Error ? error.message : String(error)}`
+              );
+            }
+          }
         }
       } catch (error) {
         Logger.error(
@@ -125,12 +167,12 @@ export class TerraformExecutor {
     }
 
     // 5. Execute secrets plugin (if configured)
-    if (config.secrets) {
-      Logger.info(`🔑 Fetching secrets from ${config.secrets.provider}...`);
+    if (resolvedConfig.secrets) {
+      Logger.info(`🔑 Fetching secrets from ${resolvedConfig.secrets.provider}...`);
       try {
-        const secretsPlugin = await loadSecretsPlugin(config.secrets.provider);
-        await secretsPlugin.validate(config.secrets);
-        const secrets = await secretsPlugin.getSecrets(config.secrets, updatedContext);
+        const secretsPlugin = await loadSecretsPlugin(resolvedConfig.secrets.provider);
+        await secretsPlugin.validate(resolvedConfig.secrets);
+        const secrets = await secretsPlugin.getSecrets(resolvedConfig.secrets, updatedContext);
         // Set secrets as environment variables (already prefixed with TF_VAR_)
         for (const key in secrets) {
           if (Object.prototype.hasOwnProperty.call(secrets, key)) {
@@ -147,25 +189,26 @@ export class TerraformExecutor {
     }
 
     // 6. Execute backend plugin
-    const backendType = config.backend?.type || 'local';
+    const backendType = resolvedConfig.backend?.type || 'local';
+    Logger.debug(`Resolved backend config: ${JSON.stringify(resolvedConfig.backend, null, 2)}`);
     Logger.info(`📦 Configuring ${backendType} backend...`);
     try {
       const backendPlugin = await loadBackendPlugin(backendType);
-      await backendPlugin.validate(config.backend || { type: 'local' });
+      await backendPlugin.validate(resolvedConfig.backend || { type: 'local' });
 
       // Optional setup hook
       if (backendPlugin.setup) {
-        await backendPlugin.setup(config.backend || { type: 'local' }, updatedContext);
+        await backendPlugin.setup(resolvedConfig.backend || { type: 'local' }, updatedContext);
       }
 
       const backendArgs = await backendPlugin.getBackendConfig(
-        config.backend || { type: 'local' },
+        resolvedConfig.backend || { type: 'local' },
         updatedContext
       );
 
       // Save backend state for migration detection
-      if (config.backend) {
-        saveBackendState(updatedContext.workingDir, config.backend);
+      if (resolvedConfig.backend) {
+        saveBackendState(updatedContext.workingDir, resolvedConfig.backend);
       }
 
       // Determine if this command needs init and workspace
@@ -204,8 +247,20 @@ export class TerraformExecutor {
         await TerraformExecutor.runCommand(command, args, updatedContext.workingDir);
       }
     } catch (error) {
+      // Check if this is a user cancellation from runCommand
+      // runCommand handles cancellation for interactive commands (apply, plan, destroy)
+      const exitCode = (error as { status?: number }).status;
+      const isInteractiveCommand = ['apply', 'plan', 'destroy'].includes(command);
+      
+      if (isInteractiveCommand && exitCode === 1) {
+        // User cancellation - runCommand already handled it, just exit
+        process.exit(1);
+      }
+
+      // For actual errors, log and rethrow
+      const errorMessage = error instanceof Error ? error.message : String(error);
       Logger.error(
-        `Backend setup failed: ${error instanceof Error ? error.message : String(error)}`
+        `Backend setup failed: ${errorMessage}`
       );
       throw error;
     }
@@ -294,9 +349,22 @@ export class TerraformExecutor {
         encoding: 'utf8',
       });
     } catch (error) {
-      Logger.error(
-        `Terraform command failed: ${error instanceof Error ? error.message : String(error)}`
-      );
+      // Check if this is a user cancellation
+      // Terraform exits with code 1 when cancelled and prints "Apply cancelled." etc.
+      // Since we use stdio: 'inherit', terraform's message is already shown to the user
+      // For interactive commands (apply, plan, destroy), exit code 1 often means cancellation
+      const exitCode = (error as { status?: number }).status;
+      const isInteractiveCommand = ['apply', 'plan', 'destroy'].includes(command);
+      
+      if (isInteractiveCommand && exitCode === 1) {
+        // Likely a user cancellation - terraform already printed the message
+        // Just exit without adding our own error messages
+        process.exit(1);
+      }
+
+      // For other errors, log and rethrow
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      Logger.error(`Terraform command failed: ${errorMessage}`);
       throw error;
     }
   }

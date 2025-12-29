@@ -33,12 +33,12 @@ export class ConfigManager {
    * Load and merge configuration from CLI args, env vars, and config file
    * @param cliOptions - Command line options
    * @param cwd - Current working directory
-   * @returns Merged configuration
+   * @returns Object containing merged configuration and config file directory
    */
   static async load(
     cliOptions: CliOptions = {},
     cwd: string = process.cwd()
-  ): Promise<TerraflowConfig> {
+  ): Promise<{ config: TerraflowConfig; configFileDir: string }> {
     // Start with hard-coded defaults (lowest priority)
     const defaults: TerraflowConfig = {
       workspace: undefined,
@@ -57,6 +57,8 @@ export class ConfigManager {
     // Load config file (higher priority than defaults)
     const configFile = ConfigManager.getConfigFilePath(cliOptions, cwd);
     const fileConfig = ConfigManager.loadConfigFile(configFile);
+    // Get directory where config file is located (for .env file loading)
+    const configFileDir = path.dirname(configFile);
 
     // Load environment variables (higher priority than config file)
     const envConfig = ConfigManager.loadFromEnvironment();
@@ -69,7 +71,7 @@ export class ConfigManager {
       ConfigManager.cliOptionsToConfig(cliOptions)
     );
 
-    return merged;
+    return { config: merged, configFileDir };
   }
 
   /**
@@ -108,6 +110,7 @@ export class ConfigManager {
       const content = fs.readFileSync(configPath, 'utf8');
       const config = yaml.load(content) as TerraflowConfig;
       Logger.debug(`Loaded configuration from ${configPath}`);
+      Logger.debug(`Backend type in loaded config: ${config.backend?.type || 'undefined'}`);
       return config || {};
     } catch (error) {
       Logger.warn(

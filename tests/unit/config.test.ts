@@ -30,7 +30,7 @@ describe('ConfigManager', () => {
 
   describe('load', () => {
     it('should return default configuration when no config exists', async () => {
-      const config = await ConfigManager.load({}, tempDir);
+      const { config } = await ConfigManager.load({}, tempDir);
 
       expect(config.backend?.type).toBe('local');
       expect(config['working-dir']).toBe('./terraform');
@@ -51,7 +51,7 @@ backend:
 `;
       fs.writeFileSync(configFile, yamlContent, 'utf8');
 
-      const config = await ConfigManager.load({}, tempDir);
+      const { config } = await ConfigManager.load({}, tempDir);
 
       expect(config.workspace).toBe('test-workspace');
       expect(config['working-dir']).toBe('./test-terraform');
@@ -64,7 +64,7 @@ backend:
       const yamlContent = 'workspace: custom-workspace\n';
       fs.writeFileSync(customConfigPath, yamlContent, 'utf8');
 
-      const config = await ConfigManager.load({ config: customConfigPath }, tempDir);
+      const { config } = await ConfigManager.load({ config: customConfigPath }, tempDir);
 
       expect(config.workspace).toBe('custom-workspace');
     });
@@ -75,7 +75,7 @@ backend:
       process.env.TERRAFLOW_BACKEND = 's3';
       process.env.TERRAFLOW_SKIP_COMMIT_CHECK = 'true';
 
-      const config = await ConfigManager.load({}, tempDir);
+      const { config } = await ConfigManager.load({}, tempDir);
 
       expect(config.workspace).toBe('env-workspace');
       expect(config['working-dir']).toBe('./env-terraform');
@@ -87,7 +87,7 @@ backend:
       process.env.TERRAFLOW_WORKSPACE = 'env-workspace';
       process.env.TERRAFLOW_BACKEND = 's3';
 
-      const config = await ConfigManager.load(
+      const { config } = await ConfigManager.load(
         {
           workspace: 'cli-workspace',
           backend: 'azurerm',
@@ -107,7 +107,7 @@ backend:
         'utf8'
       );
 
-      const config = await ConfigManager.load(
+      const { config } = await ConfigManager.load(
         {
           workspace: 'cli-workspace',
           backend: 'gcs',
@@ -132,7 +132,7 @@ backend:
         'utf8'
       );
 
-      const config = await ConfigManager.load({}, tempDir);
+      const { config } = await ConfigManager.load({}, tempDir);
 
       expect(config.backend?.type).toBe('s3');
       expect((config.backend?.config as Record<string, unknown>)?.bucket).toBe('file-bucket');
@@ -141,34 +141,34 @@ backend:
 
     it('should handle boolean environment variables correctly', async () => {
       process.env.TERRAFLOW_SKIP_COMMIT_CHECK = 'true';
-      let config = await ConfigManager.load({}, tempDir);
+      let { config } = await ConfigManager.load({}, tempDir);
       expect(config['skip-commit-check']).toBe(true);
 
       process.env.TERRAFLOW_SKIP_COMMIT_CHECK = '1';
-      config = await ConfigManager.load({}, tempDir);
+      ({ config } = await ConfigManager.load({}, tempDir));
       expect(config['skip-commit-check']).toBe(true);
 
       process.env.TERRAFLOW_SKIP_COMMIT_CHECK = 'yes';
-      config = await ConfigManager.load({}, tempDir);
+      ({ config } = await ConfigManager.load({}, tempDir));
       expect(config['skip-commit-check']).toBe(true);
 
       process.env.TERRAFLOW_SKIP_COMMIT_CHECK = 'false';
-      config = await ConfigManager.load({}, tempDir);
+      ({ config } = await ConfigManager.load({}, tempDir));
       expect(config['skip-commit-check']).toBe(false);
     });
 
     it('should set log level from CLI verbose option', async () => {
-      const config = await ConfigManager.load({ verbose: true }, tempDir);
+      const { config } = await ConfigManager.load({ verbose: true }, tempDir);
       expect(config.logging?.level).toBe('info');
     });
 
     it('should set log level from CLI debug option', async () => {
-      const config = await ConfigManager.load({ debug: true }, tempDir);
+      const { config } = await ConfigManager.load({ debug: true }, tempDir);
       expect(config.logging?.level).toBe('debug');
     });
 
     it('should handle assume role from CLI', async () => {
-      const config = await ConfigManager.load(
+      const { config } = await ConfigManager.load(
         {
           assumeRole: 'arn:aws:iam::123456789:role/TestRole',
         },
@@ -181,7 +181,7 @@ backend:
     it('should handle assume role from environment', async () => {
       process.env.TERRAFLOW_ASSUME_ROLE = 'arn:aws:iam::987654321:role/EnvRole';
 
-      const config = await ConfigManager.load({}, tempDir);
+      const { config } = await ConfigManager.load({}, tempDir);
 
       expect(config.auth?.assume_role?.role_arn).toBe('arn:aws:iam::987654321:role/EnvRole');
     });

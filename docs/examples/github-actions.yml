@@ -6,7 +6,7 @@ backend:
   config:
     # Use GitHub Actions environment variables
     bucket: ${AWS_REGION}-${AWS_ACCOUNT_ID}-terraform-state
-    key: ${GITHUB_REPOSITORY}/${GITHUB_REF_NAME}/terraform.tfstate
+    key: ${GIT_REPOSITORY}/${GITHUB_REF_NAME}/terraform.tfstate
     region: ${AWS_REGION}
     encrypt: true
     dynamodb_table: terraform-statelock
@@ -15,7 +15,7 @@ secrets:
   provider: aws-secrets
   config:
     # Use GitHub repository name in secret path
-    secret_name: ${GITHUB_REPOSITORY}/terraform-vars
+    secret_name: ${GIT_REPOSITORY}/terraform-vars
     region: ${AWS_REGION}
 
 auth:
@@ -28,7 +28,7 @@ auth:
 variables:
   # Use GitHub Actions context
   environment: ${GITHUB_REF_NAME}
-  github_repository: ${GITHUB_REPOSITORY}
+  github_repository: ${GIT_REPOSITORY}
   github_sha: ${GITHUB_SHA}
 
 workspace_strategy:

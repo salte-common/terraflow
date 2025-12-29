@@ -6,9 +6,54 @@ function main() {
   console.log('Hello from <project-name>!');
 }
 
+/**
+ * Serverless function handler
+ * Works for both AWS Lambda and GCP Cloud Functions
+ * Returns project name and workspace in the response
+ */
+async function handler(event, context) {
+  const projectName = process.env.PROJECT_NAME || '<project-name>';
+  const workspace = process.env.WORKSPACE || 'default';
+  
+  // AWS Lambda format (event has httpMethod for API Gateway)
+  if (event && event.httpMethod) {
+    return {
+      statusCode: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        message: 'Hello from AWS Lambda!',
+        projectName: projectName,
+        workspace: workspace,
+      }),
+    };
+  }
+  
+  // GCP Cloud Functions HTTP trigger format (context has req/res)
+  if (context && context.req && context.res) {
+    context.res.status(200).json({
+      message: 'Hello from GCP Cloud Function!',
+      projectName: projectName,
+      workspace: workspace,
+    });
+    return;
+  }
+  
+  // Default format (direct invocation)
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      message: 'Hello from serverless function!',
+      projectName: projectName,
+      workspace: workspace,
+    }),
+  };
+}
+
 if (require.main === module) {
   main();
 }
 
-module.exports = { main };
+module.exports = { main, handler };
 

@@ -1,3 +1,9 @@
+variable "azure_location" {
+  description = "Azure region (e.g., eastus, westus2)"
+  type        = string
+  default     = "eastus"
+}
+
 variable "git_repository" {
   description = "Git repository name (e.g., org/repo)"
   type        = string

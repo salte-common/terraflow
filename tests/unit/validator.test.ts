@@ -73,18 +73,27 @@ describe('Validator', () => {
 
   describe('validateGitCommit', () => {
     it('should pass when working directory is clean', async () => {
+      (GitUtils.isGitRepository as jest.Mock).mockReturnValue(true);
       (GitUtils.isClean as jest.Mock).mockResolvedValue(true);
 
       await expect(Validator.validateGitCommit(tempDir)).resolves.not.toThrow();
     });
 
     it('should throw ValidationError when working directory is dirty', async () => {
+      (GitUtils.isGitRepository as jest.Mock).mockReturnValue(true);
       (GitUtils.isClean as jest.Mock).mockResolvedValue(false);
 
       await expect(Validator.validateGitCommit(tempDir)).rejects.toThrow(ValidationError);
       await expect(Validator.validateGitCommit(tempDir)).rejects.toThrow(
         'uncommitted changes'
       );
+    });
+
+    it('should skip validation when not in a git repository', async () => {
+      (GitUtils.isGitRepository as jest.Mock).mockReturnValue(false);
+
+      await expect(Validator.validateGitCommit(tempDir)).resolves.not.toThrow();
+      expect(GitUtils.isClean).not.toHaveBeenCalled();
     });
   });
 
@@ -362,7 +371,7 @@ describe('Validator', () => {
       expect(result.errors.some((e) => e.includes('uncommitted changes'))).toBe(true);
     });
 
-    it('should include warnings in dry-run mode', async () => {
+    it('should not warn when git repository is not detected (expected behavior)', async () => {
       (GitUtils.isGitRepository as jest.Mock).mockReturnValue(false);
 
       const config: TerraflowConfig = {
@@ -371,8 +380,8 @@ describe('Validator', () => {
 
       const result = await Validator.validate('apply', config, mockContext, { dryRun: true });
 
-      expect(result.warnings.length).toBeGreaterThan(0);
-      expect(result.warnings.some((w) => w.includes('Git repository not detected'))).toBe(true);
+      // No warning for missing git repo - it's expected and defaults to "local"
+      expect(result.warnings.some((w) => w.includes('Git repository not detected'))).toBe(false);
     });
   });
 

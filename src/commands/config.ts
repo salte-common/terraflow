@@ -121,7 +121,7 @@ export class ConfigCommand {
   static async show(cliOptions: CliOptions = {}): Promise<void> {
     try {
       // Load configuration
-      const config = await ConfigManager.load(cliOptions);
+      const { config } = await ConfigManager.load(cliOptions);
 
       // Mask sensitive values
       const maskedConfig = maskSensitiveValues(config) as TerraflowConfig;
@@ -363,7 +363,7 @@ backend:
 # Available variables:
 #   - Environment variables (e.g., \${AWS_REGION})
 #   - Cloud provider info (e.g., \${AWS_ACCOUNT_ID}, \${AZURE_SUBSCRIPTION_ID}, \${GCP_PROJECT_ID})
-#   - VCS info (e.g., \${GITHUB_REPOSITORY}, \${GIT_BRANCH}, \${GIT_COMMIT_SHA})
+#   - VCS info (e.g., \${GIT_REPOSITORY}, \${GIT_BRANCH}, \${GIT_COMMIT_SHA})
 # Example:
 #   bucket: \${AWS_REGION}-\${AWS_ACCOUNT_ID}-terraform-state
 `;

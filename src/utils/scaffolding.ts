@@ -100,9 +100,10 @@ export async function generateTerraformFiles(
   const localsContent = processTemplate(localsTemplate, { 'project-name': projectName });
   writeFileSync(join(terraformDir, 'locals.tf'), localsContent);
 
-  // main.tf - common
-  const mainTemplate = loadTemplate(join(templatesDir, 'main.tf.template'));
-  writeFileSync(join(terraformDir, 'main.tf'), mainTemplate);
+  // main.tf - provider-specific
+  const mainTemplate = loadTemplate(join(templatesDir, provider, 'main.tf.template'));
+  const mainContent = processTemplate(mainTemplate, { 'project-name': projectName });
+  writeFileSync(join(terraformDir, 'main.tf'), mainContent);
 
   // outputs.tf - common
   const outputsTemplate = loadTemplate(join(templatesDir, 'outputs.tf.template'));
