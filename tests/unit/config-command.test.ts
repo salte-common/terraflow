@@ -64,7 +64,7 @@ describe('ConfigCommand', () => {
         },
       };
 
-      (ConfigManager.load as jest.Mock).mockResolvedValue(mockConfig);
+      (ConfigManager.load as jest.Mock).mockResolvedValue({ config: mockConfig, configFileDir: process.cwd() });
 
       await ConfigCommand.show({});
 
@@ -92,7 +92,7 @@ describe('ConfigCommand', () => {
         },
       };
 
-      (ConfigManager.load as jest.Mock).mockResolvedValue(mockConfig);
+      (ConfigManager.load as jest.Mock).mockResolvedValue({ config: mockConfig, configFileDir: process.cwd() });
 
       await ConfigCommand.show({});
 
@@ -108,7 +108,7 @@ describe('ConfigCommand', () => {
     });
 
     it('should show configuration sources information', async () => {
-      (ConfigManager.load as jest.Mock).mockResolvedValue({});
+      (ConfigManager.load as jest.Mock).mockResolvedValue({ config: {}, configFileDir: process.cwd() });
 
       await ConfigCommand.show({});
 
@@ -137,7 +137,7 @@ describe('ConfigCommand', () => {
         },
       };
 
-      (ConfigManager.load as jest.Mock).mockResolvedValue(mockConfig);
+      (ConfigManager.load as jest.Mock).mockResolvedValue({ config: mockConfig, configFileDir: process.cwd() });
 
       await ConfigCommand.show({});
 
@@ -155,7 +155,7 @@ describe('ConfigCommand', () => {
         },
       };
 
-      (ConfigManager.load as jest.Mock).mockResolvedValue(mockConfig);
+      (ConfigManager.load as jest.Mock).mockResolvedValue({ config: mockConfig, configFileDir: process.cwd() });
 
       await ConfigCommand.show({});
 

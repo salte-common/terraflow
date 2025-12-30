@@ -100,7 +100,7 @@ backend:
   type: s3
   config:
     bucket: ${AWS_REGION}-${AWS_ACCOUNT_ID}-terraform-state
-    key: ${GITHUB_REPOSITORY}/terraform.tfstate
+    key: ${GIT_REPOSITORY}/terraform.tfstate
     region: ${AWS_REGION}
     encrypt: true
     dynamodb_table: terraform-statelock
@@ -435,11 +435,11 @@ bucket: ${MY_BUCKET_NAME}
 
 #### VCS Variables
 
-- `GITHUB_REPOSITORY` - Repository in format `owner/repo` (from git remote)
-- `GITLAB_PROJECT_PATH` - Project path (from git remote)
+- `GIT_REPOSITORY` - Generic repository identifier (from git remote, mapped from GitHub `owner/repo` or GitLab project path)
 - `GIT_BRANCH` - Current git branch
 - `GIT_TAG` - Current git tag (if on a tag)
 - `GIT_COMMIT_SHA` - Full commit SHA
+- `TF_VAR_git_repository` - Automatically set from `GIT_REPOSITORY` for Terraform use
 - `GIT_SHORT_SHA` - Short commit SHA (7 characters)
 
 #### System Variables
@@ -456,7 +456,7 @@ backend:
   type: s3
   config:
     bucket: ${AWS_REGION}-${AWS_ACCOUNT_ID}-terraform-state
-    key: ${GITHUB_REPOSITORY}/terraform.tfstate
+    key: ${GIT_REPOSITORY}/terraform.tfstate
     region: ${AWS_REGION}
 ```
 
@@ -475,7 +475,7 @@ backend:
   type: s3
   config:
     bucket: ${AWS_REGION}-${AWS_ACCOUNT_ID}-terraform-state
-    key: ${GITHUB_REPOSITORY}/terraform.tfstate
+    key: ${GIT_REPOSITORY}/terraform.tfstate
     region: ${AWS_REGION}
     encrypt: true
     dynamodb_table: terraform-statelock

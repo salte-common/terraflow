@@ -61,6 +61,11 @@ export class Validator {
    * @throws {ValidationError} If working directory is not clean
    */
   static async validateGitCommit(cwd: string = process.cwd()): Promise<void> {
+    // Skip validation if not in a git repository (expected behavior, no warning needed)
+    if (!GitUtils.isGitRepository(cwd)) {
+      return;
+    }
+
     const isClean = await GitUtils.isClean(cwd);
     if (!isClean) {
       throw new ValidationError(
@@ -229,11 +234,9 @@ export class Validator {
       }
     }
 
-    // Check git availability (not fatal)
-    const gitAvailable = await Validator.validateGitRepo(context.workingDir);
-    if (!gitAvailable) {
-      warnings.push('Git repository not detected. Some features may not work correctly.');
-    }
+    // Git repository detection is optional - defaults to "local" if not detected
+    // Commit check is automatically skipped if no git repo is found
+    // No warning needed as this is expected behavior
 
     // Command-specific validations
     if (FULL_VALIDATION_COMMANDS.includes(command)) {

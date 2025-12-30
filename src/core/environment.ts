@@ -7,7 +7,7 @@ import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { parse } from 'dotenv';
 import type { TerraflowConfig, LoggingConfig } from '../types/config';
-import type { ExecutionContext } from '../types/context';
+import type { ExecutionContext, CloudInfo, VcsInfo } from '../types/context';
 import { CloudUtils } from '../utils/cloud';
 import { Logger } from '../utils/logger';
 import { TemplateUtils } from '../utils/templates';
@@ -65,6 +65,14 @@ export class EnvironmentSetup {
     if (cloud.provider === 'aws') {
       const region = CloudUtils.getAwsRegion();
       cloud.awsRegion = region;
+      // Ensure AWS_REGION is in process.env for template resolution
+      if (region && !process.env.AWS_REGION) {
+        process.env.AWS_REGION = region;
+      }
+      // Ensure AWS_ACCOUNT_ID is in process.env for template resolution
+      if (cloud.awsAccountId && !process.env.AWS_ACCOUNT_ID) {
+        process.env.AWS_ACCOUNT_ID = cloud.awsAccountId;
+      }
     }
 
     return cloud;
@@ -72,7 +80,8 @@ export class EnvironmentSetup {
 
   /**
    * Setup VCS environment (git variables)
-   * Sets GitHub Actions and GitLab CI compatible variables
+   * Sets generic GIT_REPOSITORY variable and GitHub Actions/GitLab CI compatible variables
+   * Automatically sets TF_VAR_git_repository for Terraform use
    * @param context - Execution context
    * @returns Updated context with VCS environment variables
    */
@@ -86,36 +95,34 @@ export class EnvironmentSetup {
     if (vcs.tag) {
       process.env.GIT_TAG = vcs.tag;
     }
+    // Set commit SHA (defaults to all zeros if git is not initialized)
     if (vcs.commitSha) {
       process.env.GIT_COMMIT_SHA = vcs.commitSha;
+      // Calculate short SHA from commit SHA if not provided
       process.env.GIT_SHORT_SHA = vcs.shortSha || vcs.commitSha.substring(0, 7);
+    } else {
+      process.env.GIT_COMMIT_SHA = '0000000000000000000000000000000000000000';
+      process.env.GIT_SHORT_SHA = '0000000';
     }
 
-    // Simulate GitHub Actions variables
+    // Set generic GIT_REPOSITORY (mapped from GitHub or GitLab)
+    // This takes precedence: GitHub first, then GitLab
+    // Default to "local" if no repository is detected
     if (vcs.githubRepository) {
-      process.env.GITHUB_REPOSITORY = vcs.githubRepository;
-      if (vcs.branch) {
-        process.env.GITHUB_REF = `refs/heads/${vcs.branch}`;
-      } else if (vcs.tag) {
-        process.env.GITHUB_REF = `refs/tags/${vcs.tag}`;
-      }
-      if (vcs.commitSha) {
-        process.env.GITHUB_SHA = vcs.commitSha;
-      }
+      process.env.GIT_REPOSITORY = vcs.githubRepository;
+    } else if (vcs.gitlabProjectPath) {
+      process.env.GIT_REPOSITORY = vcs.gitlabProjectPath;
+    } else {
+      process.env.GIT_REPOSITORY = 'local';
     }
 
-    // Simulate GitLab CI variables
-    if (vcs.gitlabProjectPath) {
-      process.env.GITLAB_PROJECT_PATH = vcs.gitlabProjectPath;
-      if (vcs.branch) {
-        process.env.CI_COMMIT_REF_NAME = vcs.branch;
-      } else if (vcs.tag) {
-        process.env.CI_COMMIT_REF_NAME = vcs.tag;
-      }
-      if (vcs.commitSha) {
-        process.env.CI_COMMIT_SHA = vcs.commitSha;
-        process.env.CI_COMMIT_SHORT_SHA = vcs.shortSha || vcs.commitSha.substring(0, 7);
-      }
+    // Automatically set TF_VAR_* variables for Terraform use
+    // Only set if not already in environment (user can override)
+    if (process.env.GIT_REPOSITORY && !process.env.TF_VAR_git_repository) {
+      process.env.TF_VAR_git_repository = process.env.GIT_REPOSITORY;
+    }
+    if (process.env.GIT_COMMIT_SHA && !process.env.TF_VAR_git_commit_sha) {
+      process.env.TF_VAR_git_commit_sha = process.env.GIT_COMMIT_SHA;
     }
   }
 
@@ -198,14 +205,17 @@ export class EnvironmentSetup {
    * Executes all environment setup steps in order
    * @param config - Terraflow configuration
    * @param context - Execution context
-   * @returns Updated context with environment setup complete
+   * @returns Object containing updated context and resolved config with template variables substituted
    */
   static async setup(
     config: TerraflowConfig,
-    context: ExecutionContext
-  ): Promise<ExecutionContext> {
-    // 1. Load .env file (bootstrap credentials)
-    EnvironmentSetup.loadEnvFile(context.workingDir);
+    context: ExecutionContext,
+    projectRoot?: string
+  ): Promise<{ context: ExecutionContext; resolvedConfig: TerraflowConfig }> {
+    // 1. Load .env file from project root (where config file is), not terraform working directory
+    // If projectRoot is not provided, try current working directory first, then fall back to workingDir
+    const envDir = projectRoot || process.cwd();
+    EnvironmentSetup.loadEnvFile(envDir);
 
     // 2. Setup cloud environment (detect account IDs, regions)
     const cloud = await EnvironmentSetup.setupCloud();
@@ -214,15 +224,98 @@ export class EnvironmentSetup {
     // 3. Setup VCS environment (git branch, commit, repository)
     await EnvironmentSetup.setupVcs(context);
 
-    // 4. Resolve template variables in config
+    // 4. Rebuild template variables to include .env file variables and updated cloud/VCS info
+    context.templateVars = EnvironmentSetup.buildTemplateVars(
+      context.cloud,
+      context.vcs,
+      context.hostname,
+      context.workspace
+    );
+
+    // 5. Resolve template variables in config
     const resolvedConfig = EnvironmentSetup.resolveTemplateVars(config, context) as TerraflowConfig;
 
-    // 5. Setup Terraform variables from config
+    // 6. Setup Terraform variables from config
     EnvironmentSetup.setupTerraformVariables(resolvedConfig);
 
-    // 6. Setup logging configuration
+    // 7. Setup logging configuration
     EnvironmentSetup.setupLogging(resolvedConfig);
 
-    return context;
+    return { context, resolvedConfig };
+  }
+
+  /**
+   * Build template variables from environment and context
+   * This is similar to ContextBuilder.buildTemplateVars but needed here to rebuild after .env is loaded
+   * @param cloud - Cloud information
+   * @param vcs - VCS information
+   * @param hostname - Machine hostname
+   * @param workspace - Workspace name
+   * @returns Template variables
+   */
+  static buildTemplateVars(
+    cloud: CloudInfo,
+    vcs: VcsInfo,
+    hostname: string,
+    workspace: string
+  ): Record<string, string> {
+    const vars: Record<string, string> = {
+      HOSTNAME: hostname,
+      WORKSPACE: workspace,
+    };
+
+    // Add all environment variables (including those from .env file)
+    for (const key in process.env) {
+      if (Object.prototype.hasOwnProperty.call(process.env, key)) {
+        const value = process.env[key];
+        if (value !== undefined) {
+          vars[key] = value;
+        }
+      }
+    }
+
+    // Add cloud-specific variables
+    if (cloud.awsAccountId) {
+      vars.AWS_ACCOUNT_ID = cloud.awsAccountId;
+    }
+    if (cloud.awsRegion) {
+      vars.AWS_REGION = cloud.awsRegion;
+    }
+    if (cloud.azureSubscriptionId) {
+      vars.AZURE_SUBSCRIPTION_ID = cloud.azureSubscriptionId;
+    }
+    if (cloud.azureTenantId) {
+      vars.AZURE_TENANT_ID = cloud.azureTenantId;
+    }
+    if (cloud.gcpProjectId) {
+      vars.GCP_PROJECT_ID = cloud.gcpProjectId;
+    }
+
+    // Add VCS-specific variables
+    if (vcs.branch) {
+      vars.GIT_BRANCH = vcs.branch;
+    }
+    if (vcs.tag) {
+      vars.GIT_TAG = vcs.tag;
+    }
+    // Set commit SHA (defaults to all zeros if git is not initialized)
+    if (vcs.commitSha) {
+      vars.GIT_COMMIT_SHA = vcs.commitSha;
+      vars.GIT_SHORT_SHA = vcs.shortSha || vcs.commitSha.substring(0, 7);
+    } else {
+      vars.GIT_COMMIT_SHA = '0000000000000000000000000000000000000000';
+      vars.GIT_SHORT_SHA = '0000000';
+    }
+    // Map both GitHub and GitLab to generic GIT_REPOSITORY
+    // Default to "local" if no repository is detected
+    if (vcs.githubRepository) {
+      vars.GIT_REPOSITORY = vcs.githubRepository;
+    } else if (vcs.gitlabProjectPath) {
+      vars.GIT_REPOSITORY = vcs.gitlabProjectPath;
+    } else {
+      vars.GIT_REPOSITORY = 'local';
+    }
+
+    return vars;
   }
 }

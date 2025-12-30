@@ -25,7 +25,7 @@ describe('S3 Backend Plugin - Integration', () => {
     templateVars: {
       AWS_REGION: 'us-east-1',
       AWS_ACCOUNT_ID: '123456789012',
-      GITHUB_REPOSITORY: 'owner/repo',
+      GIT_REPOSITORY: 'owner/repo',
       GIT_BRANCH: 'main',
     },
   };
@@ -40,7 +40,7 @@ describe('S3 Backend Plugin - Integration', () => {
         type: 's3',
         config: {
           bucket: '${AWS_REGION}-${AWS_ACCOUNT_ID}-terraform-state',
-          key: '${GITHUB_REPOSITORY}/terraform.tfstate',
+          key: '${GIT_REPOSITORY}/terraform.tfstate',
           region: '${AWS_REGION}',
         },
       };
@@ -153,7 +153,7 @@ describe('S3 Backend Plugin - Integration', () => {
         type: 's3',
         config: {
           bucket: '${AWS_REGION}-${AWS_ACCOUNT_ID}-terraform-state',
-          key: '${GITHUB_REPOSITORY}/${GIT_BRANCH}/terraform.tfstate',
+          key: '${GIT_REPOSITORY}/${GIT_BRANCH}/terraform.tfstate',
           region: '${AWS_REGION}',
           encrypt: true,
           dynamodb_table: 'terraform-statelock',

@@ -27,8 +27,8 @@ describe('EnvironmentSetup', () => {
     delete process.env.TF_VAR_test;
     delete process.env.TF_LOG;
     delete process.env.GIT_BRANCH;
-    delete process.env.GITHUB_REPOSITORY;
-    delete process.env.GITLAB_PROJECT_PATH;
+    delete process.env.GIT_REPOSITORY;
+    delete process.env.TF_VAR_git_repository;
 
     if (fs.existsSync(tempDir)) {
       fs.rmSync(tempDir, { recursive: true, force: true });
@@ -150,9 +150,8 @@ describe('EnvironmentSetup', () => {
 
       await EnvironmentSetup.setupVcs(context);
 
-      expect(process.env.GITHUB_REPOSITORY).toBe('owner/repo');
-      expect(process.env.GITHUB_REF).toBe('refs/heads/main');
-      expect(process.env.GITHUB_SHA).toBe('abc123def456');
+      expect(process.env.GIT_REPOSITORY).toBe('owner/repo');
+      expect(process.env.TF_VAR_git_repository).toBe('owner/repo'); // Auto-set for Terraform
     });
 
     it('should set GitHub Actions variables for tags', async () => {
@@ -172,9 +171,8 @@ describe('EnvironmentSetup', () => {
 
       await EnvironmentSetup.setupVcs(context);
 
-      expect(process.env.GITHUB_REPOSITORY).toBe('owner/repo');
-      expect(process.env.GITHUB_REF).toBe('refs/tags/v1.0.0');
-      expect(process.env.GITHUB_SHA).toBe('abc123def456');
+      expect(process.env.GIT_REPOSITORY).toBe('owner/repo');
+      expect(process.env.TF_VAR_git_repository).toBe('owner/repo'); // Auto-set for Terraform
     });
 
     it('should set GitLab CI variables when GitLab project detected', async () => {
@@ -195,10 +193,8 @@ describe('EnvironmentSetup', () => {
 
       await EnvironmentSetup.setupVcs(context);
 
-      expect(process.env.GITLAB_PROJECT_PATH).toBe('group/project');
-      expect(process.env.CI_COMMIT_REF_NAME).toBe('main');
-      expect(process.env.CI_COMMIT_SHA).toBe('abc123def456');
-      expect(process.env.CI_COMMIT_SHORT_SHA).toBe('abc123d');
+      expect(process.env.GIT_REPOSITORY).toBe('group/project');
+      expect(process.env.TF_VAR_git_repository).toBe('group/project'); // Auto-set for Terraform
     });
 
     it('should calculate short SHA if not provided', async () => {
@@ -404,7 +400,7 @@ describe('EnvironmentSetup', () => {
 
       const result = await EnvironmentSetup.setup(config, context);
 
-      expect(result.cloud.provider).toBe('aws');
+      expect(result.context.cloud.provider).toBe('aws');
       expect(process.env.TF_VAR_test).toBe('value');
     });
   });

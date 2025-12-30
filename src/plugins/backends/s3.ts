@@ -94,6 +94,42 @@ export const s3Backend: BackendPlugin = {
       ...resolvedConfig,
     };
 
+    // Validate required fields after template resolution
+    if (!s3Config.bucket || s3Config.bucket.trim() === '') {
+      Logger.debug('S3 backend config after resolution:', JSON.stringify(s3Config, null, 2));
+      Logger.debug('Available template variables:', Object.keys(context.templateVars).join(', '));
+      throw new ConfigError(
+        'S3 backend "bucket" is empty or undefined after template resolution. ' +
+          'Check that the bucket value is set in your .tfwconfig.yml and that template variables (e.g., ${AWS_REGION}, ${AWS_ACCOUNT_ID}) are available and resolved correctly.'
+      );
+    }
+    if (s3Config.bucket.includes('${')) {
+      Logger.debug('S3 backend config after resolution:', JSON.stringify(s3Config, null, 2));
+      Logger.debug('Available template variables:', Object.keys(context.templateVars).join(', '));
+      throw new ConfigError(
+        `S3 backend "bucket" contains unresolved template variables: ${s3Config.bucket}. ` +
+          'Check that all template variables (e.g., ${AWS_REGION}, ${AWS_ACCOUNT_ID}) are defined in your environment or .env file.'
+      );
+    }
+    if (!s3Config.key || s3Config.key.trim() === '') {
+      Logger.debug('S3 backend config after resolution:', JSON.stringify(s3Config, null, 2));
+      Logger.debug('Available template variables:', Object.keys(context.templateVars).join(', '));
+      throw new ConfigError(
+        'S3 backend "key" is empty or undefined after template resolution. ' +
+          'Check that the key value is set in your .tfwconfig.yml and that template variables (e.g., ${GIT_REPOSITORY}) are available and resolved correctly.'
+      );
+    }
+    if (s3Config.key.includes('${')) {
+      Logger.debug('S3 backend config after resolution:', JSON.stringify(s3Config, null, 2));
+      Logger.debug('Available template variables:', Object.keys(context.templateVars).join(', '));
+      throw new ConfigError(
+        `S3 backend "key" contains unresolved template variables: ${s3Config.key}. ` +
+          'Check that all template variables (e.g., ${GIT_REPOSITORY}) are defined in your environment or .env file.'
+      );
+    }
+
+    Logger.debug(`Resolved S3 backend config: bucket=${s3Config.bucket}, key=${s3Config.key}`);
+
     // Build backend-config arguments
     const backendArgs: string[] = [];
 

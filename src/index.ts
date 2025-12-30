@@ -176,7 +176,10 @@ Examples:
       .allowExcessArguments(true)
       .passThroughOptions()
       .action(async () => {
-        await handleWorkspaceSensitiveCommand(cmd);
+        // Get remaining arguments after the command
+        // Commander.js may include the command name in program.args, so filter it out
+        const terraformArgs = program.args.filter((arg) => arg !== cmd);
+        await handleWorkspaceSensitiveCommand(cmd, terraformArgs);
       });
   }
 
@@ -194,10 +197,12 @@ Examples:
  * Handle workspace-sensitive terraform command (plan, apply, destroy, etc.)
  * These commands go through full workflow: init + workspace selection + terraform command
  */
-async function handleWorkspaceSensitiveCommand(command: string): Promise<void> {
+async function handleWorkspaceSensitiveCommand(
+  command: string,
+  terraformArgs: string[] = []
+): Promise<void> {
   const opts = program.opts<CliOptions>();
-  // Get remaining arguments after the command
-  const terraformArgs = program.args;
+  // terraformArgs are passed from the action callback, already excluding the command name
 
   // Configure logger
   if (opts.debug) {
@@ -213,9 +218,9 @@ async function handleWorkspaceSensitiveCommand(command: string): Promise<void> {
   }
 
   // Load configuration
-  let config;
+  let configResult;
   try {
-    config = await ConfigManager.load(opts);
+    configResult = await ConfigManager.load(opts);
   } catch (error) {
     Logger.error(
       `Failed to load configuration: ${error instanceof Error ? error.message : String(error)}`
@@ -223,6 +228,7 @@ async function handleWorkspaceSensitiveCommand(command: string): Promise<void> {
     process.exit(1);
     return;
   }
+  const { config, configFileDir } = configResult;
 
   // Build execution context
   let context;
@@ -241,11 +247,23 @@ async function handleWorkspaceSensitiveCommand(command: string): Promise<void> {
     await TerraformExecutor.execute(command, terraformArgs, config, context, {
       skipCommitCheck: opts.skipCommitCheck,
       dryRun: opts.dryRun,
+      configFileDir,
     });
   } catch (error) {
-    Logger.error(
-      `Terraform execution failed: ${error instanceof Error ? error.message : String(error)}`
-    );
+    // Check if this is a user cancellation from TerraformExecutor
+    // TerraformExecutor handles cancellation for interactive commands (apply, plan, destroy)
+    const exitCode = (error as { status?: number }).status;
+    const isInteractiveCommand = ['apply', 'plan', 'destroy'].includes(command);
+
+    if (isInteractiveCommand && exitCode === 1) {
+      // User cancellation - already handled, just exit
+      process.exit(1);
+      return;
+    }
+
+    // For actual errors, log and exit
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    Logger.error(`Terraform execution failed: ${errorMessage}`);
     process.exit(1);
     return;
   }
@@ -275,9 +293,9 @@ async function handleUnknownCommand(command: string): Promise<void> {
   }
 
   // Load configuration (for working dir and other settings)
-  let config;
+  let configResult;
   try {
-    config = await ConfigManager.load(opts);
+    configResult = await ConfigManager.load(opts);
   } catch (error) {
     Logger.error(
       `Failed to load configuration: ${error instanceof Error ? error.message : String(error)}`
@@ -285,6 +303,7 @@ async function handleUnknownCommand(command: string): Promise<void> {
     process.exit(1);
     return;
   }
+  const { config } = configResult;
 
   // Minimal validation - just check terraform is installed
   try {

@@ -1,4 +1,7 @@
 locals {
+  # Project name for resource naming
+  project_name = "<project-name>"
+  
   # Common tags/labels for all resources
   common_tags = {
     Workspace   = terraform.workspace

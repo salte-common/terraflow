@@ -1,14 +1,12 @@
 /**
- * Main application entry point
+ * Serverless function handler for <project-name>
  */
-
-function main(): void {
-  console.log('Hello from <project-name>!');
+export async function handler(event: any, context: any) {
+  console.log('Event:', JSON.stringify(event, null, 2));
+  console.log('Context:', JSON.stringify(context, null, 2));
+  
+  return {
+    statusCode: 200,
+    body: JSON.stringify({ message: 'Hello World!' }),
+  };
 }
-
-if (require.main === module) {
-  main();
-}
-
-export { main };
-

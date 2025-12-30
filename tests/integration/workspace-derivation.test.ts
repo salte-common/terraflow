@@ -254,7 +254,7 @@ describe('Workspace Derivation Integration', () => {
       expect(context.templateVars.GIT_BRANCH).toBe('main');
       expect(context.templateVars.GIT_COMMIT_SHA).toBeDefined();
       expect(context.templateVars.GIT_SHORT_SHA).toBeDefined();
-      expect(context.templateVars.GITHUB_REPOSITORY).toBe('owner/repo');
+      expect(context.templateVars.GIT_REPOSITORY).toBe('owner/repo');
       expect(context.templateVars.WORKSPACE).toBe('main');
       expect(context.templateVars.HOSTNAME).toBe(os.hostname());
     });

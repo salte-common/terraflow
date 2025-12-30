@@ -100,9 +100,10 @@ export async function generateTerraformFiles(
   const localsContent = processTemplate(localsTemplate, { 'project-name': projectName });
   writeFileSync(join(terraformDir, 'locals.tf'), localsContent);
 
-  // main.tf - common
-  const mainTemplate = loadTemplate(join(templatesDir, 'main.tf.template'));
-  writeFileSync(join(terraformDir, 'main.tf'), mainTemplate);
+  // main.tf - provider-specific
+  const mainTemplate = loadTemplate(join(templatesDir, provider, 'main.tf.template'));
+  const mainContent = processTemplate(mainTemplate, { 'project-name': projectName });
+  writeFileSync(join(terraformDir, 'main.tf'), mainContent);
 
   // outputs.tf - common
   const outputsTemplate = loadTemplate(join(templatesDir, 'outputs.tf.template'));
@@ -202,18 +203,70 @@ export async function generateApplicationFiles(
   writeFileSync(join(srcDir, 'test', testFileName), testContent);
 
   // Language-specific config files
-  if (language === 'typescript') {
+  if (language === 'javascript') {
+    const packageJsonTemplate = loadTemplate(join(templatesDir, language, 'package.json.template'));
+    const packageJsonContent = processTemplate(packageJsonTemplate, {
+      'project-name': projectName,
+    });
+    writeFileSync(join(projectDir, 'package.json'), packageJsonContent);
+
+    // ESLint config
+    const eslintTemplate = loadTemplate(join(templatesDir, language, '.eslintrc.json.template'));
+    writeFileSync(join(projectDir, '.eslintrc.json'), eslintTemplate);
+
+    // Jest config
+    const jestTemplate = loadTemplate(join(templatesDir, language, 'jest.config.js.template'));
+    writeFileSync(join(projectDir, 'jest.config.js'), jestTemplate);
+
+    // Prettier config
+    const prettierTemplate = loadTemplate(join(templatesDir, language, '.prettierrc.template'));
+    writeFileSync(join(projectDir, '.prettierrc'), prettierTemplate);
+  } else if (language === 'typescript') {
+    // package.json
+    const packageJsonTemplate = loadTemplate(join(templatesDir, language, 'package.json.template'));
+    const packageJsonContent = processTemplate(packageJsonTemplate, {
+      'project-name': projectName,
+    });
+    writeFileSync(join(projectDir, 'package.json'), packageJsonContent);
+
+    // tsconfig.json
     const tsconfigTemplate = loadTemplate(join(templatesDir, language, 'tsconfig.json.template'));
     writeFileSync(join(projectDir, 'tsconfig.json'), tsconfigTemplate);
+
+    // ESLint config
+    const eslintTemplate = loadTemplate(join(templatesDir, language, '.eslintrc.json.template'));
+    writeFileSync(join(projectDir, '.eslintrc.json'), eslintTemplate);
+
+    // Jest config
+    const jestTemplate = loadTemplate(join(templatesDir, language, 'jest.config.js.template'));
+    writeFileSync(join(projectDir, 'jest.config.js'), jestTemplate);
+
+    // Prettier config
+    const prettierTemplate = loadTemplate(join(templatesDir, language, '.prettierrc.template'));
+    writeFileSync(join(projectDir, '.prettierrc'), prettierTemplate);
   } else if (language === 'python') {
+    // requirements.txt
     const requirementsTemplate = loadTemplate(
       join(templatesDir, language, 'requirements.txt.template')
     );
     writeFileSync(join(projectDir, 'requirements.txt'), requirementsTemplate);
+
+    // pytest.ini
+    const pytestTemplate = loadTemplate(join(templatesDir, language, 'pytest.ini.template'));
+    writeFileSync(join(projectDir, 'pytest.ini'), pytestTemplate);
+
+    // pylintrc
+    const pylintTemplate = loadTemplate(join(templatesDir, language, '.pylintrc.template'));
+    writeFileSync(join(projectDir, '.pylintrc'), pylintTemplate);
   } else if (language === 'go') {
+    // go.mod
     const goModTemplate = loadTemplate(join(templatesDir, language, 'go.mod.template'));
     const goModContent = processTemplate(goModTemplate, { 'project-name': projectName });
     writeFileSync(join(projectDir, 'go.mod'), goModContent);
+
+    // golangci-lint config
+    const golangciTemplate = loadTemplate(join(templatesDir, language, '.golangci.yml.template'));
+    writeFileSync(join(projectDir, '.golangci.yml'), golangciTemplate);
   }
 
   Logger.debug('Application files generated successfully');

@@ -1,0 +1,60 @@
+# Service Account for Cloud Function
+resource "google_service_account" "function" {
+  account_id   = "${replace(local.project_name, "-", "")}-${replace(terraform.workspace, "-", "")}-sa"
+  display_name = "${local.project_name} ${terraform.workspace} Function Service Account"
+
+  labels = local.common_tags
+}
+
+# IAM binding for service account to invoke Cloud Functions
+resource "google_project_iam_member" "function_invoker" {
+  project = var.gcp_project_id
+  role    = "roles/cloudfunctions.invoker"
+  member  = "serviceAccount:${google_service_account.function.email}"
+}
+
+# Storage bucket for function source code
+resource "google_storage_bucket" "function_source" {
+  name     = "${replace(local.project_name, "-", "")}-${replace(terraform.workspace, "-", "")}-funcs-source"
+  location = var.gcp_region
+
+  uniform_bucket_level_access = true
+
+  labels = local.common_tags
+}
+
+# Archive function source code
+data "archive_file" "function_zip" {
+  type        = "zip"
+  source_dir  = "${path.root}/../src/main"
+  output_path = "${path.module}/function_source.zip"
+  excludes    = ["node_modules", ".git"]
+}
+
+# Upload source code to bucket
+resource "google_storage_bucket_object" "function_source" {
+  name   = "function_source_${data.archive_file.function_zip.output_md5}.zip"
+  bucket = google_storage_bucket.function_source.name
+  source = data.archive_file.function_zip.output_path
+}
+
+# Cloud Function
+resource "google_cloudfunctions_function" "main" {
+  name        = "${local.project_name}-${terraform.workspace}-function"
+  description = "Serverless function for ${local.project_name}"
+  runtime     = "nodejs20"
+
+  available_memory_mb   = 256
+  source_archive_bucket = google_storage_bucket.function_source.name
+  source_archive_object = google_storage_bucket_object.function_source.name
+  trigger {
+    http_trigger {}
+  }
+
+  entry_point = "handler"
+
+  service_account_email = google_service_account.function.email
+
+  labels = local.common_tags
+}
+

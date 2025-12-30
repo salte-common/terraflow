@@ -11,7 +11,7 @@ backend:
   config:
     # Environment-specific state files
     bucket: ${AWS_REGION}-${AWS_ACCOUNT_ID}-terraform-state
-    key: ${GITHUB_REPOSITORY}/${WORKSPACE}/terraform.tfstate
+    key: ${GIT_REPOSITORY}/${WORKSPACE}/terraform.tfstate
     region: ${AWS_REGION}
     encrypt: true
     dynamodb_table: terraform-statelock
