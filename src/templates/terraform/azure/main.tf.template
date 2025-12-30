@@ -38,6 +38,30 @@ resource "azurerm_service_plan" "func" {
   tags = local.common_tags
 }
 
+# Archive function source code
+data "archive_file" "function_zip" {
+  type        = "zip"
+  source_dir  = "${path.root}/../src/main"
+  output_path = "${path.module}/function_app.zip"
+  excludes    = ["node_modules", ".git"]
+}
+
+# Storage container for function code
+resource "azurerm_storage_container" "function_code" {
+  name                  = "function-code"
+  storage_account_name  = azurerm_storage_account.func.name
+  container_access_type = "private"
+}
+
+# Upload function code to storage
+resource "azurerm_storage_blob" "function_code" {
+  name                   = "function_app_${data.archive_file.function_zip.output_md5}.zip"
+  storage_account_name   = azurerm_storage_account.func.name
+  storage_container_name = azurerm_storage_container.function_code.name
+  type                   = "Block"
+  source                 = data.archive_file.function_zip.output_path
+}
+
 # Function App
 resource "azurerm_linux_function_app" "main" {
   name                = "${local.project_name}-${terraform.workspace}-func"
@@ -50,6 +74,13 @@ resource "azurerm_linux_function_app" "main" {
 
   site_config {
     application_insights_connection_string = azurerm_application_insights.main.connection_string
+    application_stack {
+      node_version = "20"
+    }
+  }
+
+  app_settings = {
+    "WEBSITE_RUN_FROM_PACKAGE" = "https://${azurerm_storage_account.func.name}.blob.core.windows.net/${azurerm_storage_container.function_code.name}/${azurerm_storage_blob.function_code.name}${azurerm_storage_account.func.primary_access_key != "" ? "?${azurerm_storage_account.func.primary_access_key}" : ""}"
   }
 
   identity {

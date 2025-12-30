@@ -1,8 +1,24 @@
 package main
 
-import "fmt"
+import (
+	"encoding/json"
+	"log"
+)
 
-func main() {
-	fmt.Println("Hello from <project-name>!")
+// Handler handles serverless function requests for <project-name>
+func Handler(event map[string]interface{}, context interface{}) (map[string]interface{}, error) {
+	eventJSON, err := json.MarshalIndent(event, "", "  ")
+	if err == nil {
+		log.Printf("Event: %s\n", string(eventJSON))
+	}
+	
+	contextJSON, err := json.MarshalIndent(context, "", "  ")
+	if err == nil {
+		log.Printf("Context: %s\n", string(contextJSON))
+	}
+	
+	return map[string]interface{}{
+		"statusCode": 200,
+		"body":       "Hello World!",
+	}, nil
 }
-

@@ -1,8 +1,13 @@
-const { main } = require('../main/index');
+const { handler } = require('../main/index');
 
 describe('<project-name>', () => {
-  it('should run main function', () => {
-    expect(() => main()).not.toThrow();
+  it('should return Hello World!', async () => {
+    const event = {};
+    const context = {};
+    const result = await handler(event, context);
+    
+    expect(result.statusCode).toBe(200);
+    const body = JSON.parse(result.body);
+    expect(body.message).toBe('Hello World!');
   });
 });
-

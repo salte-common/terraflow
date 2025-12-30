@@ -1,11 +1,23 @@
 package main
 
-import "testing"
+import (
+	"testing"
+)
 
-func TestMain(t *testing.T) {
-	// Test that main function exists and can be called
-	// Note: main() cannot be called directly in tests
-	// This is a placeholder test
-	t.Log("Main function test placeholder")
+func TestHandler(t *testing.T) {
+	event := make(map[string]interface{})
+	context := make(map[string]interface{})
+
+	result, err := Handler(event, context)
+	if err != nil {
+		t.Fatalf("Handler returned error: %v", err)
+	}
+
+	if result["statusCode"].(int) != 200 {
+		t.Errorf("Expected statusCode 200, got %v", result["statusCode"])
+	}
+
+	if result["body"].(string) != "Hello World!" {
+		t.Errorf("Expected body 'Hello World!', got %v", result["body"])
+	}
 }
-

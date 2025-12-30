@@ -1,8 +1,12 @@
 import pytest
-from src.main.index import main
+from src.main.index import handler
 
 
-def test_main_function():
-    """Test that main function runs without error"""
-    assert main() is None
-
+def test_handler():
+    """Test serverless function handler"""
+    event = {}
+    context = {}
+    result = handler(event, context)
+    
+    assert result['statusCode'] == 200
+    assert result['body'] == 'Hello World!'

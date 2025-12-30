@@ -251,7 +251,7 @@ export class TerraformExecutor {
       // runCommand handles cancellation for interactive commands (apply, plan, destroy)
       const exitCode = (error as { status?: number }).status;
       const isInteractiveCommand = ['apply', 'plan', 'destroy'].includes(command);
-      
+
       if (isInteractiveCommand && exitCode === 1) {
         // User cancellation - runCommand already handled it, just exit
         process.exit(1);
@@ -259,9 +259,7 @@ export class TerraformExecutor {
 
       // For actual errors, log and rethrow
       const errorMessage = error instanceof Error ? error.message : String(error);
-      Logger.error(
-        `Backend setup failed: ${errorMessage}`
-      );
+      Logger.error(`Backend setup failed: ${errorMessage}`);
       throw error;
     }
   }
@@ -355,7 +353,7 @@ export class TerraformExecutor {
       // For interactive commands (apply, plan, destroy), exit code 1 often means cancellation
       const exitCode = (error as { status?: number }).status;
       const isInteractiveCommand = ['apply', 'plan', 'destroy'].includes(command);
-      
+
       if (isInteractiveCommand && exitCode === 1) {
         // Likely a user cancellation - terraform already printed the message
         // Just exit without adding our own error messages

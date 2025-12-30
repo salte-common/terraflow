@@ -12,8 +12,8 @@
 #
 # Environment variables take precedence over this config file.
 
-# Working directory for terraform files
-working-dir: ./terraform
+# Working directory for terraform files (optional - defaults to ./terraform)
+# working-dir: ./terraform
 
 # Workspace derivation strategy (optional - uses sensible default)
 # workspace_strategy:
@@ -23,35 +23,34 @@ working-dir: ./terraform
 #   - branch
 #   - hostname
 
-# Backend configuration (adjust for your provider)
-backend:
-  type: <provider>  # local, s3, azurerm, or gcs
-  config:
-    # Template variables are supported: ${VAR_NAME}
-    # See documentation for available template variables
-    
-    # Uncomment and configure based on your provider:
-    
-    # AWS S3 Backend:
-    # bucket: ${AWS_REGION}-${AWS_ACCOUNT_ID}-terraform-state
-    # key: ${GIT_REPOSITORY}
-    # region: ${AWS_REGION}
-    # dynamodb_table: terraform-statelock
-    # encrypt: true
-    # kms_key_id: arn:aws:kms:${AWS_REGION}:${AWS_ACCOUNT_ID}:key/your-key-id  # Optional: Customer-managed KMS key for encryption
-    
-    # Azure Backend:
-    # storage_account_name: mystorageaccount
-    # container_name: tfstate
-    # key: terraform.tfstate
-    # encryption: true  # Optional: Enable encryption (customer-managed keys configured at storage account level)
-    
-    # GCP Backend:
-    # bucket: my-gcs-bucket
-    # prefix: terraform/state
-    # encryption_key: projects/PROJECT_ID/locations/LOCATION/keyRings/RING_NAME/cryptoKeys/KEY_NAME  # Optional: Customer-managed encryption key (CMEK)
+# Backend configuration (optional - defaults to local backend)
+# Uncomment and configure based on your provider:
+# backend:
+#   type: <provider>  # local, s3, azurerm, or gcs
+#   config:
+#     # Template variables are supported: ${VAR_NAME}
+#     # See documentation for available template variables
+#     
+#     # AWS S3 Backend:
+#     # bucket: ${AWS_REGION}-${AWS_ACCOUNT_ID}-terraform-state
+#     # key: ${GIT_REPOSITORY}
+#     # region: ${AWS_REGION}
+#     # dynamodb_table: terraform-statelock
+#     # encrypt: true
+#     # kms_key_id: arn:aws:kms:${AWS_REGION}:${AWS_ACCOUNT_ID}:key/your-key-id  # Optional: Customer-managed KMS key for encryption
+#     
+#     # Azure Backend:
+#     # storage_account_name: mystorageaccount
+#     # container_name: tfstate
+#     # key: terraform.tfstate
+#     # encryption: true  # Optional: Enable encryption (customer-managed keys configured at storage account level)
+#     
+#     # GCP Backend:
+#     # bucket: my-gcs-bucket
+#     # prefix: terraform/state
+#     # encryption_key: projects/PROJECT_ID/locations/LOCATION/keyRings/RING_NAME/cryptoKeys/KEY_NAME  # Optional: Customer-managed encryption key (CMEK)
 
-# Uncomment to configure secrets from secret manager
+# Secrets management (optional)
 # secrets:
 #   provider: env  # env | aws-secrets | azure-keyvault | gcp-secret-manager
 #   config:
@@ -65,20 +64,40 @@ backend:
 #     # GCP Secret Manager:
 #     # project_id: my-project
 
+# Authentication (optional)
+# auth:
+#   # AWS Assume Role:
+#   # assume_role:
+#   #   role_arn: arn:aws:iam::123456789012:role/TerraformRole
+#   #   session_name: terraflow-session
+#   #   duration: 3600
+#   
+#   # Azure Service Principal:
+#   # service_principal:
+#   #   client_id: your-client-id
+#   #   tenant_id: your-tenant-id
+#   #   client_secret: your-client-secret
+#   
+#   # GCP Service Account:
+#   # service_account:
+#   #   key_file: /path/to/service-account-key.json
+
 # Terraform variables (optional)
 # Variables defined here are automatically converted to TF_VAR_* environment variables
 # variables:
 #   environment: development
 
-# Validations
-validations:
-  require_git_commit: true
-  # allowed_workspaces:
-  #   - development
-  #   - staging
-  #   - production
+# Validations (optional)
+# validations:
+#   require_git_commit: true
+#   allowed_workspaces:
+#     - development
+#     - staging
+#     - production
 
-# Logging
-logging:
-  level: info
+# Logging (optional - defaults to level: info)
+# logging:
+#   level: info
+#   terraform_log: false
+#   terraform_log_level: TRACE
 

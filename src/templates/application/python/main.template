@@ -1,13 +1,16 @@
-"""
-Main application entry point
-"""
+import json
+import logging
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 
-def main():
-    """Main function"""
-    print('Hello from <project-name>!')
-
-
-if __name__ == '__main__':
-    main()
-
+def handler(event, context):
+    """Serverless function handler for <project-name>"""
+    logger.info('Event: %s', json.dumps(event, indent=2))
+    logger.info('Context: %s', json.dumps(context.__dict__ if hasattr(context, '__dict__') else str(context), indent=2))
+    
+    return {
+        'statusCode': 200,
+        'body': 'Hello World!',
+    }

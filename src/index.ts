@@ -254,7 +254,7 @@ async function handleWorkspaceSensitiveCommand(
     // TerraformExecutor handles cancellation for interactive commands (apply, plan, destroy)
     const exitCode = (error as { status?: number }).status;
     const isInteractiveCommand = ['apply', 'plan', 'destroy'].includes(command);
-    
+
     if (isInteractiveCommand && exitCode === 1) {
       // User cancellation - already handled, just exit
       process.exit(1);
@@ -263,9 +263,7 @@ async function handleWorkspaceSensitiveCommand(
 
     // For actual errors, log and exit
     const errorMessage = error instanceof Error ? error.message : String(error);
-    Logger.error(
-      `Terraform execution failed: ${errorMessage}`
-    );
+    Logger.error(`Terraform execution failed: ${errorMessage}`);
     process.exit(1);
     return;
   }

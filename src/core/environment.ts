@@ -95,9 +95,15 @@ export class EnvironmentSetup {
     if (vcs.tag) {
       process.env.GIT_TAG = vcs.tag;
     }
-    // Always set commit SHA (defaults to all zeros if git is not initialized)
-    process.env.GIT_COMMIT_SHA = vcs.commitSha || '0000000000000000000000000000000000000000';
-    process.env.GIT_SHORT_SHA = vcs.shortSha || '0000000';
+    // Set commit SHA (defaults to all zeros if git is not initialized)
+    if (vcs.commitSha) {
+      process.env.GIT_COMMIT_SHA = vcs.commitSha;
+      // Calculate short SHA from commit SHA if not provided
+      process.env.GIT_SHORT_SHA = vcs.shortSha || vcs.commitSha.substring(0, 7);
+    } else {
+      process.env.GIT_COMMIT_SHA = '0000000000000000000000000000000000000000';
+      process.env.GIT_SHORT_SHA = '0000000';
+    }
 
     // Set generic GIT_REPOSITORY (mapped from GitHub or GitLab)
     // This takes precedence: GitHub first, then GitLab
@@ -292,9 +298,14 @@ export class EnvironmentSetup {
     if (vcs.tag) {
       vars.GIT_TAG = vcs.tag;
     }
-    // Always set commit SHA (defaults to all zeros if git is not initialized)
-    vars.GIT_COMMIT_SHA = vcs.commitSha || '0000000000000000000000000000000000000000';
-    vars.GIT_SHORT_SHA = vcs.shortSha || '0000000';
+    // Set commit SHA (defaults to all zeros if git is not initialized)
+    if (vcs.commitSha) {
+      vars.GIT_COMMIT_SHA = vcs.commitSha;
+      vars.GIT_SHORT_SHA = vcs.shortSha || vcs.commitSha.substring(0, 7);
+    } else {
+      vars.GIT_COMMIT_SHA = '0000000000000000000000000000000000000000';
+      vars.GIT_SHORT_SHA = '0000000';
+    }
     // Map both GitHub and GitLab to generic GIT_REPOSITORY
     // Default to "local" if no repository is detected
     if (vcs.githubRepository) {
