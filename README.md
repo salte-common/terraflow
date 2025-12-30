@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/salte-common/terraflow/workflows/CI/badge.svg)](https://github.com/salte-common/terraflow/actions)
 [![codecov](https://codecov.io/gh/salte-common/terraflow/branch/main/graph/badge.svg)](https://codecov.io/gh/salte-common/terraflow)
-[![npm version](https://badge.fury.io/js/terraflow.svg)](https://badge.fury.io/js/terraflow)
+[![npm version](https://img.shields.io/npm/v/@salte-common/terraflow.svg)](https://www.npmjs.com/package/@salte-common/terraflow)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 An opinionated Node.js CLI wrapper for Terraform that provides intelligent workspace management, multi-cloud backend support, secrets integration, and git-aware workflows.
