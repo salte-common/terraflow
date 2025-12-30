@@ -7,6 +7,38 @@
 
 An opinionated Node.js CLI wrapper for Terraform that provides intelligent workspace management, multi-cloud backend support, secrets integration, and git-aware workflows.
 
+## About
+
+Terraflow was created by Dave Woodward, VP of Cloud & Enterprise Architecture with over 20 years of experience in financial services technology. Coming from a full-stack development background before evolving into cloud architecture, Dave brings a hands-on, practical approach to enterprise architecture that emphasizes solving real operational problems over theoretical ideals.
+
+### The Problem
+
+After half a decade of managing Terraform in enterprise environments, a pattern emerged: every infrastructure repository needed the same orchestration logic. Before Terraflow, this meant writing bash scripts in every repo to handle the multi-step process of initializing Terraform, selecting the appropriate workspace, assuming cloud provider roles, retrieving secrets, and finally applying changes. These scripts were essential for testing Terraform locally before CI/CD pipelines, but they became repetitive maintenance overhead. Environment-specific and branch-specific configuration—some sensitive, some not—required careful orchestration that varied slightly across projects. Additionally, while consistent project structure proved crucial for helping developers understand resource dependencies, manually scaffolding this structure was time-consuming and error-prone.
+
+### The Developer Perspective
+
+Coming from a development background rather than pure infrastructure, the importance of preview branches became immediately apparent. Developers need to see their infrastructure changes in isolation before those changes overwrite shared development environments. This preview branch support is often overlooked by infrastructure-focused practitioners, but it's critical for modern development workflows where multiple feature branches need to coexist temporarily.
+
+### Terraflow's Approach
+
+Terraflow addresses these challenges through several key design principles:
+
+- **Convention over Configuration**: Codifies the repetitive orchestration logic once, eliminating the need for per-repo bash scripts. The same workflow that works locally also works in CI/CD, reducing cognitive load and maintenance burden.
+
+- **Consistent Project Structure**: Scaffolds a logical organization (setup, inputs, locals, main, outputs, modules) that helps future developers quickly understand resource dependencies and project intent, regardless of which team created the repository.
+
+- **Multi-Cloud Support**: Provides unified conventions across AWS, Azure, and GCP, allowing teams to apply the same mental model regardless of cloud provider.
+
+- **Enterprise-Ready Topology**: Supports the best practice of separating teams/workloads and environments (dev/prod) into distinct cloud accounts, ensuring proper isolation and access control.
+
+- **Preview Branch Support**: Enables multiple representations of workload resources to coexist side-by-side temporarily in the same account, allowing developers to test infrastructure changes in isolation.
+
+- **State Alignment**: Assumes Terraform state lives in the same cloud account as provisioned resources, ensuring team/workload owners have consistent access to both infrastructure and its state.
+
+- **Code + Infrastructure Together**: Scaffolding includes serverless function examples demonstrating how application code and infrastructure-as-code can be versioned and deployed from the same repository, reducing context switching and improving traceability.
+
+Terraflow is built for DevOps practitioners, platform engineers, and cloud architects managing multi-cloud enterprise environments who value consistency, developer experience, and practical solutions born from real-world experience.
+
 ## Features
 
 - 🎯 **Intelligent Workspace Management** - Automatically derives workspace names from git context (branch, tag, or hostname)
