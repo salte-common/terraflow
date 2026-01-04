@@ -89,7 +89,6 @@
 
 # Validations (optional)
 # validations:
-#   require_git_commit: true
 #   allowed_workspaces:
 #     - development
 #     - staging

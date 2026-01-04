@@ -334,9 +334,6 @@ backend:
 # Validation rules for Terraform operations
 
 # validations:
-#   # Require git commit before apply/destroy
-#   require_git_commit: true
-#
 #   # List of allowed workspace names (empty = allow all)
 #   allowed_workspaces:
 #     - development

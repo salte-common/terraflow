@@ -36,7 +36,6 @@ workspace_strategy:
   - hostname
 
 validations:
-  require_git_commit: true
   # Restrict allowed workspaces per environment
   allowed_workspaces:
     - production

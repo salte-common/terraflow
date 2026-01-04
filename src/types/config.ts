@@ -65,8 +65,6 @@ export interface LoggingConfig {
  * Validation configuration
  */
 export interface ValidationConfig {
-  /** Require git commit before apply/destroy */
-  require_git_commit?: boolean;
   /** List of allowed workspace names (empty = allow all) */
   allowed_workspaces?: string[];
 }
