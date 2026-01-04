@@ -37,6 +37,17 @@ describe('Workspace Derivation Integration', () => {
     execSync('git commit -m "Initial commit"', { cwd: tempDir, stdio: 'ignore' });
   };
 
+  const checkoutBranch = (branchName: string): void => {
+    // Try to checkout the branch (will work if it exists)
+    // If it doesn't exist, create it with -b flag
+    try {
+      execSync(`git checkout ${branchName}`, { cwd: tempDir, stdio: 'ignore' });
+    } catch {
+      // Branch doesn't exist, create it
+      execSync(`git checkout -b ${branchName}`, { cwd: tempDir, stdio: 'ignore' });
+    }
+  };
+
   describe('Priority: CLI → env → tag → branch → hostname', () => {
     it('should use CLI parameter (highest priority)', async () => {
       const config: TerraflowConfig = {
@@ -74,12 +85,10 @@ describe('Workspace Derivation Integration', () => {
 
     it('should use git branch when CLI, env, and tag not set', async () => {
       initGitRepo();
-      console.log(`Temp dir: ${tempDir}`);
-      execSync('git checkout -b main', { cwd: tempDir, stdio: 'inherit' });
+      checkoutBranch('main');
 
       const config: TerraflowConfig = {};
       const context = await ContextBuilder.build(config, tempDir);
-      console.log(context.workspace);
       expect(context.workspace).toBe('main');
     });
 
@@ -107,7 +116,7 @@ describe('Workspace Derivation Integration', () => {
 
     it('should use non-ephemeral branches', async () => {
       initGitRepo();
-      execSync('git checkout -b main', { cwd: tempDir, stdio: 'ignore' });
+      checkoutBranch('main');
 
       const config: TerraflowConfig = {};
       const context = await ContextBuilder.build(config, tempDir);
@@ -180,7 +189,7 @@ describe('Workspace Derivation Integration', () => {
   describe('Custom workspace strategy', () => {
     it('should respect workspace_strategy configuration', async () => {
       initGitRepo();
-      execSync('git checkout -b main', { cwd: tempDir, stdio: 'ignore' });
+      checkoutBranch('main');
       execSync('git tag v1.0.0', { cwd: tempDir });
 
       // Only use hostname strategy
@@ -195,7 +204,7 @@ describe('Workspace Derivation Integration', () => {
 
     it('should skip strategies not in workspace_strategy', async () => {
       initGitRepo();
-      execSync('git checkout -b main', { cwd: tempDir, stdio: 'ignore' });
+      checkoutBranch('main');
 
       // Skip tag and branch, go straight to hostname
       const config: TerraflowConfig = {
@@ -247,7 +256,7 @@ describe('Workspace Derivation Integration', () => {
   describe('Template variables', () => {
     it('should include VCS variables in template vars', async () => {
       initGitRepo();
-      execSync('git checkout -b main', { cwd: tempDir, stdio: 'ignore' });
+      checkoutBranch('main');
       execSync('git remote add origin https://github.com/owner/repo.git', { cwd: tempDir });
 
       const config: TerraflowConfig = {};
