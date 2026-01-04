@@ -456,7 +456,6 @@ variables:
 
 # Validations
 validations:
-  require_git_commit: true
   # allowed_workspaces:
   #   - development
   #   - staging
@@ -751,7 +750,6 @@ workspace_strategy:
 
 # Validations
 validations:
-  require_git_commit: true
   allowed_workspaces: []  # Empty = allow all
 
 # Logging

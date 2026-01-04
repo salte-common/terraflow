@@ -39,8 +39,7 @@ workspace_strategy:
   - hostname
 
 # In GitHub Actions, skip commit check (CI environment is clean by default)
-validations:
-  require_git_commit: false
+skip-commit-check: true
 
 logging:
   level: info

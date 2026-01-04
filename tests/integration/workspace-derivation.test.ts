@@ -74,10 +74,12 @@ describe('Workspace Derivation Integration', () => {
 
     it('should use git branch when CLI, env, and tag not set', async () => {
       initGitRepo();
-      execSync('git checkout -b main', { cwd: tempDir, stdio: 'ignore' });
+      console.log(`Temp dir: ${tempDir}`);
+      execSync('git checkout -b main', { cwd: tempDir, stdio: 'inherit' });
 
       const config: TerraflowConfig = {};
       const context = await ContextBuilder.build(config, tempDir);
+      console.log(context.workspace);
       expect(context.workspace).toBe('main');
     });
 

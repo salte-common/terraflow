@@ -355,18 +355,11 @@ Configure validation rules.
 
 ```yaml
 validations:
-  require_git_commit: true
   allowed_workspaces:
     - production
     - staging
     - development
 ```
-
-### `require_git_commit`
-
-Require git working directory to be clean before destructive operations (`apply`, `destroy`). Defaults to `true`.
-
-**CLI Option:** `--skip-commit-check` overrides this.
 
 ### `allowed_workspaces`
 
@@ -509,7 +502,6 @@ workspace_strategy:
 
 # Validations
 validations:
-  require_git_commit: true
   allowed_workspaces: []
 
 # Logging
