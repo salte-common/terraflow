@@ -53,7 +53,7 @@ export class TerraformExecutor {
 
     // Re-detect cloud after .env is loaded (credentials might be in .env)
     const { CloudUtils } = await import('../utils/cloud');
-    context.cloud = await CloudUtils.detectCloud();
+    context.cloud = await CloudUtils.detectCloud(config);
 
     // 1. Run validations
     Logger.info('🔍 Running validations...');

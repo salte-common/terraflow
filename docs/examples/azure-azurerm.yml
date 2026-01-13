@@ -1,6 +1,9 @@
 # Azure Example: AzureRM Backend
 # This example shows a complete Azure setup with Azure Resource Manager backend.
 
+# Required: Cloud provider
+provider: azure
+
 backend:
   type: azurerm
   config:

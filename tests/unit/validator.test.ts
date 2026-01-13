@@ -189,12 +189,13 @@ describe('Validator', () => {
 
   describe('validateBackendConfig', () => {
     it('should pass when backend is not configured', async () => {
-      const config: TerraflowConfig = {};
+      const config: TerraflowConfig = { provider: 'aws' };
       await expect(Validator.validateBackendConfig(config)).resolves.not.toThrow();
     });
 
     it('should pass when backend type is specified', async () => {
       const config: TerraflowConfig = {
+        provider: 'aws',
         backend: {
           type: 's3',
         },
@@ -204,6 +205,7 @@ describe('Validator', () => {
 
     it('should throw ValidationError when backend type is missing', async () => {
       const config: TerraflowConfig = {
+        provider: 'aws',
         backend: {
           type: '',
         },
@@ -245,6 +247,7 @@ describe('Validator', () => {
 
     it('should run all validations for apply command', async () => {
       const config: TerraflowConfig = {
+        provider: 'aws',
         backend: { type: 'local' },
       };
 
@@ -256,6 +259,7 @@ describe('Validator', () => {
 
     it('should skip git commit check when skipCommitCheck is true', async () => {
       const config: TerraflowConfig = {
+        provider: 'aws',
         backend: { type: 'local' },
       };
 
@@ -267,6 +271,7 @@ describe('Validator', () => {
 
     it('should validate allowed workspace for full validation commands', async () => {
       const config: TerraflowConfig = {
+        provider: 'aws',
         backend: { type: 'local' },
         validations: {
           allowed_workspaces: ['production'],
@@ -280,6 +285,7 @@ describe('Validator', () => {
 
     it('should pass when workspace is in allowed list', async () => {
       const config: TerraflowConfig = {
+        provider: 'aws',
         backend: { type: 'local' },
         validations: {
           allowed_workspaces: ['test-workspace'],
@@ -309,6 +315,7 @@ describe('Validator', () => {
 
     it('should validate backend for plan command', async () => {
       const config: TerraflowConfig = {
+        provider: 'aws',
         backend: { type: 'local' },
       };
 
@@ -334,7 +341,7 @@ describe('Validator', () => {
     });
 
     it('should only validate terraform installation for fmt command', async () => {
-      const config: TerraflowConfig = {};
+      const config: TerraflowConfig = { provider: 'aws' };
 
       const result = await Validator.validate('fmt', config, mockContext);
       expect(result.passed).toBe(true);
@@ -361,6 +368,7 @@ describe('Validator', () => {
 
     it('should collect errors but not throw in dry-run mode', async () => {
       const config: TerraflowConfig = {
+        provider: 'aws',
         backend: { type: 'local' },
       };
 
@@ -375,6 +383,7 @@ describe('Validator', () => {
       (GitUtils.isGitRepository as jest.Mock).mockReturnValue(false);
 
       const config: TerraflowConfig = {
+        provider: 'aws',
         backend: { type: 'local' },
       };
 
@@ -401,7 +410,7 @@ describe('Validator', () => {
     });
 
     it('should throw ValidationError for invalid workspace name', async () => {
-      const config: TerraflowConfig = {};
+      const config: TerraflowConfig = { provider: 'aws' };
 
       await expect(Validator.validate('fmt', config, mockContext)).rejects.toThrow(
         ValidationError

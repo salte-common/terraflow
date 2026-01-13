@@ -400,6 +400,9 @@ describe('<project-name>', () => {
 # Terraflow configuration
 # See: https://github.com/salte-common/terraflow/blob/main/docs/configuration.md
 
+# Required: Cloud provider (aws, gcp, or azure)
+provider: aws
+
 # Working directory for terraform files
 working-dir: ./terraform
 
@@ -958,18 +961,30 @@ Exception: In `--dry-run` mode, validations run but don't stop execution (to sho
 #### Passthrough
 - Existing TF_VAR_* environment variables pass through unchanged
 
-### Cloud Provider Auto-Detection
+### Cloud Provider Detection
+
+Cloud provider is determined from the `provider` field in `.tfwconfig.yml` (required). This field must be set to one of: `aws`, `gcp`, or `azure`.
+
+**Primary Source:** The `provider` field in the configuration file is the primary source for cloud detection. This makes platform identification explicit and independent of environment variables.
+
+**Fallback:** If `provider` is not set in the config file, terraflow falls back to environment-based detection for backwards compatibility:
+- AWS: Detected if `AWS_ACCESS_KEY_ID`, `AWS_PROFILE`, or `AWS_REGION` is set
+- Azure: Detected if `AZURE_CLIENT_ID` or `ARM_CLIENT_ID` is set
+- GCP: Detected if `GOOGLE_APPLICATION_CREDENTIALS` or `GCLOUD_PROJECT` is set
 
 #### AWS
-- Sync `AWS_REGION` and `AWS_DEFAULT_REGION`
-- Default to `us-east-1` if not set
+- Uses `provider: aws` from config
+- Syncs `AWS_REGION` and `AWS_DEFAULT_REGION`
+- Defaults to `us-east-1` if region not set
 - Fetch account ID via `aws sts get-caller-identity`
 
 #### Azure
+- Uses `provider: azure` from config
 - Fetch subscription ID via `az account show`
 - Fetch tenant ID
 
 #### GCP
+- Uses `provider: gcp` from config
 - Fetch project ID via `gcloud config get-value project`
 
 ### VCS Environment Setup

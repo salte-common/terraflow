@@ -82,12 +82,12 @@ terraflow new my-aws-project --provider aws --language javascript
 - AWS provider ~> 5.0
 - S3 backend configuration
 - Variables: `aws_region`, `environment`
-- Pre-configured `.tfwconfig.yml` with S3 backend settings
+- Pre-configured `.tfwconfig.yml` with `provider: aws` and S3 backend settings
 
 **Files Generated:**
 - `terraform/_init.tf` with AWS provider and S3 backend
 - `terraform/inputs.tf` with AWS-specific variables
-- `.tfwconfig.yml` with `type: s3` backend
+- `.tfwconfig.yml` with `provider: aws` and `type: s3` backend
 
 ### Azure Project
 
@@ -99,12 +99,12 @@ terraflow new my-azure-project --provider azure --language typescript
 - AzureRM provider ~> 3.0
 - AzureRM backend configuration
 - Variables: `azure_location`, `environment`
-- Pre-configured `.tfwconfig.yml` with AzureRM backend settings
+- Pre-configured `.tfwconfig.yml` with `provider: azure` and AzureRM backend settings
 
 **Files Generated:**
 - `terraform/_init.tf` with AzureRM provider and backend
 - `terraform/inputs.tf` with Azure-specific variables
-- `.tfwconfig.yml` with `type: azurerm` backend
+- `.tfwconfig.yml` with `provider: azure` and `type: azurerm` backend
 - `tsconfig.json` for TypeScript projects
 
 ### GCP Project
@@ -117,12 +117,12 @@ terraflow new my-gcp-project --provider gcp --language python
 - Google provider ~> 5.0
 - GCS backend configuration
 - Variables: `gcp_project_id`, `gcp_region`, `environment`
-- Pre-configured `.tfwconfig.yml` with GCS backend settings
+- Pre-configured `.tfwconfig.yml` with `provider: gcp` and GCS backend settings
 
 **Files Generated:**
 - `terraform/_init.tf` with Google provider and GCS backend
 - `terraform/inputs.tf` with GCP-specific variables
-- `.tfwconfig.yml` with `type: gcs` backend
+- `.tfwconfig.yml` with `provider: gcp` and `type: gcs` backend
 - `requirements.txt` with pytest for Python projects
 
 ## Language-Specific Features
@@ -241,6 +241,7 @@ After running `terraflow new`, follow these steps:
    - GCP: `GOOGLE_APPLICATION_CREDENTIALS`, `GCP_PROJECT_ID`
 
 4. **Review and update `.tfwconfig.yml`:**
+   - The `provider` field is automatically set based on the `--provider` flag used with `terraflow new`
    - Configure your backend bucket/storage account
    - Set up secrets provider if needed
    - Adjust workspace strategy if needed

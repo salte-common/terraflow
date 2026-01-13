@@ -27,7 +27,7 @@ export class ContextBuilder {
     const workspace = await ContextBuilder.deriveWorkspace(config, cwd);
     const workingDir = ConfigManager.getWorkingDir(config, cwd);
 
-    const cloud = await ContextBuilder.buildCloudInfo();
+    const cloud = await ContextBuilder.buildCloudInfo(config);
     const vcs = await ContextBuilder.buildVcsInfo(cwd);
     const hostname = os.hostname();
 
@@ -111,14 +111,15 @@ export class ContextBuilder {
 
   /**
    * Build cloud provider information
-   * Detects cloud provider from environment (AWS, Azure, GCP)
+   * Detects cloud provider from configuration or environment (AWS, Azure, GCP)
+   * @param config - Terraflow configuration
    * @returns Cloud information
    */
-  private static async buildCloudInfo(): Promise<CloudInfo> {
+  private static async buildCloudInfo(config: TerraflowConfig): Promise<CloudInfo> {
     // Use CloudUtils to detect cloud provider
     // This needs to happen early so validation can check it
     const { CloudUtils } = await import('../utils/cloud');
-    return await CloudUtils.detectCloud();
+    return await CloudUtils.detectCloud(config);
   }
 
   /**

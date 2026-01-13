@@ -220,6 +220,7 @@ describe('EnvironmentSetup', () => {
   describe('setupTerraformVariables', () => {
     it('should convert config variables to TF_VAR_* environment variables', () => {
       const config: TerraflowConfig = {
+        provider: 'aws',
         variables: {
           environment: 'production',
           instance_count: '3',
@@ -236,6 +237,7 @@ describe('EnvironmentSetup', () => {
 
     it('should convert objects and arrays to JSON strings', () => {
       const config: TerraflowConfig = {
+        provider: 'aws',
         variables: {
           tags: { env: 'prod', app: 'web' },
           zones: ['us-east-1a', 'us-east-1b'],
@@ -250,6 +252,7 @@ describe('EnvironmentSetup', () => {
 
     it('should handle null and undefined values', () => {
       const config: TerraflowConfig = {
+        provider: 'aws',
         variables: {
           null_value: null,
           undefined_value: undefined,
@@ -265,6 +268,7 @@ describe('EnvironmentSetup', () => {
     it('should not override existing TF_VAR_* environment variables', () => {
       process.env.TF_VAR_existing = 'existing-value';
       const config: TerraflowConfig = {
+        provider: 'aws',
         variables: {
           existing: 'new-value',
         },
@@ -276,7 +280,7 @@ describe('EnvironmentSetup', () => {
     });
 
     it('should handle config without variables', () => {
-      const config: TerraflowConfig = {};
+      const config: TerraflowConfig = { provider: 'aws' };
       expect(() => EnvironmentSetup.setupTerraformVariables(config)).not.toThrow();
     });
   });
@@ -284,6 +288,7 @@ describe('EnvironmentSetup', () => {
   describe('setupLogging', () => {
     it('should set TF_LOG when terraform_log_level is configured', () => {
       const config: TerraflowConfig = {
+        provider: 'aws',
         logging: {
           level: 'info',
           terraform_log_level: 'DEBUG',
@@ -298,6 +303,7 @@ describe('EnvironmentSetup', () => {
     it('should disable Terraform logging when terraform_log is false', () => {
       process.env.TF_LOG = 'DEBUG';
       const config: TerraflowConfig = {
+        provider: 'aws',
         logging: {
           level: 'info',
           terraform_log: false,
@@ -311,6 +317,7 @@ describe('EnvironmentSetup', () => {
 
     it('should enable Terraform logging with default level when terraform_log is true', () => {
       const config: TerraflowConfig = {
+        provider: 'aws',
         logging: {
           level: 'info',
           terraform_log: true,
@@ -325,6 +332,7 @@ describe('EnvironmentSetup', () => {
     it('should not override existing TF_LOG when terraform_log is true', () => {
       process.env.TF_LOG = 'TRACE';
       const config: TerraflowConfig = {
+        provider: 'aws',
         logging: {
           level: 'info',
           terraform_log: true,
@@ -337,7 +345,7 @@ describe('EnvironmentSetup', () => {
     });
 
     it('should handle config without logging', () => {
-      const config: TerraflowConfig = {};
+      const config: TerraflowConfig = { provider: 'aws' };
       expect(() => EnvironmentSetup.setupLogging(config)).not.toThrow();
     });
   });
@@ -345,6 +353,7 @@ describe('EnvironmentSetup', () => {
   describe('resolveTemplateVars', () => {
     it('should resolve template variables in config', () => {
       const config: TerraflowConfig = {
+        provider: 'aws',
         workspace: '${WORKSPACE}',
         'working-dir': 'terraform/${ENV}',
       };
@@ -378,6 +387,7 @@ describe('EnvironmentSetup', () => {
       (CloudUtils.getAwsRegion as jest.Mock).mockReturnValue('us-east-1');
 
       const config: TerraflowConfig = {
+        provider: 'aws',
         variables: {
           test: 'value',
         },

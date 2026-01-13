@@ -51,6 +51,7 @@ describe('Workspace Derivation Integration', () => {
   describe('Priority: CLI → env → tag → branch → hostname', () => {
     it('should use CLI parameter (highest priority)', async () => {
       const config: TerraflowConfig = {
+        provider: 'aws',
         workspace: 'cli-workspace',
       };
       const context = await ContextBuilder.build(config, tempDir);
@@ -59,7 +60,7 @@ describe('Workspace Derivation Integration', () => {
 
     it('should use environment variable when CLI not set', async () => {
       process.env.TERRAFLOW_WORKSPACE = 'env-workspace';
-      const config: TerraflowConfig = {};
+      const config: TerraflowConfig = { provider: 'aws' };
       const context = await ContextBuilder.build(config, tempDir);
       expect(context.workspace).toBe('env-workspace');
     });
@@ -67,6 +68,7 @@ describe('Workspace Derivation Integration', () => {
     it('should prioritize CLI over environment variable', async () => {
       process.env.TERRAFLOW_WORKSPACE = 'env-workspace';
       const config: TerraflowConfig = {
+        provider: 'aws',
         workspace: 'cli-workspace',
       };
       const context = await ContextBuilder.build(config, tempDir);
@@ -77,7 +79,7 @@ describe('Workspace Derivation Integration', () => {
       initGitRepo();
       execSync('git tag v1.0.0', { cwd: tempDir });
 
-      const config: TerraflowConfig = {};
+      const config: TerraflowConfig = { provider: 'aws' };
       const context = await ContextBuilder.build(config, tempDir);
       // Tag is sanitized (dots become hyphens) per spec
       expect(context.workspace).toBe('v1-0-0');
@@ -87,14 +89,14 @@ describe('Workspace Derivation Integration', () => {
       initGitRepo();
       checkoutBranch('main');
 
-      const config: TerraflowConfig = {};
+      const config: TerraflowConfig = { provider: 'aws' };
       const context = await ContextBuilder.build(config, tempDir);
       expect(context.workspace).toBe('main');
     });
 
     it('should use hostname as fallback', async () => {
       const hostname = os.hostname();
-      const config: TerraflowConfig = {};
+      const config: TerraflowConfig = { provider: 'aws' };
       const context = await ContextBuilder.build(config, tempDir);
       expect(context.workspace).toBe(GitUtils.sanitizeWorkspaceName(hostname));
     });
@@ -105,7 +107,7 @@ describe('Workspace Derivation Integration', () => {
       initGitRepo();
       execSync('git checkout -b feature/new-feature', { cwd: tempDir, stdio: 'ignore' });
 
-      const config: TerraflowConfig = {};
+      const config: TerraflowConfig = { provider: 'aws' };
       const context = await ContextBuilder.build(config, tempDir);
 
       // Should fall back to hostname since branch is ephemeral
@@ -118,7 +120,7 @@ describe('Workspace Derivation Integration', () => {
       initGitRepo();
       checkoutBranch('main');
 
-      const config: TerraflowConfig = {};
+      const config: TerraflowConfig = { provider: 'aws' };
       const context = await ContextBuilder.build(config, tempDir);
       expect(context.workspace).toBe('main');
     });
@@ -137,7 +139,7 @@ describe('Workspace Derivation Integration', () => {
         execSync('git commit -m "Initial commit"', { cwd: branchDir, stdio: 'ignore' });
         execSync(`git checkout -b ${branch}`, { cwd: branchDir, stdio: 'ignore' });
 
-        const config: TerraflowConfig = {};
+        const config: TerraflowConfig = { provider: 'aws' };
         const context = await ContextBuilder.build(config, branchDir);
 
         const hostname = os.hostname();
@@ -156,6 +158,7 @@ describe('Workspace Derivation Integration', () => {
 
       // Force using branch strategy, but include hostname as fallback
       const config: TerraflowConfig = {
+        provider: 'aws',
         workspace_strategy: ['branch', 'hostname'],
       };
       const context = await ContextBuilder.build(config, tempDir);
@@ -169,7 +172,7 @@ describe('Workspace Derivation Integration', () => {
       initGitRepo();
       execSync('git tag v1.0.0', { cwd: tempDir });
 
-      const config: TerraflowConfig = {};
+      const config: TerraflowConfig = { provider: 'aws' };
       const context = await ContextBuilder.build(config, tempDir);
       // Tag is sanitized (dots become hyphens) but original tag preserved in template vars
       expect(context.workspace).toBe('v1-0-0');
@@ -178,6 +181,7 @@ describe('Workspace Derivation Integration', () => {
 
     it('should sanitize CLI workspace names', async () => {
       const config: TerraflowConfig = {
+        provider: 'aws',
         workspace: 'my/workspace name',
       };
       const context = await ContextBuilder.build(config, tempDir);
@@ -194,6 +198,7 @@ describe('Workspace Derivation Integration', () => {
 
       // Only use hostname strategy
       const config: TerraflowConfig = {
+        provider: 'aws',
         workspace_strategy: ['hostname'],
       };
       const context = await ContextBuilder.build(config, tempDir);
@@ -208,6 +213,7 @@ describe('Workspace Derivation Integration', () => {
 
       // Skip tag and branch, go straight to hostname
       const config: TerraflowConfig = {
+        provider: 'aws',
         workspace_strategy: ['tag', 'hostname'], // branch not included
       };
       const context = await ContextBuilder.build(config, tempDir);
@@ -223,7 +229,7 @@ describe('Workspace Derivation Integration', () => {
       execSync('git checkout -b test-branch', { cwd: tempDir, stdio: 'ignore' });
       execSync('git remote add origin https://github.com/owner/repo.git', { cwd: tempDir });
 
-      const config: TerraflowConfig = {};
+      const config: TerraflowConfig = { provider: 'aws' };
       const context = await ContextBuilder.build(config, tempDir);
 
       expect(context.vcs.branch).toBe('test-branch');
@@ -237,14 +243,14 @@ describe('Workspace Derivation Integration', () => {
       initGitRepo();
       execSync('git remote add origin https://gitlab.com/group/project.git', { cwd: tempDir });
 
-      const config: TerraflowConfig = {};
+      const config: TerraflowConfig = { provider: 'aws' };
       const context = await ContextBuilder.build(config, tempDir);
 
       expect(context.vcs.gitlabProjectPath).toBe('group/project');
     });
 
     it('should return empty VCS info for non-git directories', async () => {
-      const config: TerraflowConfig = {};
+      const config: TerraflowConfig = { provider: 'aws' };
       const context = await ContextBuilder.build(config, tempDir);
 
       expect(context.vcs.branch).toBeUndefined();
@@ -259,7 +265,7 @@ describe('Workspace Derivation Integration', () => {
       checkoutBranch('main');
       execSync('git remote add origin https://github.com/owner/repo.git', { cwd: tempDir });
 
-      const config: TerraflowConfig = {};
+      const config: TerraflowConfig = { provider: 'aws' };
       const context = await ContextBuilder.build(config, tempDir);
 
       expect(context.templateVars.GIT_BRANCH).toBe('main');
@@ -274,7 +280,7 @@ describe('Workspace Derivation Integration', () => {
       initGitRepo();
       execSync('git tag v1.0.0', { cwd: tempDir });
 
-      const config: TerraflowConfig = {};
+      const config: TerraflowConfig = { provider: 'aws' };
       const context = await ContextBuilder.build(config, tempDir);
 
       // Original tag preserved in template vars

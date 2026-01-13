@@ -108,6 +108,9 @@ This creates a `.tfwconfig.yml` file with examples for all backends, secrets pro
 2. **Configure your backend and secrets** in `.tfwconfig.yml`:
 
 ```yaml
+# Required: Cloud provider (aws, gcp, or azure)
+provider: aws
+
 backend:
   type: s3
   config:

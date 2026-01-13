@@ -317,6 +317,7 @@ export async function generateConfigFiles(
   const tfwconfigContent = processTemplate(tfwconfigTemplate, {
     'project-name': projectName,
     provider: backendType,
+    'cloud-provider': provider, // Add provider field
   });
   writeFileSync(join(projectDir, '.tfwconfig.yml'), tfwconfigContent);
 

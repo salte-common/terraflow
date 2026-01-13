@@ -11,14 +11,46 @@ import type { CloudInfo } from '../types/context.js';
  */
 export class CloudUtils {
   /**
-   * Detect cloud provider from environment
+   * Detect cloud provider from configuration or environment
+   * @param config - Optional Terraflow configuration
    * @returns Cloud information
    */
-  static async detectCloud(): Promise<CloudInfo> {
+  static async detectCloud(config?: { provider?: 'aws' | 'gcp' | 'azure' }): Promise<CloudInfo> {
     const cloud: CloudInfo = {
       provider: 'none',
     };
 
+    // If provider is specified in config, use it as primary source
+    if (config?.provider) {
+      cloud.provider = config.provider;
+
+      if (config.provider === 'aws') {
+        cloud.awsRegion = CloudUtils.getAwsRegion();
+        try {
+          cloud.awsAccountId = await CloudUtils.getAwsAccountId();
+        } catch {
+          // Account ID fetch failed, continue without it
+        }
+        return cloud;
+      } else if (config.provider === 'azure') {
+        try {
+          cloud.azureSubscriptionId = await CloudUtils.getAzureSubscriptionId();
+          cloud.azureTenantId = await CloudUtils.getAzureTenantId();
+        } catch {
+          // Subscription/Tenant ID fetch failed, continue without it
+        }
+        return cloud;
+      } else if (config.provider === 'gcp') {
+        try {
+          cloud.gcpProjectId = await CloudUtils.getGcpProjectId();
+        } catch {
+          // Project ID fetch failed, continue without it
+        }
+        return cloud;
+      }
+    }
+
+    // Fallback to environment-based detection (for backwards compatibility)
     // Check for AWS
     if (process.env.AWS_ACCESS_KEY_ID || process.env.AWS_PROFILE || process.env.AWS_REGION) {
       cloud.provider = 'aws';
