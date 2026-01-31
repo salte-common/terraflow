@@ -12,14 +12,14 @@ terraform {
     }
   }
   
-  backend "s3" {
-    # Backend configuration provided via:
-    # - terraflow CLI flags
-    # - environment variables (TERRAFLOW_*)
-    # - .tfwconfig.yml
-    # 
-    # Do not hardcode values here
-  }
+  # Uncomment when ready for remote state. Configure in .tfwconfig.yml
+  # backend "s3" {
+  #   # Backend configuration provided via:
+  #   # - terraflow CLI flags
+  #   # - environment variables (TERRAFLOW_*)
+  #   # - .tfwconfig.yml
+  #   # Do not hardcode values here
+  # }
 }
 
 provider "aws" {
