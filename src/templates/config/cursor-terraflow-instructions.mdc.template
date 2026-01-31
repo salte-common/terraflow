@@ -30,11 +30,13 @@ Prefer `terraflow` over `terraform` for plan/apply/destroy — it runs init and 
 
 ## Workspace Derivation
 
-Terraflow derives workspaces from git context:
+Terraflow derives workspaces in this order (first match wins):
 
-- **Branch** `feature/new-api` → workspace `feature-new-api`
-- **Tag** `v1.0.0` → workspace `v1-0-0`
-- **Hostname** — fallback when not in a git repo
+1. **CLI** — `--workspace` or `-w`
+2. **Environment** — `TERRAFLOW_WORKSPACE`
+3. **Git tag** — e.g. `v1.0.0` → `v1-0-0`
+4. **Git branch** — if non-ephemeral (e.g. `main`, `my-preview-branch`). Ephemeral branches (`feature/foo`, `fix/bar`) fall through to hostname.
+5. **Hostname** — when none of the above apply (no git repo, no tag, or ephemeral branch)
 
 Override explicitly:
 
