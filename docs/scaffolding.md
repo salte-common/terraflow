@@ -8,6 +8,8 @@ The `terraflow new` command scaffolds a new infrastructure project with:
 - Pre-configured Terraform files for your cloud provider
 - Application code templates in your chosen language
 - Complete configuration files (`.tfwconfig.yml`, `.env.example`, `.gitignore`, `README.md`)
+- `.ai-metadata.json` initialized with stats for all scaffolded files (100% AI-authored)
+- Cursor rules for Terraflow usage and `.ai-metadata.json` maintenance
 - Proper directory structure following best practices
 
 ## Command Syntax
@@ -49,9 +51,11 @@ terraflow new my-infrastructure --force
 
 ```
 <project-name>/
+├── .ai-metadata.json         # AI code tracking (initialized with scaffold stats)
 ├── .cursor/
 │   └── rules/
-│       └── terraflow.mdc     # Cursor instructions for Terraflow usage
+│       ├── terraform.mdc    # Cursor instructions for Terraflow usage
+│       └── ai-metadata.mdc  # Cursor instructions for .ai-metadata.json maintenance
 ├── src/
 │   ├── main/
 │   │   └── index.js (or .ts, .py, .go based on --language)

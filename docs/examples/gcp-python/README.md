@@ -36,7 +36,9 @@ Infrastructure as Code project managed with [Terraflow](https://github.com/salte
 
 ## Project Structure
 
+- `.ai-metadata.json` - AI code tracking (initialized by terraflow new)
 - `.cursor/rules/terraform.mdc` - Cursor instructions for Terraflow (delete if not using Cursor)
+- `.cursor/rules/ai-metadata.mdc` - Cursor instructions for .ai-metadata.json maintenance
 - `src/` - Application source code
   - `main/` - Main application code
   - `test/` - Test files

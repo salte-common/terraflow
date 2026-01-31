@@ -171,9 +171,11 @@ terraflow new [project-name] [options]
 
 ```
 <project-name>/
+├── .ai-metadata.json         # AI code tracking (initialized with scaffold stats)
 ├── .cursor/
 │   └── rules/
-│       └── terraform.mdc     # Cursor instructions for Terraflow (delete if not using Cursor)
+│       ├── terraform.mdc     # Cursor instructions for Terraflow (delete if not using Cursor)
+│       └── ai-metadata.mdc   # Cursor instructions for .ai-metadata.json maintenance
 ├── src/
 │   ├── main/
 │   │   └── index.js (or .ts, .py, .go based on --language)
@@ -1137,7 +1139,7 @@ Minimum 80% code coverage required
 ### docs/examples/
 
 - Example configurations for common scenarios
-- Cursor instructions (cursor-terraflow-instructions.mdc) — included in scaffolded projects as .cursor/rules/terraform.mdc
+- Cursor instructions (cursor-terraflow-instructions.mdc, cursor-ai-metadata.mdc.template) — included in scaffolded projects as .cursor/rules/terraform.mdc and .cursor/rules/ai-metadata.mdc
 - AWS + GitHub Actions (tfwconfig.github-actions.example.yml)
 - Azure + GitLab CI (tfwconfig.gitlab-ci.example.yml)
 - GCP + local development

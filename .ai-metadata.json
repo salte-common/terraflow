@@ -386,8 +386,8 @@
       "tool": "cursor"
     },
     "docs/examples/cursor-terraflow-instructions.mdc": {
-      "lines_total": 145,
-      "lines_ai_generated": 145,
+      "lines_total": 69,
+      "lines_ai_generated": 69,
       "ai_percentage": 100,
       "last_updated": "2026-01-31T18:09:28Z",
       "tool": "cursor"
@@ -890,8 +890,8 @@
       "tool": "cursor"
     },
     "src/templates/config/cursor-terraflow-instructions.mdc.template": {
-      "lines_total": 151,
-      "lines_ai_generated": 151,
+      "lines_total": 69,
+      "lines_ai_generated": 69,
       "ai_percentage": 100,
       "last_updated": "2026-01-31T18:15:00Z",
       "tool": "cursor"

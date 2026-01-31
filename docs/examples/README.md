@@ -12,7 +12,8 @@ This directory contains complete example projects generated using `terraflow new
 
 ### Cursor Instructions
 
-- **[cursor-terraflow-instructions.mdc](./cursor-terraflow-instructions.mdc)** - Cursor rules file for projects using Terraflow. **Included automatically** when you run `terraflow new` (as `.cursor/rules/terraform.mdc`). For existing projects, copy to `.cursor/rules/` so Cursor knows how to scaffold (`terraflow new`), initialize (`terraflow config init`), and work with generated files (use as designed or delete if not needed).
+- **[cursor-terraflow-instructions.mdc](./cursor-terraflow-instructions.mdc)** - Cursor rules file for using Terraflow in this project. **Included automatically** when you run `terraflow new` (as `.cursor/rules/terraform.mdc`). Focuses on day-to-day usage: plan, apply, workspace derivation, configuration. For existing projects, copy to `.cursor/rules/` so Cursor knows how to work with Terraflow.
+- **ai-metadata.mdc** - Cursor rules file for maintaining `.ai-metadata.json`. **Included automatically** when you run `terraflow new` (as `.cursor/rules/ai-metadata.mdc`). Instructs Cursor to update `.ai-metadata.json` when creating or modifying files checked into source control.
 
 ### Standalone `.tfwconfig.yml` Examples
 
@@ -60,9 +61,11 @@ Each example project includes:
 
 ```
 <project-name>/
+├── .ai-metadata.json         # AI code tracking (initialized by terraflow new)
 ├── .cursor/
 │   └── rules/
-│       └── terraform.mdc     # Cursor instructions for Terraflow (from terraflow new)
+│       ├── terraform.mdc     # Cursor instructions for Terraflow (from terraflow new)
+│       └── ai-metadata.mdc   # Cursor instructions for .ai-metadata.json maintenance
 ├── src/
 │   ├── main/          # Application main files
 │   └── test/          # Test files

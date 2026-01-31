@@ -346,7 +346,115 @@ export async function generateConfigFiles(
   );
   writeFileSync(join(cursorRulesDir, 'terraform.mdc'), cursorRulesTemplate);
 
+  // .cursor/rules/ai-metadata.mdc - Cursor instructions for .ai-metadata.json maintenance
+  const aiMetadataRulesTemplate = loadTemplate(
+    join(templatesDir, 'cursor-ai-metadata.mdc.template')
+  );
+  writeFileSync(join(cursorRulesDir, 'ai-metadata.mdc'), aiMetadataRulesTemplate);
+
   Logger.debug('Configuration files generated successfully');
+}
+
+/**
+ * Get list of scaffolded file paths (relative to project root) for AI metadata
+ * Only includes files that are checked into source control
+ * @param language - Programming language (javascript, typescript, python, go)
+ * @returns Array of relative file paths
+ */
+function getScaffoldedFilePaths(language: string): string[] {
+  const common = [
+    '.tfwconfig.yml',
+    '.env.example',
+    '.gitignore',
+    'README.md',
+    '.cursor/rules/terraform.mdc',
+    '.cursor/rules/ai-metadata.mdc',
+    'terraform/_init.tf',
+    'terraform/inputs.tf',
+    'terraform/locals.tf',
+    'terraform/main.tf',
+    'terraform/outputs.tf',
+    'terraform/modules/inputs.tf',
+    'terraform/modules/main.tf',
+    'terraform/modules/outputs.tf',
+  ];
+
+  const languageFiles: Record<string, string[]> = {
+    javascript: [
+      'src/main/index.js',
+      'src/test/index.spec.js',
+      'package.json',
+      '.eslintrc.json',
+      'jest.config.js',
+      '.prettierrc',
+    ],
+    typescript: [
+      'src/main/index.ts',
+      'src/test/index.spec.ts',
+      'package.json',
+      'tsconfig.json',
+      '.eslintrc.json',
+      'jest.config.js',
+      '.prettierrc',
+    ],
+    python: [
+      'src/main/index.py',
+      'src/test/test_main.py',
+      'requirements.txt',
+      'pytest.ini',
+      '.pylintrc',
+    ],
+    go: ['src/main/index.go', 'src/test/main_test.go', 'go.mod', '.golangci.yml'],
+  };
+
+  return [...common, ...(languageFiles[language] ?? [])];
+}
+
+/**
+ * Generate initial .ai-metadata.json with stats for all scaffolded files
+ * All scaffolded files are treated as 100% AI-authored (from templates)
+ * Only tracks files that are checked into source control
+ * @param projectDir - Root directory of the project
+ * @param language - Programming language (javascript, typescript, python, go)
+ */
+export async function generateAiMetadata(projectDir: string, language: string): Promise<void> {
+  const filePaths = getScaffoldedFilePaths(language);
+  const files: Record<
+    string,
+    {
+      lines_total: number;
+      lines_ai_generated: number;
+      ai_percentage: number;
+      last_updated: string;
+      tool: string;
+    }
+  > = {};
+
+  const timestamp = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
+
+  for (const relPath of filePaths) {
+    const fullPath = join(projectDir, relPath);
+    if (!existsSync(fullPath)) continue;
+
+    const content = readFileSync(fullPath, 'utf8');
+    const linesTotal = content.split(/\r?\n/).length;
+
+    files[relPath] = {
+      lines_total: linesTotal,
+      lines_ai_generated: linesTotal,
+      ai_percentage: 100,
+      last_updated: timestamp,
+      tool: 'cursor',
+    };
+  }
+
+  const metadata = {
+    files,
+    metadata_version: '1.0',
+  };
+
+  writeFileSync(join(projectDir, '.ai-metadata.json'), JSON.stringify(metadata, null, 2));
+  Logger.debug('Initial .ai-metadata.json generated');
 }
 
 /**
