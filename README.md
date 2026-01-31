@@ -89,6 +89,7 @@ terraflow new my-infrastructure --provider gcp --language python
 ```
 
 This creates a complete project structure with:
+- **Cursor-ready** — Optimized for [Cursor](https://cursor.com/) to get up and running quickly with AI-assisted development
 - Terraform configuration files for your cloud provider
 - Application code templates in your chosen language
 - Pre-configured `.tfwconfig.yml` with backend settings
@@ -97,6 +98,7 @@ This creates a complete project structure with:
 - `.ai-metadata.json` — AI code tracking (initialized with scaffold stats)
 - `.cursor/rules/terraform.mdc` — Cursor instructions for Terraflow (delete if not using Cursor)
 - `.cursor/rules/ai-metadata.mdc` — Cursor instructions for `.ai-metadata.json` maintenance
+- `.cursor/rules/development-standards.mdc` — Cursor instructions (language, platform, salte-common/standards)
 
 See [Project Scaffolding Documentation](docs/scaffolding.md) for complete details.
 

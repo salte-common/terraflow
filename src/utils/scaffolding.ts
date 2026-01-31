@@ -295,6 +295,82 @@ function getBackendType(provider: string): string {
 }
 
 /**
+ * Build template variables for development standards Cursor rules
+ * @param language - Programming language (javascript, typescript, python, go)
+ * @param provider - Cloud provider (aws, azure, gcp)
+ * @returns Variables for cursor-development-standards.mdc.template
+ */
+function getDevelopmentStandardsVariables(
+  language: string,
+  provider: string
+): Record<string, string> {
+  const languageMap: Record<
+    string,
+    { display: string; testFramework: string; runtime: string; standards: string }
+  > = {
+    javascript: {
+      display: 'JavaScript',
+      testFramework: 'Jest',
+      runtime: 'Node.js',
+      standards: 'JavaScript Standards',
+    },
+    typescript: {
+      display: 'TypeScript',
+      testFramework: 'Jest',
+      runtime: 'Node.js',
+      standards: 'JavaScript Standards',
+    },
+    python: {
+      display: 'Python',
+      testFramework: 'pytest',
+      runtime: 'Python',
+      standards: 'Python Standards',
+    },
+    go: {
+      display: 'Go',
+      testFramework: 'go test',
+      runtime: 'Go',
+      standards: 'Development Standards',
+    },
+  };
+
+  const providerMap: Record<string, { display: string; platformStandards: string }> = {
+    aws: {
+      display: 'AWS',
+      platformStandards: 'AWS Architecture Standards',
+    },
+    azure: {
+      display: 'Azure',
+      platformStandards: 'Azure deployment and architecture patterns',
+    },
+    gcp: {
+      display: 'GCP',
+      platformStandards: 'GCP deployment and architecture patterns',
+    },
+  };
+
+  const lang = languageMap[language] ?? {
+    display: language,
+    testFramework: 'tests',
+    runtime: language,
+    standards: 'Development Standards',
+  };
+  const prov = providerMap[provider] ?? {
+    display: provider,
+    platformStandards: 'platform-specific standards',
+  };
+
+  return {
+    'language-display': lang.display,
+    'provider-display': prov.display,
+    'test-framework': lang.testFramework,
+    runtime: lang.runtime,
+    'language-standards': lang.standards,
+    'platform-standards': prov.platformStandards,
+  };
+}
+
+/**
  * Generate configuration files for the project
  * @param projectDir - Root directory of the project
  * @param provider - Cloud provider (aws, azure, gcp)
@@ -352,6 +428,14 @@ export async function generateConfigFiles(
   );
   writeFileSync(join(cursorRulesDir, 'ai-metadata.mdc'), aiMetadataRulesTemplate);
 
+  // .cursor/rules/development-standards.mdc - Cursor instructions for development standards
+  const devStandardsTemplate = loadTemplate(
+    join(templatesDir, 'cursor-development-standards.mdc.template')
+  );
+  const devStandardsVars = getDevelopmentStandardsVariables(language, provider);
+  const devStandardsContent = processTemplate(devStandardsTemplate, devStandardsVars);
+  writeFileSync(join(cursorRulesDir, 'development-standards.mdc'), devStandardsContent);
+
   Logger.debug('Configuration files generated successfully');
 }
 
@@ -369,6 +453,7 @@ function getScaffoldedFilePaths(language: string): string[] {
     'README.md',
     '.cursor/rules/terraform.mdc',
     '.cursor/rules/ai-metadata.mdc',
+    '.cursor/rules/development-standards.mdc',
     'terraform/_init.tf',
     'terraform/inputs.tf',
     'terraform/locals.tf',

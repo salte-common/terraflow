@@ -5,11 +5,12 @@ Terraflow provides a powerful project scaffolding feature that generates complet
 ## Overview
 
 The `terraflow new` command scaffolds a new infrastructure project with:
+- **Cursor-ready** — Optimized for [Cursor](https://cursor.com/) to get up and running quickly with AI-assisted development
 - Pre-configured Terraform files for your cloud provider
 - Application code templates in your chosen language
 - Complete configuration files (`.tfwconfig.yml`, `.env.example`, `.gitignore`, `README.md`)
 - `.ai-metadata.json` initialized with stats for all scaffolded files (100% AI-authored)
-- Cursor rules for Terraflow usage and `.ai-metadata.json` maintenance
+- Cursor rules for Terraflow usage, `.ai-metadata.json` maintenance, and development standards (language, platform, salte-common/standards)
 - Proper directory structure following best practices
 
 ## Command Syntax
@@ -54,8 +55,9 @@ terraflow new my-infrastructure --force
 ├── .ai-metadata.json         # AI code tracking (initialized with scaffold stats)
 ├── .cursor/
 │   └── rules/
-│       ├── terraform.mdc    # Cursor instructions for Terraflow usage
-│       └── ai-metadata.mdc  # Cursor instructions for .ai-metadata.json maintenance
+│       ├── terraform.mdc             # Cursor instructions for Terraflow usage
+│       ├── ai-metadata.mdc           # Cursor instructions for .ai-metadata.json maintenance
+│       └── development-standards.mdc # Cursor instructions (language, platform, salte-common/standards)
 ├── src/
 │   ├── main/
 │   │   └── index.js (or .ts, .py, .go based on --language)
@@ -267,6 +269,8 @@ After running `terraflow new`, follow these steps:
    ```bash
    terraflow apply
    ```
+
+8. **Optional: Create `SPECIFICATION.md`** — Add a project specification document in the root to define requirements, architecture, and conventions. Cursor will read this file to inform code suggestions.
 
 ## Template Customization
 

@@ -1,0 +1,43 @@
+---
+description: Development standards — language, runtime, and platform context from scaffold
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Development Standards
+
+This project was scaffolded with **<language-display>**, **<provider-display>**, and **<test-framework>** as the test framework. Assume these as the default context when suggesting code, tests, or architecture.
+
+## Assumed Context (from `terraflow new`)
+
+| Setting | Value |
+|---------|-------|
+| Language | <language-display> |
+| Runtime | <runtime> |
+| Target Platform | <provider-display> |
+| Test Framework | <test-framework> |
+
+## Project Specification
+
+**Before making significant changes, check for `SPECIFICATION.md` in the project root.** If it exists, read it and apply its requirements. Project-specific specifications override generic standards when they conflict.
+
+## External Standards
+
+Follow [salte-common/standards](https://github.com/salte-common/standards) recursively. Apply as appropriate:
+
+- **Architecture Standards** — Twelve-Factor App, modular design, testing pyramid
+- **Development Standards** — Code formatting, quality, security
+- **<language-standards>** — Language-specific guidelines
+- **<platform-standards>** — Platform-specific deployment and architecture
+- **Deployment Standards** — IaC, CI/CD, environment config
+- **Security Standards** — OWASP Top 10, data protection, API security
+- **Documentation Standards** — README, API docs, code comments
+- **Git Workflow Standards** — Branch strategy, tagging, release process
+
+## When Suggesting Code
+
+1. Use **<language-display>** conventions (runtime: **<runtime>**)
+2. Write tests with **<test-framework>**
+3. Target **<provider-display>** for deployment and infrastructure
+4. Reference salte-common/standards for patterns and compliance
+5. Honor `SPECIFICATION.md` if present

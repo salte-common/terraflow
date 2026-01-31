@@ -169,6 +169,7 @@ src/templates/
 └── config/            # Configuration file templates
     ├── cursor-terraflow-instructions.mdc.template  # Cursor rules (→ .cursor/rules/terraform.mdc)
     ├── cursor-ai-metadata.mdc.template              # Cursor rules (→ .cursor/rules/ai-metadata.mdc)
+    ├── cursor-development-standards.mdc.template    # Cursor rules (→ .cursor/rules/development-standards.mdc)
     ├── env.example.template
     ├── gitignore.template
     ├── README.md.template

@@ -2,6 +2,8 @@
 
 Infrastructure as Code project managed with [Terraflow](https://github.com/salte-common/terraflow).
 
+**Cursor-ready:** This project is scaffolded for [Cursor](https://cursor.com/) with rules for Terraflow, development standards, and AI code tracking. Open in Cursor to get up and running quickly with AI-assisted development.
+
 ## Prerequisites
 
 - [Terraform](https://www.terraform.io/downloads) >= 1.0
@@ -75,6 +77,10 @@ Terraflow automatically derives workspace names from your git branch:
 ## Configuration
 
 See `.tfwconfig.yml` for all available options and the [documentation](https://github.com/salte-common/terraflow/blob/main/docs/configuration.md) for detailed configuration reference.
+
+## Project Specification
+
+You can create a `SPECIFICATION.md` file in the project root to define project-specific requirements, architecture, and conventions. Cursor and other AI tools will read this file to inform code suggestions and maintain consistency with your specification.
 
 ## License
 

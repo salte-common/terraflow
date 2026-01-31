@@ -14,6 +14,7 @@ This directory contains complete example projects generated using `terraflow new
 
 - **[cursor-terraflow-instructions.mdc](./cursor-terraflow-instructions.mdc)** - Cursor rules file for using Terraflow in this project. **Included automatically** when you run `terraflow new` (as `.cursor/rules/terraform.mdc`). Focuses on day-to-day usage: plan, apply, workspace derivation, configuration. For existing projects, copy to `.cursor/rules/` so Cursor knows how to work with Terraflow.
 - **ai-metadata.mdc** - Cursor rules file for maintaining `.ai-metadata.json`. **Included automatically** when you run `terraflow new` (as `.cursor/rules/ai-metadata.mdc`). Instructs Cursor to update `.ai-metadata.json` when creating or modifying files checked into source control.
+- **[cursor-development-standards.mdc](./cursor-development-standards.mdc)** - Cursor rules file for development standards. **Included automatically** when you run `terraflow new` (as `.cursor/rules/development-standards.mdc`). Tailored to the scaffold options (language, provider, test framework); references [salte-common/standards](https://github.com/salte-common/standards); instructs Cursor to check for `SPECIFICATION.md` in the project root. (Example shown is TypeScript + AWS.)
 
 ### Standalone `.tfwconfig.yml` Examples
 
@@ -64,8 +65,9 @@ Each example project includes:
 ├── .ai-metadata.json         # AI code tracking (initialized by terraflow new)
 ├── .cursor/
 │   └── rules/
-│       ├── terraform.mdc     # Cursor instructions for Terraflow (from terraflow new)
-│       └── ai-metadata.mdc   # Cursor instructions for .ai-metadata.json maintenance
+│       ├── terraform.mdc             # Cursor instructions for Terraflow (from terraflow new)
+│       ├── ai-metadata.mdc           # Cursor instructions for .ai-metadata.json maintenance
+│       └── development-standards.mdc # Cursor instructions (language, platform, salte-common/standards)
 ├── src/
 │   ├── main/          # Application main files
 │   └── test/          # Test files

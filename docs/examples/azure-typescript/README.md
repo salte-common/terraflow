@@ -2,6 +2,8 @@
 
 Infrastructure as Code project managed with [Terraflow](https://github.com/salte-common/terraflow).
 
+**Cursor-ready:** This project is scaffolded for [Cursor](https://cursor.com/) with rules for Terraflow, development standards, and AI code tracking. Open in Cursor to get up and running quickly with AI-assisted development.
+
 ## Prerequisites
 
 - [Terraform](https://www.terraform.io/downloads) >= 1.0
@@ -39,6 +41,7 @@ Infrastructure as Code project managed with [Terraflow](https://github.com/salte
 - `.ai-metadata.json` - AI code tracking (initialized by terraflow new)
 - `.cursor/rules/terraform.mdc` - Cursor instructions for Terraflow (delete if not using Cursor)
 - `.cursor/rules/ai-metadata.mdc` - Cursor instructions for .ai-metadata.json maintenance
+- `.cursor/rules/development-standards.mdc` - Cursor instructions (language, platform, salte-common/standards)
 - `src/` - Application source code
   - `main/` - Main application code
   - `test/` - Test files
