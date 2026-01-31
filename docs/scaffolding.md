@@ -49,6 +49,9 @@ terraflow new my-infrastructure --force
 
 ```
 <project-name>/
+├── .cursor/
+│   └── rules/
+│       └── terraflow.mdc     # Cursor instructions for Terraflow usage
 ├── src/
 │   ├── main/
 │   │   └── index.js (or .ts, .py, .go based on --language)

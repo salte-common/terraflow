@@ -1,0 +1,151 @@
+---
+description: How to use Terraflow for scaffolding and managing Terraform projects
+globs: ["**/*.tf", "**/.tfwconfig.yml", "**/terraform/**", "**/.env.example"]
+alwaysApply: false
+---
+
+# Terraflow Usage Guide for Cursor
+
+This project uses [Terraflow](https://github.com/salte-common/terraflow), an opinionated Terraform CLI wrapper. When working on infrastructure, follow these guidelines.
+
+## Installation
+
+```bash
+npm install -g terraflow
+```
+
+Requires: Node.js >= 18.x, Terraform in PATH.
+
+## Scaffolding a New Project
+
+Use `terraflow new` to create a complete infrastructure project from scratch:
+
+```bash
+terraflow new [project-name] [options]
+```
+
+### Options
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `-p, --provider <name>` | Cloud provider: `aws`, `azure`, or `gcp` | `aws` |
+| `-l, --language <name>` | Application language: `javascript`, `typescript`, `python`, or `go` | `javascript` |
+| `-d, --working-dir <path>` | Directory to create project in | current directory |
+| `-f, --force` | Overwrite existing files | `false` |
+
+### Examples
+
+```bash
+# AWS project with JavaScript (default)
+terraflow new my-infrastructure
+
+# Azure project with TypeScript
+terraflow new my-infrastructure --provider azure --language typescript
+
+# GCP project with Python
+terraflow new my-infrastructure --provider gcp --language python
+
+# Create in current directory (no subfolder)
+terraflow new --provider aws --language go
+
+# Overwrite existing files
+terraflow new my-infrastructure --force
+```
+
+### Generated Structure
+
+```
+<project-name>/
+├── .cursor/
+│   └── rules/
+│       └── terraflow.mdc     # This file (Cursor instructions)
+├── src/
+│   ├── main/          # Application entry (index.js, .ts, .py, or .go)
+│   └── test/          # Test file
+├── terraform/
+│   ├── modules/       # inputs.tf, main.tf, outputs.tf
+│   ├── _init.tf       # Provider + backend config
+│   ├── inputs.tf      # Variables
+│   ├── locals.tf      # Tags/labels
+│   ├── main.tf        # Main resources
+│   └── outputs.tf     # Outputs
+├── .tfwconfig.yml     # Terraflow config
+├── .env.example       # Env var template
+├── .gitignore
+└── README.md
+```
+
+## Initializing an Existing Project
+
+For projects that already have Terraform files but no Terraflow config:
+
+```bash
+terraflow config init
+```
+
+This creates `.tfwconfig.yml` with examples for all backend types (S3, AzureRM, GCS), secrets providers, and auth configs. Edit the file to match your setup.
+
+### Optional: Custom Output Path
+
+```bash
+terraflow config init -o .github/workflows/.tfwconfig.yml
+```
+
+## Using Generated Files
+
+**Use as designed:** The generated files follow Terraflow conventions. Keep and customize them for your infrastructure.
+
+**Delete if not needed:** If the project does not require certain generated artifacts, you may delete them after scaffolding:
+
+| Delete if... | Files/Directories |
+|--------------|-------------------|
+| No application code (pure Terraform) | `src/` directory |
+| No serverless/lambda functions | Application-specific resources in `terraform/main.tf` |
+| Different structure preferred | `terraform/modules/` (move or inline as needed) |
+| Config managed elsewhere | `.env.example` (keep `.tfwconfig.yml`) |
+
+**Always keep:** `.tfwconfig.yml` (required), `terraform/_init.tf`, `terraform/inputs.tf` (or equivalent variables).
+
+## Common Workflows
+
+### After Scaffolding
+
+1. `cd <project-name>` (if named project)
+2. `cp .env.example .env` and add credentials
+3. Edit `.tfwconfig.yml` with your backend bucket/storage and secrets
+4. `terraflow init` — initialize Terraform
+5. `terraflow plan` — plan (auto init + workspace)
+6. `terraflow apply` — apply (when ready)
+
+### Workspace Derivation
+
+Terraflow derives workspaces from git: branch → `feature-x` workspace, tag → `v1-0-0`. Override with `--workspace`:
+
+```bash
+terraflow --workspace production plan
+```
+
+### Other Commands
+
+```bash
+terraflow plan              # Plan (auto init + workspace)
+terraflow apply             # Apply
+terraflow destroy           # Destroy
+terraflow fmt               # Format (no init)
+terraflow config show       # Show resolved config
+terraflow --dry-run plan    # Preview without executing
+```
+
+## Configuration
+
+Config is merged: defaults → `.tfwconfig.yml` → `TERRAFLOW_*` env vars → CLI args.
+
+Template variables in `.tfwconfig.yml`: `${AWS_REGION}`, `${GITHUB_REPOSITORY}`, `${WORKSPACE}`, etc.
+
+## When Suggesting Terraflow Usage
+
+- Prefer `terraflow` over raw `terraform` for plan/apply/destroy (handles init + workspace)
+- Use `terraflow new` when creating new infrastructure projects
+- Use `terraflow config init` when adding Terraflow to existing Terraform repos
+- If generated `src/` or application code is irrelevant, suggest deleting it
+- Point users to `.tfwconfig.yml` for backend, secrets, and auth configuration

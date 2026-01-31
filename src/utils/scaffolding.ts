@@ -338,6 +338,14 @@ export async function generateConfigFiles(
   });
   writeFileSync(join(projectDir, 'README.md'), readmeContent);
 
+  // .cursor/rules/terraform.mdc - Cursor instructions for Terraflow usage
+  const cursorRulesDir = join(projectDir, '.cursor', 'rules');
+  mkdirSync(cursorRulesDir, { recursive: true });
+  const cursorRulesTemplate = loadTemplate(
+    join(templatesDir, 'cursor-terraflow-instructions.mdc.template')
+  );
+  writeFileSync(join(cursorRulesDir, 'terraform.mdc'), cursorRulesTemplate);
+
   Logger.debug('Configuration files generated successfully');
 }
 

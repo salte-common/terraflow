@@ -1,626 +1,1333 @@
 {
   "files": {
-    "package.json": {
-      "lines_total": 59,
-      "lines_ai_generated": 2,
-      "ai_percentage": 3,
-      "last_updated": "2025-12-25T21:30:00Z",
-      "tool": "cursor"
-    },
-    "tsconfig.json": {
-      "lines_total": 25,
-      "lines_ai_generated": 25,
+    ".cursor/rules/terraflow-project.mdc": {
+      "lines_total": 150,
+      "lines_ai_generated": 150,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
-      "tool": "cursor"
-    },
-    ".eslintrc.js": {
-      "lines_total": 31,
-      "lines_ai_generated": 31,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
-      "tool": "cursor"
-    },
-    ".prettierrc": {
-      "lines_total": 11,
-      "lines_ai_generated": 11,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
+      "last_updated": "2026-01-31T17:37:24Z",
       "tool": "cursor"
     },
     ".eslintignore": {
-      "lines_total": 5,
-      "lines_ai_generated": 5,
+      "lines_total": 6,
+      "lines_ai_generated": 6,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
+      "last_updated": "2026-01-31T17:37:24Z",
       "tool": "cursor"
     },
-    "jest.config.js": {
-      "lines_total": 22,
-      "lines_ai_generated": 22,
+    ".eslintrc.js": {
+      "lines_total": 32,
+      "lines_ai_generated": 32,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    ".github/copilot-instructions.md": {
+      "lines_total": 143,
+      "lines_ai_generated": 143,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    ".github/workflows/auto-tag-and-publish.yml": {
+      "lines_total": 200,
+      "lines_ai_generated": 200,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    ".github/workflows/ci.yml": {
+      "lines_total": 91,
+      "lines_ai_generated": 91,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
       "tool": "cursor"
     },
     ".gitignore": {
-      "lines_total": 41,
-      "lines_ai_generated": 41,
+      "lines_total": 42,
+      "lines_ai_generated": 42,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    ".npmignore": {
+      "lines_total": 47,
+      "lines_ai_generated": 47,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    ".prettierrc": {
+      "lines_total": 12,
+      "lines_ai_generated": 12,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    ".tfwconfig.yml": {
+      "lines_total": 175,
+      "lines_ai_generated": 175,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "CHANGELOG.md": {
+      "lines_total": 125,
+      "lines_ai_generated": 125,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "CODE_OF_CONDUCT.md": {
+      "lines_total": 124,
+      "lines_ai_generated": 124,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "CONTRIBUTING.md": {
+      "lines_total": 364,
+      "lines_ai_generated": 364,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "LICENSE": {
+      "lines_total": 23,
+      "lines_ai_generated": 23,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
       "tool": "cursor"
     },
     "README.md": {
-      "lines_total": 279,
-      "lines_ai_generated": 36,
-      "ai_percentage": 12.903225806451612,
-      "last_updated": "2025-12-26T01:42:46.233Z",
+      "lines_total": 316,
+      "lines_ai_generated": 316,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "RELEASE_SUMMARY.md": {
+      "lines_total": 54,
+      "lines_ai_generated": 54,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "SPECIFICATION.md": {
+      "lines_total": 1497,
+      "lines_ai_generated": 1497,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "STANDARDS_COMPLIANCE.md": {
+      "lines_total": 86,
+      "lines_ai_generated": 86,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
       "tool": "cursor"
     },
     "bin/terraflow.js": {
-      "lines_total": 3,
-      "lines_ai_generated": 3,
+      "lines_total": 4,
+      "lines_ai_generated": 4,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
+      "last_updated": "2026-01-31T17:37:24Z",
       "tool": "cursor"
     },
     "bin/tf.js": {
+      "lines_total": 4,
+      "lines_ai_generated": 4,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/RELEASE.md": {
+      "lines_total": 64,
+      "lines_ai_generated": 64,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/ci-cd.md": {
+      "lines_total": 168,
+      "lines_ai_generated": 168,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/configuration.md": {
+      "lines_total": 558,
+      "lines_ai_generated": 558,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/README.md": {
+      "lines_total": 89,
+      "lines_ai_generated": 89,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/aws-javascript/.env.example": {
+      "lines_total": 23,
+      "lines_ai_generated": 23,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/aws-javascript/.gitignore": {
+      "lines_total": 41,
+      "lines_ai_generated": 41,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/aws-javascript/.tfwconfig.yml": {
+      "lines_total": 73,
+      "lines_ai_generated": 73,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/aws-javascript/README.md": {
+      "lines_total": 83,
+      "lines_ai_generated": 83,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/aws-javascript/src/main/index.js": {
+      "lines_total": 15,
+      "lines_ai_generated": 15,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/aws-javascript/src/test/index.spec.js": {
+      "lines_total": 9,
+      "lines_ai_generated": 9,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/aws-javascript/terraform/_init.tf": {
+      "lines_total": 25,
+      "lines_ai_generated": 25,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/aws-javascript/terraform/inputs.tf": {
+      "lines_total": 12,
+      "lines_ai_generated": 12,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/aws-javascript/terraform/locals.tf": {
+      "lines_total": 10,
+      "lines_ai_generated": 10,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/aws-javascript/terraform/main.tf": {
+      "lines_total": 9,
+      "lines_ai_generated": 9,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/aws-javascript/terraform/modules/inputs.tf": {
+      "lines_total": 6,
+      "lines_ai_generated": 6,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/aws-javascript/terraform/modules/main.tf": {
       "lines_total": 3,
       "lines_ai_generated": 3,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
+      "last_updated": "2026-01-31T17:37:24Z",
       "tool": "cursor"
     },
-    "src/index.ts": {
-      "lines_total": 284,
-      "lines_ai_generated": 20,
-      "ai_percentage": 7,
-      "last_updated": "2025-12-28T03:11:06.521Z",
-      "tool": "cursor"
-    },
-    "src/types/config.ts": {
-      "lines_total": 98,
-      "lines_ai_generated": 98,
+    "docs/examples/aws-javascript/terraform/modules/outputs.tf": {
+      "lines_total": 3,
+      "lines_ai_generated": 3,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
+      "last_updated": "2026-01-31T17:37:24Z",
       "tool": "cursor"
     },
-    "src/types/context.ts": {
-      "lines_total": 61,
-      "lines_ai_generated": 61,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
-      "tool": "cursor"
-    },
-    "src/types/plugins.ts": {
-      "lines_total": 87,
-      "lines_ai_generated": 87,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
-      "tool": "cursor"
-    },
-    "src/types/index.ts": {
+    "docs/examples/aws-javascript/terraform/outputs.tf": {
       "lines_total": 7,
       "lines_ai_generated": 7,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/aws-s3-secrets-manager.yml": {
+      "lines_total": 56,
+      "lines_ai_generated": 56,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/azure-azurerm.yml": {
+      "lines_total": 45,
+      "lines_ai_generated": 45,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/azure-typescript/.env.example": {
+      "lines_total": 23,
+      "lines_ai_generated": 23,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/azure-typescript/.gitignore": {
+      "lines_total": 41,
+      "lines_ai_generated": 41,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/azure-typescript/.tfwconfig.yml": {
+      "lines_total": 73,
+      "lines_ai_generated": 73,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/azure-typescript/README.md": {
+      "lines_total": 83,
+      "lines_ai_generated": 83,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/azure-typescript/src/main/index.ts": {
+      "lines_total": 15,
+      "lines_ai_generated": 15,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/azure-typescript/src/test/index.spec.ts": {
+      "lines_total": 9,
+      "lines_ai_generated": 9,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/azure-typescript/terraform/_init.tf": {
+      "lines_total": 20,
+      "lines_ai_generated": 20,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/azure-typescript/terraform/inputs.tf": {
+      "lines_total": 12,
+      "lines_ai_generated": 12,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/azure-typescript/terraform/locals.tf": {
+      "lines_total": 10,
+      "lines_ai_generated": 10,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/azure-typescript/terraform/main.tf": {
+      "lines_total": 9,
+      "lines_ai_generated": 9,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/azure-typescript/terraform/modules/inputs.tf": {
+      "lines_total": 6,
+      "lines_ai_generated": 6,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/azure-typescript/terraform/modules/main.tf": {
+      "lines_total": 3,
+      "lines_ai_generated": 3,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/azure-typescript/terraform/modules/outputs.tf": {
+      "lines_total": 3,
+      "lines_ai_generated": 3,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/azure-typescript/terraform/outputs.tf": {
+      "lines_total": 7,
+      "lines_ai_generated": 7,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/azure-typescript/tsconfig.json": {
+      "lines_total": 21,
+      "lines_ai_generated": 21,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/cursor-terraflow-instructions.mdc": {
+      "lines_total": 145,
+      "lines_ai_generated": 145,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T18:09:28Z",
+      "tool": "cursor"
+    },
+    "docs/examples/gcp-gcs.yml": {
+      "lines_total": 39,
+      "lines_ai_generated": 39,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/gcp-python/.env.example": {
+      "lines_total": 23,
+      "lines_ai_generated": 23,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/gcp-python/.gitignore": {
+      "lines_total": 41,
+      "lines_ai_generated": 41,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/gcp-python/.tfwconfig.yml": {
+      "lines_total": 73,
+      "lines_ai_generated": 73,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/gcp-python/README.md": {
+      "lines_total": 83,
+      "lines_ai_generated": 83,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/gcp-python/requirements.txt": {
+      "lines_total": 4,
+      "lines_ai_generated": 4,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/gcp-python/src/main/index.py": {
+      "lines_total": 14,
+      "lines_ai_generated": 14,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/gcp-python/src/test/test_main.py": {
+      "lines_total": 9,
+      "lines_ai_generated": 9,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/gcp-python/terraform/_init.tf": {
+      "lines_total": 21,
+      "lines_ai_generated": 21,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/gcp-python/terraform/inputs.tf": {
+      "lines_total": 17,
+      "lines_ai_generated": 17,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/gcp-python/terraform/locals.tf": {
+      "lines_total": 10,
+      "lines_ai_generated": 10,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/gcp-python/terraform/main.tf": {
+      "lines_total": 9,
+      "lines_ai_generated": 9,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/gcp-python/terraform/modules/inputs.tf": {
+      "lines_total": 6,
+      "lines_ai_generated": 6,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/gcp-python/terraform/modules/main.tf": {
+      "lines_total": 3,
+      "lines_ai_generated": 3,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/gcp-python/terraform/modules/outputs.tf": {
+      "lines_total": 3,
+      "lines_ai_generated": 3,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/gcp-python/terraform/outputs.tf": {
+      "lines_total": 7,
+      "lines_ai_generated": 7,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/tfwconfig.github-actions.example.yml": {
+      "lines_total": 75,
+      "lines_ai_generated": 75,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/tfwconfig.gitlab-ci.example.yml": {
+      "lines_total": 62,
+      "lines_ai_generated": 62,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/examples/tfwconfig.multi-environment.example.yml": {
+      "lines_total": 52,
+      "lines_ai_generated": 52,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/greeting.txt": {
+      "lines_total": 2,
+      "lines_ai_generated": 2,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/plugins.md": {
+      "lines_total": 401,
+      "lines_ai_generated": 401,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/releasing.md": {
+      "lines_total": 249,
+      "lines_ai_generated": 249,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "docs/scaffolding.md": {
+      "lines_total": 353,
+      "lines_ai_generated": 353,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T18:15:00Z",
+      "tool": "cursor"
+    },
+    "jest.config.js": {
+      "lines_total": 23,
+      "lines_ai_generated": 23,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "package-lock.json": {
+      "lines_total": 7364,
+      "lines_ai_generated": 7364,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "package.json": {
+      "lines_total": 61,
+      "lines_ai_generated": 61,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/commands/config.ts": {
+      "lines_total": 374,
+      "lines_ai_generated": 374,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/commands/new.ts": {
+      "lines_total": 163,
+      "lines_ai_generated": 163,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/core/backend-state.ts": {
+      "lines_total": 88,
+      "lines_ai_generated": 88,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
       "tool": "cursor"
     },
     "src/core/config.ts": {
-      "lines_total": 358,
-      "lines_ai_generated": 358,
+      "lines_total": 384,
+      "lines_ai_generated": 384,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
+      "last_updated": "2026-01-31T17:37:24Z",
       "tool": "cursor"
     },
     "src/core/context.ts": {
-      "lines_total": 216,
-      "lines_ai_generated": 216,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
-      "tool": "cursor"
-    },
-    "src/core/environment.ts": {
       "lines_total": 229,
       "lines_ai_generated": 229,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:54:07Z",
+      "last_updated": "2026-01-31T17:37:24Z",
       "tool": "cursor"
     },
-    "src/core/terraform.ts": {
-      "lines_total": 284,
-      "lines_ai_generated": 284,
+    "src/core/environment.ts": {
+      "lines_total": 325,
+      "lines_ai_generated": 325,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:08:18Z",
-      "tool": "cursor"
-    },
-    "src/core/plugin-loader.ts": {
-      "lines_total": 127,
-      "lines_ai_generated": 127,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:08:18Z",
+      "last_updated": "2026-01-31T17:37:24Z",
       "tool": "cursor"
     },
     "src/core/errors.ts": {
       "lines_total": 33,
       "lines_ai_generated": 33,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:43:54Z",
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/core/plugin-loader.ts": {
+      "lines_total": 128,
+      "lines_ai_generated": 128,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/core/terraform.ts": {
+      "lines_total": 418,
+      "lines_ai_generated": 418,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
       "tool": "cursor"
     },
     "src/core/validator.ts": {
-      "lines_total": 366,
-      "lines_ai_generated": 366,
+      "lines_total": 370,
+      "lines_ai_generated": 370,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:43:54Z",
+      "last_updated": "2026-01-31T17:37:24Z",
       "tool": "cursor"
     },
-    "src/commands/config.ts": {
-      "lines_total": 372,
-      "lines_ai_generated": 1,
-      "ai_percentage": 0,
-      "last_updated": "2025-12-25T20:56:15Z",
-      "tool": "cursor"
-    },
-    "src/plugins/backends/local.ts": {
-      "lines_total": 41,
-      "lines_ai_generated": 41,
+    "src/index.ts": {
+      "lines_total": 341,
+      "lines_ai_generated": 341,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T03:03:15Z",
-      "tool": "cursor"
-    },
-    "src/plugins/backends/s3.ts": {
-      "lines_total": 226,
-      "lines_ai_generated": 226,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T03:08:40Z",
-      "tool": "cursor"
-    },
-    "src/plugins/backends/azurerm.ts": {
-      "lines_total": 165,
-      "lines_ai_generated": 165,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:21:27Z",
-      "tool": "cursor"
-    },
-    "src/plugins/backends/gcs.ts": {
-      "lines_total": 105,
-      "lines_ai_generated": 105,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:21:27Z",
-      "tool": "cursor"
-    },
-    "src/plugins/secrets/env.ts": {
-      "lines_total": 66,
-      "lines_ai_generated": 66,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T03:12:31Z",
-      "tool": "cursor"
-    },
-    "src/plugins/secrets/aws-secrets.ts": {
-      "lines_total": 168,
-      "lines_ai_generated": 168,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T03:23:50Z",
-      "tool": "cursor"
-    },
-    "src/plugins/secrets/azure-keyvault.ts": {
-      "lines_total": 232,
-      "lines_ai_generated": 232,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:36:58Z",
-      "tool": "cursor"
-    },
-    "src/plugins/secrets/gcp-secret-manager.ts": {
-      "lines_total": 201,
-      "lines_ai_generated": 201,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:36:58Z",
+      "last_updated": "2026-01-31T17:37:24Z",
       "tool": "cursor"
     },
     "src/plugins/auth/aws-assume-role.ts": {
-      "lines_total": 143,
-      "lines_ai_generated": 143,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T03:18:48Z",
-      "tool": "cursor"
-    },
-    "src/plugins/auth/azure-service-principal.ts": {
-      "lines_total": 120,
-      "lines_ai_generated": 120,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:36:58Z",
-      "tool": "cursor"
-    },
-    "src/plugins/auth/gcp-service-account.ts": {
-      "lines_total": 140,
-      "lines_ai_generated": 140,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:36:58Z",
-      "tool": "cursor"
-    },
-    "src/utils/git.ts": {
-      "lines_total": 272,
-      "lines_ai_generated": 272,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
-      "tool": "cursor"
-    },
-    "src/utils/cloud.ts": {
-      "lines_total": 152,
-      "lines_ai_generated": 152,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:51:19Z",
-      "tool": "cursor"
-    },
-    "src/utils/templates.ts": {
-      "lines_total": 73,
-      "lines_ai_generated": 73,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:51:19Z",
-      "tool": "cursor"
-    },
-    "src/utils/logger.ts": {
-      "lines_total": 132,
-      "lines_ai_generated": 129,
-      "ai_percentage": 97.73,
-      "last_updated": "2025-12-21T02:31:12Z",
-      "tool": "cursor"
-    },
-    "tests/unit/example.test.ts": {
-      "lines_total": 11,
-      "lines_ai_generated": 11,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
-      "tool": "cursor"
-    },
-    "tests/unit/config.test.ts": {
-      "lines_total": 222,
-      "lines_ai_generated": 222,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
-      "tool": "cursor"
-    },
-    "tests/unit/validator.test.ts": {
-      "lines_total": 406,
-      "lines_ai_generated": 406,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:43:54Z",
-      "tool": "cursor"
-    },
-    "tests/mocks/chalk.ts": {
-      "lines_total": 8,
-      "lines_ai_generated": 8,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
-      "tool": "cursor"
-    },
-    "tests/unit/git.test.ts": {
-      "lines_total": 296,
-      "lines_ai_generated": 296,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
-      "tool": "cursor"
-    },
-    "tests/integration/workspace-derivation.test.ts": {
-      "lines_total": 276,
-      "lines_ai_generated": 276,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:31:12Z",
-      "tool": "cursor"
-    },
-    "tests/unit/templates.test.ts": {
-      "lines_total": 195,
-      "lines_ai_generated": 195,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:54:07Z",
-      "tool": "cursor"
-    },
-    "tests/unit/environment.test.ts": {
-      "lines_total": 411,
-      "lines_ai_generated": 411,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T02:54:07Z",
-      "tool": "cursor"
-    },
-    "tests/unit/local-backend.test.ts": {
-      "lines_total": 89,
-      "lines_ai_generated": 89,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T03:03:15Z",
-      "tool": "cursor"
-    },
-    "tests/integration/local-backend-init.test.ts": {
-      "lines_total": 165,
-      "lines_ai_generated": 165,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T03:03:15Z",
-      "tool": "cursor"
-    },
-    "src/core/backend-state.ts": {
-      "lines_total": 87,
-      "lines_ai_generated": 87,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T03:08:40Z",
-      "tool": "cursor"
-    },
-    "tests/unit/s3-backend.test.ts": {
-      "lines_total": 249,
-      "lines_ai_generated": 249,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T03:08:40Z",
-      "tool": "cursor"
-    },
-    "tests/unit/backend-state.test.ts": {
-      "lines_total": 137,
-      "lines_ai_generated": 137,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T03:08:40Z",
-      "tool": "cursor"
-    },
-    "tests/integration/s3-backend.test.ts": {
       "lines_total": 144,
       "lines_ai_generated": 144,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T03:08:40Z",
+      "last_updated": "2026-01-31T17:37:24Z",
       "tool": "cursor"
     },
-    "tests/unit/env-secrets.test.ts": {
-      "lines_total": 155,
-      "lines_ai_generated": 155,
+    "src/plugins/auth/azure-service-principal.ts": {
+      "lines_total": 121,
+      "lines_ai_generated": 121,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T03:12:31Z",
+      "last_updated": "2026-01-31T17:37:24Z",
       "tool": "cursor"
     },
-    "tests/unit/aws-assume-role.test.ts": {
-      "lines_total": 367,
-      "lines_ai_generated": 367,
+    "src/plugins/auth/gcp-service-account.ts": {
+      "lines_total": 141,
+      "lines_ai_generated": 141,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T03:18:48Z",
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/plugins/backends/azurerm.ts": {
+      "lines_total": 163,
+      "lines_ai_generated": 163,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/plugins/backends/gcs.ts": {
+      "lines_total": 106,
+      "lines_ai_generated": 106,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/plugins/backends/local.ts": {
+      "lines_total": 42,
+      "lines_ai_generated": 42,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/plugins/backends/s3.ts": {
+      "lines_total": 263,
+      "lines_ai_generated": 263,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/plugins/secrets/aws-secrets.ts": {
+      "lines_total": 171,
+      "lines_ai_generated": 171,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/plugins/secrets/azure-keyvault.ts": {
+      "lines_total": 233,
+      "lines_ai_generated": 233,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/plugins/secrets/env.ts": {
+      "lines_total": 67,
+      "lines_ai_generated": 67,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/plugins/secrets/gcp-secret-manager.ts": {
+      "lines_total": 202,
+      "lines_ai_generated": 202,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/application/go/.golangci.yml.template": {
+      "lines_total": 73,
+      "lines_ai_generated": 73,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/application/go/go.mod.template": {
+      "lines_total": 5,
+      "lines_ai_generated": 5,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/application/go/main.template": {
+      "lines_total": 25,
+      "lines_ai_generated": 25,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/application/go/test.template": {
+      "lines_total": 24,
+      "lines_ai_generated": 24,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/application/javascript/.eslintrc.json.template": {
+      "lines_total": 23,
+      "lines_ai_generated": 23,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/application/javascript/.prettierrc.template": {
+      "lines_total": 10,
+      "lines_ai_generated": 10,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/application/javascript/jest.config.js.template": {
+      "lines_total": 15,
+      "lines_ai_generated": 15,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/application/javascript/main.template": {
+      "lines_total": 15,
+      "lines_ai_generated": 15,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/application/javascript/package.json.template": {
+      "lines_total": 25,
+      "lines_ai_generated": 25,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/application/javascript/test.template": {
+      "lines_total": 14,
+      "lines_ai_generated": 14,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/application/python/.pylintrc.template": {
+      "lines_total": 16,
+      "lines_ai_generated": 16,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/application/python/main.template": {
+      "lines_total": 17,
+      "lines_ai_generated": 17,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/application/python/pytest.ini.template": {
+      "lines_total": 11,
+      "lines_ai_generated": 11,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/application/python/requirements.txt.template": {
+      "lines_total": 6,
+      "lines_ai_generated": 6,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/application/python/test.template": {
+      "lines_total": 13,
+      "lines_ai_generated": 13,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/application/typescript/.eslintrc.json.template": {
+      "lines_total": 26,
+      "lines_ai_generated": 26,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/application/typescript/.prettierrc.template": {
+      "lines_total": 10,
+      "lines_ai_generated": 10,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/application/typescript/jest.config.js.template": {
+      "lines_total": 21,
+      "lines_ai_generated": 21,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/application/typescript/main.template": {
+      "lines_total": 13,
+      "lines_ai_generated": 13,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/application/typescript/package.json.template": {
+      "lines_total": 33,
+      "lines_ai_generated": 33,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/application/typescript/test.template": {
+      "lines_total": 14,
+      "lines_ai_generated": 14,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/application/typescript/tsconfig.json.template": {
+      "lines_total": 21,
+      "lines_ai_generated": 21,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/config/README.md.template": {
+      "lines_total": 83,
+      "lines_ai_generated": 83,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/config/cursor-terraflow-instructions.mdc.template": {
+      "lines_total": 151,
+      "lines_ai_generated": 151,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T18:15:00Z",
+      "tool": "cursor"
+    },
+    "src/templates/config/env.example.template": {
+      "lines_total": 23,
+      "lines_ai_generated": 23,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/config/gitignore.template": {
+      "lines_total": 41,
+      "lines_ai_generated": 41,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/config/tfwconfig.yml.template": {
+      "lines_total": 106,
+      "lines_ai_generated": 106,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/terraform/aws/_init.tf.template": {
+      "lines_total": 29,
+      "lines_ai_generated": 29,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/terraform/aws/inputs.tf.template": {
+      "lines_total": 11,
+      "lines_ai_generated": 11,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/terraform/aws/main.tf.template": {
+      "lines_total": 70,
+      "lines_ai_generated": 70,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/terraform/azure/_init.tf.template": {
+      "lines_total": 24,
+      "lines_ai_generated": 24,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/terraform/azure/inputs.tf.template": {
+      "lines_total": 17,
+      "lines_ai_generated": 17,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/terraform/azure/main.tf.template": {
+      "lines_total": 96,
+      "lines_ai_generated": 96,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/terraform/gcp/_init.tf.template": {
+      "lines_total": 25,
+      "lines_ai_generated": 25,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/terraform/gcp/inputs.tf.template": {
+      "lines_total": 22,
+      "lines_ai_generated": 22,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/terraform/gcp/main.tf.template": {
+      "lines_total": 63,
+      "lines_ai_generated": 63,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/terraform/locals.tf.template": {
+      "lines_total": 19,
+      "lines_ai_generated": 19,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/terraform/modules/inputs.tf.template": {
+      "lines_total": 6,
+      "lines_ai_generated": 6,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/terraform/modules/main.tf.template": {
+      "lines_total": 3,
+      "lines_ai_generated": 3,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/terraform/modules/outputs.tf.template": {
+      "lines_total": 3,
+      "lines_ai_generated": 3,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/templates/terraform/outputs.tf.template": {
+      "lines_total": 36,
+      "lines_ai_generated": 36,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/types/config.ts": {
+      "lines_total": 99,
+      "lines_ai_generated": 99,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/types/context.ts": {
+      "lines_total": 62,
+      "lines_ai_generated": 62,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/types/index.ts": {
+      "lines_total": 8,
+      "lines_ai_generated": 8,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/types/plugins.ts": {
+      "lines_total": 88,
+      "lines_ai_generated": 88,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/utils/cloud.ts": {
+      "lines_total": 185,
+      "lines_ai_generated": 185,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/utils/git.ts": {
+      "lines_total": 273,
+      "lines_ai_generated": 273,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/utils/logger.ts": {
+      "lines_total": 133,
+      "lines_ai_generated": 133,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "src/utils/scaffolding.ts": {
+      "lines_total": 460,
+      "lines_ai_generated": 460,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T18:15:00Z",
+      "tool": "cursor"
+    },
+    "src/utils/templates.ts": {
+      "lines_total": 71,
+      "lines_ai_generated": 71,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "terraform/.terraflow/state.json": {
+      "lines_total": 7,
+      "lines_ai_generated": 7,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "terraform/.terraform/environment": {
+      "lines_total": 1,
+      "lines_ai_generated": 1,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
       "tool": "cursor"
     },
     "tests/integration/aws-assume-role.test.ts": {
-      "lines_total": 195,
-      "lines_ai_generated": 195,
+      "lines_total": 196,
+      "lines_ai_generated": 196,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T03:18:48Z",
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "tests/integration/aws-secrets.test.ts": {
+      "lines_total": 256,
+      "lines_ai_generated": 256,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "tests/integration/azurerm-backend.test.ts": {
+      "lines_total": 197,
+      "lines_ai_generated": 197,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "tests/integration/gcs-backend.test.ts": {
+      "lines_total": 206,
+      "lines_ai_generated": 206,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "tests/integration/local-backend-init.test.ts": {
+      "lines_total": 166,
+      "lines_ai_generated": 166,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "tests/integration/new.test.ts": {
+      "lines_total": 304,
+      "lines_ai_generated": 304,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "tests/integration/s3-backend.test.ts": {
+      "lines_total": 185,
+      "lines_ai_generated": 185,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "tests/integration/terraform-executor.test.ts": {
+      "lines_total": 769,
+      "lines_ai_generated": 769,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "tests/integration/workspace-derivation.test.ts": {
+      "lines_total": 294,
+      "lines_ai_generated": 294,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "tests/mocks/chalk.ts": {
+      "lines_total": 9,
+      "lines_ai_generated": 9,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "tests/unit/.tfwconfig.yml": {
+      "lines_total": 170,
+      "lines_ai_generated": 170,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "tests/unit/aws-assume-role.test.ts": {
+      "lines_total": 368,
+      "lines_ai_generated": 368,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
       "tool": "cursor"
     },
     "tests/unit/aws-secrets.test.ts": {
       "lines_total": 441,
       "lines_ai_generated": 441,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T03:23:50Z",
-      "tool": "cursor"
-    },
-    "tests/integration/aws-secrets.test.ts": {
-      "lines_total": 236,
-      "lines_ai_generated": 236,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T03:23:50Z",
-      "tool": "cursor"
-    },
-    "tests/integration/terraform-executor.test.ts": {
-      "lines_total": 536,
-      "lines_ai_generated": 536,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:08:18Z",
-      "tool": "cursor"
-    },
-    "tests/unit/config-command.test.ts": {
-      "lines_total": 293,
-      "lines_ai_generated": 293,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:15:28Z",
-      "tool": "cursor"
-    },
-    "tests/unit/azurerm-backend.test.ts": {
-      "lines_total": 248,
-      "lines_ai_generated": 248,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:21:27Z",
-      "tool": "cursor"
-    },
-    "tests/unit/gcs-backend.test.ts": {
-      "lines_total": 236,
-      "lines_ai_generated": 236,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:21:27Z",
-      "tool": "cursor"
-    },
-    "tests/integration/azurerm-backend.test.ts": {
-      "lines_total": 199,
-      "lines_ai_generated": 199,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:21:27Z",
-      "tool": "cursor"
-    },
-    "tests/integration/gcs-backend.test.ts": {
-      "lines_total": 208,
-      "lines_ai_generated": 208,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:21:27Z",
+      "last_updated": "2026-01-31T17:37:24Z",
       "tool": "cursor"
     },
     "tests/unit/azure-keyvault.test.ts": {
-      "lines_total": 270,
-      "lines_ai_generated": 270,
+      "lines_total": 271,
+      "lines_ai_generated": 271,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:36:58Z",
-      "tool": "cursor"
-    },
-    "tests/unit/gcp-secret-manager.test.ts": {
-      "lines_total": 348,
-      "lines_ai_generated": 348,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:36:58Z",
+      "last_updated": "2026-01-31T17:37:24Z",
       "tool": "cursor"
     },
     "tests/unit/azure-service-principal.test.ts": {
-      "lines_total": 234,
-      "lines_ai_generated": 234,
+      "lines_total": 233,
+      "lines_ai_generated": 233,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:36:58Z",
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "tests/unit/azurerm-backend.test.ts": {
+      "lines_total": 250,
+      "lines_ai_generated": 250,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "tests/unit/backend-state.test.ts": {
+      "lines_total": 138,
+      "lines_ai_generated": 138,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "tests/unit/config-command.test.ts": {
+      "lines_total": 294,
+      "lines_ai_generated": 294,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "tests/unit/config.test.ts": {
+      "lines_total": 225,
+      "lines_ai_generated": 225,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "tests/unit/env-secrets.test.ts": {
+      "lines_total": 156,
+      "lines_ai_generated": 156,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "tests/unit/environment.test.ts": {
+      "lines_total": 419,
+      "lines_ai_generated": 419,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "tests/unit/example.test.ts": {
+      "lines_total": 12,
+      "lines_ai_generated": 12,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "tests/unit/gcp-secret-manager.test.ts": {
+      "lines_total": 368,
+      "lines_ai_generated": 368,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
       "tool": "cursor"
     },
     "tests/unit/gcp-service-account.test.ts": {
-      "lines_total": 332,
-      "lines_ai_generated": 332,
+      "lines_total": 333,
+      "lines_ai_generated": 333,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:36:58Z",
+      "last_updated": "2026-01-31T17:37:24Z",
       "tool": "cursor"
     },
-    ".github/workflows/ci.yml": {
+    "tests/unit/gcs-backend.test.ts": {
+      "lines_total": 238,
+      "lines_ai_generated": 238,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "tests/unit/git.test.ts": {
+      "lines_total": 297,
+      "lines_ai_generated": 297,
+      "ai_percentage": 100,
+      "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "tests/unit/local-backend.test.ts": {
       "lines_total": 90,
-      "lines_ai_generated": 76,
-      "ai_percentage": 84.44444444444444,
-      "last_updated": "2025-12-26T02:42:53.786Z",
-      "tool": "cursor"
-    },
-    "docs/ci-cd.md": {
-      "lines_total": 206,
-      "lines_ai_generated": 206,
+      "lines_ai_generated": 90,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:42:42Z",
+      "last_updated": "2026-01-31T17:37:24Z",
       "tool": "cursor"
     },
-    "docs/configuration.md": {
-      "lines_total": 539,
-      "lines_ai_generated": 539,
+    "tests/unit/new-command.test.ts": {
+      "lines_total": 237,
+      "lines_ai_generated": 237,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:51:29Z",
+      "last_updated": "2026-01-31T17:37:24Z",
       "tool": "cursor"
     },
-    "docs/plugins.md": {
-      "lines_total": 400,
-      "lines_ai_generated": 400,
+    "tests/unit/s3-backend.test.ts": {
+      "lines_total": 250,
+      "lines_ai_generated": 250,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:51:29Z",
+      "last_updated": "2026-01-31T17:37:24Z",
       "tool": "cursor"
     },
-    "docs/examples/aws-s3-secrets-manager.yml": {
-      "lines_total": 53,
-      "lines_ai_generated": 53,
+    "tests/unit/scaffolding.test.ts": {
+      "lines_total": 187,
+      "lines_ai_generated": 187,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:51:29Z",
+      "last_updated": "2026-01-31T17:37:24Z",
       "tool": "cursor"
     },
-    "docs/examples/azure-azurerm.yml": {
-      "lines_total": 41,
-      "lines_ai_generated": 41,
+    "tests/unit/templates.test.ts": {
+      "lines_total": 196,
+      "lines_ai_generated": 196,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:51:29Z",
+      "last_updated": "2026-01-31T17:37:24Z",
       "tool": "cursor"
     },
-    "docs/examples/gcp-gcs.yml": {
-      "lines_total": 35,
-      "lines_ai_generated": 35,
+    "tests/unit/validator.test.ts": {
+      "lines_total": 425,
+      "lines_ai_generated": 425,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:51:29Z",
+      "last_updated": "2026-01-31T17:37:24Z",
       "tool": "cursor"
     },
-    "docs/examples/multi-environment.yml": {
-      "lines_total": 49,
-      "lines_ai_generated": 49,
+    "tsconfig.json": {
+      "lines_total": 26,
+      "lines_ai_generated": 26,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:51:29Z",
+      "last_updated": "2026-01-31T17:37:24Z",
       "tool": "cursor"
     },
-    "docs/examples/github-actions.yml": {
-      "lines_total": 72,
-      "lines_ai_generated": 72,
+    ".ai-metadata.json": {
+      "lines_total": 1320,
+      "lines_ai_generated": 1320,
       "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:51:29Z",
-      "tool": "cursor"
-    },
-    "docs/examples/gitlab-ci.yml": {
-      "lines_total": 59,
-      "lines_ai_generated": 59,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:51:29Z",
-      "tool": "cursor"
-    },
-    "CONTRIBUTING.md": {
-      "lines_total": 355,
-      "lines_ai_generated": 139,
-      "ai_percentage": 39.154929577464785,
-      "last_updated": "2025-12-26T01:42:46.233Z",
-      "tool": "cursor"
-    },
-    "CODE_OF_CONDUCT.md": {
-      "lines_total": 123,
-      "lines_ai_generated": 123,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T04:51:29Z",
-      "tool": "cursor"
-    },
-    "CHANGELOG.md": {
-      "lines_total": 167,
-      "lines_ai_generated": 1,
-      "ai_percentage": 1,
-      "last_updated": "2025-12-25T20:56:15Z",
-      "tool": "cursor"
-    },
-    "LICENSE": {
-      "lines_total": 21,
-      "lines_ai_generated": 21,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T05:00:00Z",
-      "tool": "cursor"
-    },
-    ".npmignore": {
-      "lines_total": 48,
-      "lines_ai_generated": 48,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T05:00:00Z",
-      "tool": "cursor"
-    },
-    "STANDARDS_COMPLIANCE.md": {
-      "lines_total": 80,
-      "lines_ai_generated": 80,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T05:00:00Z",
-      "tool": "cursor"
-    },
-    "docs/examples/README.md": {
-      "lines_total": 39,
-      "lines_ai_generated": 1,
-      "ai_percentage": 3,
-      "last_updated": "2025-12-25T20:56:15Z",
-      "tool": "cursor"
-    },
-    "docs/RELEASE.md": {
-      "lines_total": 66,
-      "lines_ai_generated": 66,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-21T05:00:00Z",
-      "tool": "cursor"
-    },
-    "src/commands/init.ts": {
-      "lines_total": 444,
-      "lines_ai_generated": 444,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-25T21:30:00Z",
-      "tool": "cursor"
-    },
-    "tests/unit/init-command.test.ts": {
-      "lines_total": 200,
-      "lines_ai_generated": 200,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-25T21:30:00Z",
-      "tool": "cursor"
-    },
-    "docs/releasing.md": {
-      "lines_total": 248,
-      "lines_ai_generated": 248,
-      "ai_percentage": 100,
-      "last_updated": "2025-12-26T01:42:46.233Z",
-      "tool": "cursor"
-    },
-    ".github/workflows/auto-tag-and-publish.yml": {
-      "lines_total": 199,
-      "lines_ai_generated": 194,
-      "ai_percentage": 97.48743718592965,
-      "last_updated": "2025-12-26T16:28:31.317Z",
+      "last_updated": "2026-01-31T17:37:24Z",
       "tool": "cursor"
     }
   },

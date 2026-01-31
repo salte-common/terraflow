@@ -36,6 +36,7 @@ Infrastructure as Code project managed with [Terraflow](https://github.com/salte
 
 ## Project Structure
 
+- `.cursor/rules/terraform.mdc` - Cursor instructions for Terraflow (delete if not using Cursor)
 - `src/` - Application source code
   - `main/` - Main application code
   - `test/` - Test files

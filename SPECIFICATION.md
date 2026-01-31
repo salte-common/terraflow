@@ -147,18 +147,18 @@ Boolean handling: `true|1|yes` enables, anything else disables
 ```bash
 terraflow config show              # Show resolved configuration
 terraflow config init [-o file]    # Generate skeleton config file
-terraflow init [project-name]      # Scaffold new project
+terraflow new [project-name]      # Scaffold new project
 ```
 
 ## Project Scaffolding
 
-### Init Command
+### New Command
 
-The `terraflow init` command scaffolds a new infrastructure project with opinionated defaults and best practices.
+The `terraflow new` command scaffolds a new infrastructure project with opinionated defaults and best practices.
 
 #### Command Syntax
 ```bash
-terraflow init [project-name] [options]
+terraflow new [project-name] [options]
 ```
 
 #### Options
@@ -171,6 +171,9 @@ terraflow init [project-name] [options]
 
 ```
 <project-name>/
+├── .cursor/
+│   └── rules/
+│       └── terraform.mdc     # Cursor instructions for Terraflow (delete if not using Cursor)
 ├── src/
 │   ├── main/
 │   │   └── index.js (or .ts, .py, .go based on --language)
@@ -622,7 +625,7 @@ MIT
 
 #### Implementation Details
 
-1. **Create src/commands/init.ts**:
+1. **Create src/commands/new.ts**:
    - Implement the init command handler
    - Validate that target directory is empty or --force is used
    - Create the complete project structure
@@ -672,7 +675,7 @@ Documentation: ./README.md
 
 #### Documentation Updates
 
-- Add `terraflow init` command to main README.md
+- Add `terraflow new` command to main README.md
 - Create docs/scaffolding.md with detailed init command documentation
 - Add examples for each provider type
 - Document template customization options
@@ -1134,10 +1137,11 @@ Minimum 80% code coverage required
 ### docs/examples/
 
 - Example configurations for common scenarios
-- AWS + GitHub Actions
-- Azure + GitLab CI
+- Cursor instructions (cursor-terraflow-instructions.mdc) — included in scaffolded projects as .cursor/rules/terraform.mdc
+- AWS + GitHub Actions (tfwconfig.github-actions.example.yml)
+- Azure + GitLab CI (tfwconfig.gitlab-ci.example.yml)
 - GCP + local development
-- Multi-environment setups
+- Multi-environment setups (tfwconfig.multi-environment.example.yml)
 
 ## NPM Package Configuration
 

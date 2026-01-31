@@ -167,6 +167,11 @@ src/templates/
 │   ├── python/        # Python templates
 │   └── go/            # Go templates
 └── config/            # Configuration file templates
+    ├── cursor-terraflow-instructions.mdc.template  # Cursor rules (→ .cursor/rules/terraform.mdc)
+    ├── env.example.template
+    ├── gitignore.template
+    ├── README.md.template
+    └── tfwconfig.yml.template
 ```
 
 ### Template Variable System
