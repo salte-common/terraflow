@@ -56,10 +56,13 @@ export class EnvironmentSetup {
    * Setup cloud provider environment (AWS, Azure, GCP)
    * - Syncs AWS_REGION and AWS_DEFAULT_REGION
    * - Fetches account/subscription/project IDs
+   * @param config - Optional Terraflow configuration
    * @returns Updated cloud info
    */
-  static async setupCloud(): Promise<ExecutionContext['cloud']> {
-    const cloud = await CloudUtils.detectCloud();
+  static async setupCloud(config?: {
+    provider?: 'aws' | 'gcp' | 'azure';
+  }): Promise<ExecutionContext['cloud']> {
+    const cloud = await CloudUtils.detectCloud(config);
 
     // Sync AWS region if AWS provider detected
     if (cloud.provider === 'aws') {
@@ -218,7 +221,7 @@ export class EnvironmentSetup {
     EnvironmentSetup.loadEnvFile(envDir);
 
     // 2. Setup cloud environment (detect account IDs, regions)
-    const cloud = await EnvironmentSetup.setupCloud();
+    const cloud = await EnvironmentSetup.setupCloud(config);
     context.cloud = cloud;
 
     // 3. Setup VCS environment (git branch, commit, repository)

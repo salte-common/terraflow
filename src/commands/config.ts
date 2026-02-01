@@ -198,6 +198,11 @@ export class ConfigCommand {
 # This file defines your Terraflow configuration
 # See https://github.com/salte-common/terraflow/blob/main/docs/configuration.md for full documentation
 
+# Cloud Provider (required)
+# ========================
+# Specify which cloud provider you are using: aws | gcp | azure
+provider: aws  # Change to 'gcp' or 'azure' as needed
+
 # Global Settings
 # ===============
 

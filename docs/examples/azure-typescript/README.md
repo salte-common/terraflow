@@ -2,6 +2,8 @@
 
 Infrastructure as Code project managed with [Terraflow](https://github.com/salte-common/terraflow).
 
+**Cursor-ready:** This project is scaffolded for [Cursor](https://cursor.com/) with rules for Terraflow, development standards, and AI code tracking. Open in Cursor to get up and running quickly with AI-assisted development.
+
 ## Prerequisites
 
 - [Terraform](https://www.terraform.io/downloads) >= 1.0
@@ -11,7 +13,12 @@ Infrastructure as Code project managed with [Terraflow](https://github.com/salte
 
 ## Getting Started
 
-1. Copy `.env.example` to `.env` and configure your credentials:
+1. **Credentials** (optional if using standard locations):
+   - **AWS:** `~/.aws/credentials` and `~/.aws/config` — no `.env` needed
+   - **Azure:** `az login` — no `.env` needed
+   - **GCP:** `gcloud auth application-default login` — no `.env` needed
+   
+   Otherwise, copy `.env.example` to `.env` and configure your credentials:
    ```bash
    cp .env.example .env
    # Edit .env with your credentials
@@ -19,10 +26,11 @@ Infrastructure as Code project managed with [Terraflow](https://github.com/salte
 
 2. Review and update `.tfwconfig.yml` with your backend configuration
 
-3. Initialize Terraform:
+3. **Initialize Terraform** (optional — runs automatically before plan/apply):
    ```bash
    terraflow init
    ```
+   You can skip this step; Terraflow runs init automatically when needed.
 
 4. Plan your infrastructure:
    ```bash
@@ -36,6 +44,10 @@ Infrastructure as Code project managed with [Terraflow](https://github.com/salte
 
 ## Project Structure
 
+- `.ai-metadata.json` - AI code tracking (initialized by terraflow new)
+- `.cursor/rules/terraform.mdc` - Cursor instructions for Terraflow (delete if not using Cursor)
+- `.cursor/rules/ai-metadata.mdc` - Cursor instructions for .ai-metadata.json maintenance
+- `.cursor/rules/development-standards.mdc` - Cursor instructions (language, platform, salte-common/standards)
 - `src/` - Application source code
   - `main/` - Main application code
   - `test/` - Test files
@@ -67,10 +79,19 @@ terraflow config show
 
 ## Workspace Management
 
-Terraflow automatically derives workspace names from your git branch:
-- Main branch → `main` workspace
-- Feature branches (e.g., `feature/new-api`) → hostname-based workspace
-- Can be overridden with `--workspace` flag
+Terraflow derives workspace names in this order (first match wins):
+
+1. **CLI override** — `--workspace` or `-w`
+2. **Environment variable** — `TERRAFLOW_WORKSPACE`
+3. **Git tag** — if checked out on a tag (e.g. `v1.0.0` → `v1-0-0`)
+4. **Git branch** — if non-ephemeral (e.g. `main`, `my-preview-branch`). Ephemeral branches (`feature/foo`, `fix/bar`) fall through to hostname.
+5. **Hostname** — when none of the above apply (no git repo, no tag, or ephemeral branch)
+
+Examples:
+- `main` → `main` workspace
+- `my-preview-branch` → `my-preview-branch` workspace
+- `feature/new-api` → hostname
+- No git repo → hostname
 
 ## Configuration
 

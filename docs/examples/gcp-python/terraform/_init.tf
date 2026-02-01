@@ -8,9 +8,10 @@ terraform {
     }
   }
   
-  backend "gcs" {
-    # Backend configuration provided via terraflow
-  }
+  # Uncomment when ready for remote state. Configure in .tfwconfig.yml
+  # backend "gcs" {
+  #   # Backend configuration provided via terraflow
+  # }
 }
 
 provider "google" {

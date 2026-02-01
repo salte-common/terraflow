@@ -9,6 +9,7 @@ import path from 'path';
 import yaml from 'js-yaml';
 import type { TerraflowConfig } from '../types/config';
 import { Logger } from '../utils/logger';
+import { ConfigError } from './errors';
 
 export interface CliOptions {
   config?: string;
@@ -40,7 +41,7 @@ export class ConfigManager {
     cwd: string = process.cwd()
   ): Promise<{ config: TerraflowConfig; configFileDir: string }> {
     // Start with hard-coded defaults (lowest priority)
-    const defaults: TerraflowConfig = {
+    const defaults: Partial<TerraflowConfig> = {
       workspace: undefined,
       'working-dir': './terraform',
       'skip-commit-check': false,
@@ -52,6 +53,7 @@ export class ConfigManager {
         terraform_log: false,
         terraform_log_level: 'TRACE',
       },
+      // Note: provider is required and should be set in config file
     };
 
     // Load config file (higher priority than defaults)
@@ -59,6 +61,21 @@ export class ConfigManager {
     const fileConfig = ConfigManager.loadConfigFile(configFile);
     // Get directory where config file is located (for .env file loading)
     const configFileDir = path.dirname(configFile);
+
+    // Validate that provider is set (only if config file exists)
+    if (fs.existsSync(configFile) && !fileConfig.provider) {
+      throw new ConfigError(
+        'Configuration file must specify a "provider" (aws, gcp, or azure). ' +
+          'Run "terraflow config init" to generate a template, or add "provider: <provider>" to your .tfwconfig.yml'
+      );
+    }
+
+    // Validate provider value (only if provider is set)
+    if (fileConfig.provider && !['aws', 'gcp', 'azure'].includes(fileConfig.provider)) {
+      throw new ConfigError(
+        `Invalid provider "${fileConfig.provider}". Must be one of: aws, gcp, azure.`
+      );
+    }
 
     // Load environment variables (higher priority than config file)
     const envConfig = ConfigManager.loadFromEnvironment();
@@ -69,7 +86,7 @@ export class ConfigManager {
       fileConfig,
       envConfig,
       ConfigManager.cliOptionsToConfig(cliOptions)
-    );
+    ) as TerraflowConfig;
 
     return { config: merged, configFileDir };
   }
@@ -101,14 +118,14 @@ export class ConfigManager {
    * @param configPath - Path to config file
    * @returns Configuration object or empty object if file doesn't exist
    */
-  private static loadConfigFile(configPath: string): TerraflowConfig {
+  private static loadConfigFile(configPath: string): Partial<TerraflowConfig> {
     if (!fs.existsSync(configPath)) {
       return {};
     }
 
     try {
       const content = fs.readFileSync(configPath, 'utf8');
-      const config = yaml.load(content) as TerraflowConfig;
+      const config = yaml.load(content) as Partial<TerraflowConfig>;
       Logger.debug(`Loaded configuration from ${configPath}`);
       Logger.debug(`Backend type in loaded config: ${config.backend?.type || 'undefined'}`);
       return config || {};
@@ -124,8 +141,8 @@ export class ConfigManager {
    * Load configuration from environment variables
    * @returns Configuration from environment
    */
-  private static loadFromEnvironment(): TerraflowConfig {
-    const envConfig: TerraflowConfig = {};
+  private static loadFromEnvironment(): Partial<TerraflowConfig> {
+    const envConfig: Partial<TerraflowConfig> = {};
 
     if (process.env.TERRAFLOW_WORKSPACE) {
       envConfig.workspace = process.env.TERRAFLOW_WORKSPACE;
@@ -169,8 +186,8 @@ export class ConfigManager {
    * @param cliOptions - CLI options
    * @returns Configuration object
    */
-  private static cliOptionsToConfig(cliOptions: CliOptions): TerraflowConfig {
-    const config: TerraflowConfig = {};
+  private static cliOptionsToConfig(cliOptions: CliOptions): Partial<TerraflowConfig> {
+    const config: Partial<TerraflowConfig> = {};
 
     if (cliOptions.workspace !== undefined) {
       config.workspace = cliOptions.workspace;
@@ -233,12 +250,17 @@ export class ConfigManager {
    * @param configs - Configuration objects to merge (in priority order)
    * @returns Merged configuration
    */
-  private static mergeConfigs(...configs: TerraflowConfig[]): TerraflowConfig {
-    const result: TerraflowConfig = {};
+  private static mergeConfigs(...configs: Partial<TerraflowConfig>[]): Partial<TerraflowConfig> {
+    const result: Partial<TerraflowConfig> = {};
 
     for (const config of configs) {
       if (!config || typeof config !== 'object') {
         continue;
+      }
+
+      // Merge provider
+      if (config.provider !== undefined) {
+        result.provider = config.provider;
       }
 
       // Merge workspace

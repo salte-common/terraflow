@@ -12,9 +12,10 @@ terraform {
     }
   }
   
-  backend "azurerm" {
-    # Backend configuration provided via terraflow
-  }
+  # Uncomment when ready for remote state. Configure in .tfwconfig.yml
+  # backend "azurerm" {
+  #   # Backend configuration provided via terraflow
+  # }
 }
 
 provider "azurerm" {

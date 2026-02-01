@@ -3,7 +3,7 @@
  * Executes terraform commands with proper environment setup
  */
 
-import { execSync } from 'child_process';
+import { spawnSync } from 'child_process';
 import type { TerraflowConfig } from '../types/config';
 import type { ExecutionContext } from '../types/context';
 import { Logger } from '../utils/logger';
@@ -20,7 +20,7 @@ import { ConfigError } from './errors';
 export const WORKSPACE_SENSITIVE_COMMANDS: string[] = ([] as string[]).concat(
   FULL_VALIDATION_COMMANDS,
   BACKEND_REQUIRED_COMMANDS,
-  ['init'] // terraform init also needs backend setup
+  ['init', 'validate'] // terraform init and validate also need backend setup (providers initialized)
 );
 
 /**
@@ -53,7 +53,7 @@ export class TerraformExecutor {
 
     // Re-detect cloud after .env is loaded (credentials might be in .env)
     const { CloudUtils } = await import('../utils/cloud');
-    context.cloud = await CloudUtils.detectCloud();
+    context.cloud = await CloudUtils.detectCloud(config);
 
     // 1. Run validations
     Logger.info('🔍 Running validations...');
@@ -282,11 +282,21 @@ export class TerraformExecutor {
 
     try {
       Logger.debug(`Executing: terraform ${args.join(' ')} in ${workingDir}`);
-      execSync(`terraform ${args.join(' ')}`, {
+      // Use spawnSync with array to avoid shell interpretation of special characters
+      const result = spawnSync('terraform', args, {
         cwd: workingDir,
         stdio: 'inherit',
         encoding: 'utf8',
       });
+
+      if (result.error) {
+        throw result.error;
+      }
+
+      if (result.status !== 0) {
+        throw new Error(`Terraform init failed with exit code ${result.status}`);
+      }
+
       Logger.info('✅ Terraform initialized successfully');
     } catch (error) {
       Logger.error(
@@ -305,28 +315,42 @@ export class TerraformExecutor {
     try {
       // Try to select existing workspace
       Logger.debug(`Selecting workspace: ${workspaceName}`);
-      execSync(`terraform workspace select ${workspaceName}`, {
+      // Use spawnSync with array to avoid shell interpretation
+      const selectResult = spawnSync('terraform', ['workspace', 'select', workspaceName], {
         cwd: workingDir,
         stdio: 'pipe',
         encoding: 'utf8',
       });
-      Logger.debug(`Workspace ${workspaceName} selected`);
-    } catch {
-      // Workspace doesn't exist, create it
-      try {
-        Logger.debug(`Creating workspace: ${workspaceName}`);
-        execSync(`terraform workspace new ${workspaceName}`, {
-          cwd: workingDir,
-          stdio: 'inherit',
-          encoding: 'utf8',
-        });
-        Logger.info(`✅ Workspace ${workspaceName} created and selected`);
-      } catch (error) {
-        Logger.error(
-          `Failed to create workspace ${workspaceName}: ${error instanceof Error ? error.message : String(error)}`
-        );
-        throw error;
+
+      if (selectResult.status === 0) {
+        Logger.debug(`Workspace ${workspaceName} selected`);
+        return;
       }
+
+      // Workspace doesn't exist, create it
+      Logger.debug(`Creating workspace: ${workspaceName}`);
+      const createResult = spawnSync('terraform', ['workspace', 'new', workspaceName], {
+        cwd: workingDir,
+        stdio: 'inherit',
+        encoding: 'utf8',
+      });
+
+      if (createResult.error) {
+        throw createResult.error;
+      }
+
+      if (createResult.status !== 0) {
+        throw new Error(
+          `Failed to create workspace: ${createResult.stderr?.toString() || 'Unknown error'}`
+        );
+      }
+
+      Logger.info(`✅ Workspace ${workspaceName} created and selected`);
+    } catch (error) {
+      Logger.error(
+        `Failed to select/create workspace ${workspaceName}: ${error instanceof Error ? error.message : String(error)}`
+      );
+      throw error;
     }
   }
 
@@ -341,16 +365,40 @@ export class TerraformExecutor {
 
     try {
       Logger.info(`🚀 Executing: terraform ${terraformArgs.join(' ')}`);
-      execSync(`terraform ${terraformArgs.join(' ')}`, {
+      // Use spawnSync with array to avoid shell interpretation of special characters
+      // This ensures arguments with brackets, quotes, etc. are passed correctly to terraform
+      const result = spawnSync('terraform', terraformArgs, {
         cwd: workingDir,
         stdio: 'inherit',
         encoding: 'utf8',
       });
+
+      if (result.error) {
+        throw result.error;
+      }
+
+      if (result.status !== 0) {
+        // Check if this is a user cancellation
+        // Terraform exits with code 1 when cancelled and prints "Apply cancelled." etc.
+        // Since we use stdio: 'inherit', terraform's message is already shown to the user
+        // For interactive commands (apply, plan, destroy), exit code 1 often means cancellation
+        const isInteractiveCommand = ['apply', 'plan', 'destroy'].includes(command);
+
+        if (isInteractiveCommand && result.status === 1) {
+          // Likely a user cancellation - terraform already printed the message
+          // Just exit without adding our own error messages
+          process.exit(1);
+        }
+
+        // For other errors, throw with status code
+        const error = new Error(
+          `Terraform command failed with exit code ${result.status ?? 'unknown'}`
+        );
+        (error as { status?: number }).status = result.status ?? undefined;
+        throw error;
+      }
     } catch (error) {
       // Check if this is a user cancellation
-      // Terraform exits with code 1 when cancelled and prints "Apply cancelled." etc.
-      // Since we use stdio: 'inherit', terraform's message is already shown to the user
-      // For interactive commands (apply, plan, destroy), exit code 1 often means cancellation
       const exitCode = (error as { status?: number }).status;
       const isInteractiveCommand = ['apply', 'plan', 'destroy'].includes(command);
 

@@ -19,6 +19,25 @@ Configuration values are merged in the following order (later sources override e
 3. **Environment variables** (`TERRAFLOW_*`)
 4. **CLI arguments** (highest priority)
 
+## Required Settings
+
+### `provider`
+
+**Required.** Cloud provider identifier. Must be one of: `aws`, `gcp`, or `azure`.
+
+This field is used to identify which cloud platform you're working with and enables proper cloud detection and template variable resolution.
+
+```yaml
+provider: aws
+```
+
+**Note:** This field is automatically set when using `terraflow new` based on the `--provider` flag. For existing projects, you must add this field manually.
+
+**Valid values:**
+- `aws` - Amazon Web Services
+- `gcp` - Google Cloud Platform
+- `azure` - Microsoft Azure
+
 ## Global Settings
 
 ### `workspace`
@@ -458,6 +477,9 @@ If a variable is not found, the template string is left as-is.
 ## Complete Example
 
 ```yaml
+# Required: Cloud provider
+provider: aws
+
 # Global settings
 workspace: development
 working-dir: ./terraform

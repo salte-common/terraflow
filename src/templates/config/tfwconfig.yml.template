@@ -12,6 +12,9 @@
 #
 # Environment variables take precedence over this config file.
 
+# Cloud provider (required): aws | gcp | azure
+provider: <cloud-provider>
+
 # Working directory for terraform files (optional - defaults to ./terraform)
 # working-dir: ./terraform
 

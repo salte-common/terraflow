@@ -41,6 +41,7 @@ describe('ConfigManager', () => {
     it('should load configuration from file', async () => {
       const configFile = path.join(tempDir, '.tfwconfig.yml');
       const yamlContent = `
+provider: aws
 workspace: test-workspace
 working-dir: ./test-terraform
 skip-commit-check: true
@@ -61,7 +62,7 @@ backend:
 
     it('should load configuration from custom path via CLI option', async () => {
       const customConfigPath = path.join(tempDir, 'custom-config.yml');
-      const yamlContent = 'workspace: custom-workspace\n';
+      const yamlContent = 'provider: aws\nworkspace: custom-workspace\n';
       fs.writeFileSync(customConfigPath, yamlContent, 'utf8');
 
       const { config } = await ConfigManager.load({ config: customConfigPath }, tempDir);
@@ -103,7 +104,7 @@ backend:
       const configFile = path.join(tempDir, '.tfwconfig.yml');
       fs.writeFileSync(
         configFile,
-        'workspace: file-workspace\nbackend:\n  type: s3\n',
+        'provider: aws\nworkspace: file-workspace\nbackend:\n  type: s3\n',
         'utf8'
       );
 
@@ -123,7 +124,8 @@ backend:
       const configFile = path.join(tempDir, '.tfwconfig.yml');
       fs.writeFileSync(
         configFile,
-        `backend:
+        `provider: aws
+backend:
   type: s3
   config:
     bucket: file-bucket
@@ -189,31 +191,31 @@ backend:
 
   describe('getWorkspace', () => {
     it('should return workspace from config', () => {
-      const config: TerraflowConfig = { workspace: 'test-workspace' };
+      const config: TerraflowConfig = { provider: 'aws', workspace: 'test-workspace' };
       expect(ConfigManager.getWorkspace(config)).toBe('test-workspace');
     });
 
     it('should return undefined when workspace not set', () => {
-      const config: TerraflowConfig = {};
+      const config: TerraflowConfig = { provider: 'aws' };
       expect(ConfigManager.getWorkspace(config)).toBeUndefined();
     });
   });
 
   describe('getWorkingDir', () => {
     it('should return absolute path when working-dir is absolute', () => {
-      const config: TerraflowConfig = { 'working-dir': '/absolute/path' };
+      const config: TerraflowConfig = { provider: 'aws', 'working-dir': '/absolute/path' };
       const result = ConfigManager.getWorkingDir(config, tempDir);
       expect(result).toBe('/absolute/path');
     });
 
     it('should return relative path resolved against cwd', () => {
-      const config: TerraflowConfig = { 'working-dir': './relative/path' };
+      const config: TerraflowConfig = { provider: 'aws', 'working-dir': './relative/path' };
       const result = ConfigManager.getWorkingDir(config, tempDir);
       expect(result).toBe(path.join(tempDir, './relative/path'));
     });
 
     it('should use default when working-dir not set', () => {
-      const config: TerraflowConfig = {};
+      const config: TerraflowConfig = { provider: 'aws' };
       const result = ConfigManager.getWorkingDir(config, tempDir);
       expect(result).toBe(path.join(tempDir, './terraform'));
     });

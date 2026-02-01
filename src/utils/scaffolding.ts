@@ -295,6 +295,82 @@ function getBackendType(provider: string): string {
 }
 
 /**
+ * Build template variables for development standards Cursor rules
+ * @param language - Programming language (javascript, typescript, python, go)
+ * @param provider - Cloud provider (aws, azure, gcp)
+ * @returns Variables for cursor-development-standards.mdc.template
+ */
+function getDevelopmentStandardsVariables(
+  language: string,
+  provider: string
+): Record<string, string> {
+  const languageMap: Record<
+    string,
+    { display: string; testFramework: string; runtime: string; standards: string }
+  > = {
+    javascript: {
+      display: 'JavaScript',
+      testFramework: 'Jest',
+      runtime: 'Node.js',
+      standards: 'JavaScript Standards',
+    },
+    typescript: {
+      display: 'TypeScript',
+      testFramework: 'Jest',
+      runtime: 'Node.js',
+      standards: 'JavaScript Standards',
+    },
+    python: {
+      display: 'Python',
+      testFramework: 'pytest',
+      runtime: 'Python',
+      standards: 'Python Standards',
+    },
+    go: {
+      display: 'Go',
+      testFramework: 'go test',
+      runtime: 'Go',
+      standards: 'Development Standards',
+    },
+  };
+
+  const providerMap: Record<string, { display: string; platformStandards: string }> = {
+    aws: {
+      display: 'AWS',
+      platformStandards: 'AWS Architecture Standards',
+    },
+    azure: {
+      display: 'Azure',
+      platformStandards: 'Azure deployment and architecture patterns',
+    },
+    gcp: {
+      display: 'GCP',
+      platformStandards: 'GCP deployment and architecture patterns',
+    },
+  };
+
+  const lang = languageMap[language] ?? {
+    display: language,
+    testFramework: 'tests',
+    runtime: language,
+    standards: 'Development Standards',
+  };
+  const prov = providerMap[provider] ?? {
+    display: provider,
+    platformStandards: 'platform-specific standards',
+  };
+
+  return {
+    'language-display': lang.display,
+    'provider-display': prov.display,
+    'test-framework': lang.testFramework,
+    runtime: lang.runtime,
+    'language-standards': lang.standards,
+    'platform-standards': prov.platformStandards,
+  };
+}
+
+/**
  * Generate configuration files for the project
  * @param projectDir - Root directory of the project
  * @param provider - Cloud provider (aws, azure, gcp)
@@ -317,6 +393,7 @@ export async function generateConfigFiles(
   const tfwconfigContent = processTemplate(tfwconfigTemplate, {
     'project-name': projectName,
     provider: backendType,
+    'cloud-provider': provider, // Add provider field
   });
   writeFileSync(join(projectDir, '.tfwconfig.yml'), tfwconfigContent);
 
@@ -337,7 +414,132 @@ export async function generateConfigFiles(
   });
   writeFileSync(join(projectDir, 'README.md'), readmeContent);
 
+  // .cursor/rules/terraform.mdc - Cursor instructions for Terraflow usage
+  const cursorRulesDir = join(projectDir, '.cursor', 'rules');
+  mkdirSync(cursorRulesDir, { recursive: true });
+  const cursorRulesTemplate = loadTemplate(
+    join(templatesDir, 'cursor-terraflow-instructions.mdc.template')
+  );
+  writeFileSync(join(cursorRulesDir, 'terraform.mdc'), cursorRulesTemplate);
+
+  // .cursor/rules/ai-metadata.mdc - Cursor instructions for .ai-metadata.json maintenance
+  const aiMetadataRulesTemplate = loadTemplate(
+    join(templatesDir, 'cursor-ai-metadata.mdc.template')
+  );
+  writeFileSync(join(cursorRulesDir, 'ai-metadata.mdc'), aiMetadataRulesTemplate);
+
+  // .cursor/rules/development-standards.mdc - Cursor instructions for development standards
+  const devStandardsTemplate = loadTemplate(
+    join(templatesDir, 'cursor-development-standards.mdc.template')
+  );
+  const devStandardsVars = getDevelopmentStandardsVariables(language, provider);
+  const devStandardsContent = processTemplate(devStandardsTemplate, devStandardsVars);
+  writeFileSync(join(cursorRulesDir, 'development-standards.mdc'), devStandardsContent);
+
   Logger.debug('Configuration files generated successfully');
+}
+
+/**
+ * Get list of scaffolded file paths (relative to project root) for AI metadata
+ * Only includes files that are checked into source control
+ * @param language - Programming language (javascript, typescript, python, go)
+ * @returns Array of relative file paths
+ */
+function getScaffoldedFilePaths(language: string): string[] {
+  const common = [
+    '.tfwconfig.yml',
+    '.env.example',
+    '.gitignore',
+    'README.md',
+    '.cursor/rules/terraform.mdc',
+    '.cursor/rules/ai-metadata.mdc',
+    '.cursor/rules/development-standards.mdc',
+    'terraform/_init.tf',
+    'terraform/inputs.tf',
+    'terraform/locals.tf',
+    'terraform/main.tf',
+    'terraform/outputs.tf',
+    'terraform/modules/inputs.tf',
+    'terraform/modules/main.tf',
+    'terraform/modules/outputs.tf',
+  ];
+
+  const languageFiles: Record<string, string[]> = {
+    javascript: [
+      'src/main/index.js',
+      'src/test/index.spec.js',
+      'package.json',
+      '.eslintrc.json',
+      'jest.config.js',
+      '.prettierrc',
+    ],
+    typescript: [
+      'src/main/index.ts',
+      'src/test/index.spec.ts',
+      'package.json',
+      'tsconfig.json',
+      '.eslintrc.json',
+      'jest.config.js',
+      '.prettierrc',
+    ],
+    python: [
+      'src/main/index.py',
+      'src/test/test_main.py',
+      'requirements.txt',
+      'pytest.ini',
+      '.pylintrc',
+    ],
+    go: ['src/main/index.go', 'src/test/main_test.go', 'go.mod', '.golangci.yml'],
+  };
+
+  return [...common, ...(languageFiles[language] ?? [])];
+}
+
+/**
+ * Generate initial .ai-metadata.json with stats for all scaffolded files
+ * All scaffolded files are treated as 100% AI-authored (from templates)
+ * Only tracks files that are checked into source control
+ * @param projectDir - Root directory of the project
+ * @param language - Programming language (javascript, typescript, python, go)
+ */
+export async function generateAiMetadata(projectDir: string, language: string): Promise<void> {
+  const filePaths = getScaffoldedFilePaths(language);
+  const files: Record<
+    string,
+    {
+      lines_total: number;
+      lines_ai_generated: number;
+      ai_percentage: number;
+      last_updated: string;
+      tool: string;
+    }
+  > = {};
+
+  const timestamp = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
+
+  for (const relPath of filePaths) {
+    const fullPath = join(projectDir, relPath);
+    if (!existsSync(fullPath)) continue;
+
+    const content = readFileSync(fullPath, 'utf8');
+    const linesTotal = content.split(/\r?\n/).length;
+
+    files[relPath] = {
+      lines_total: linesTotal,
+      lines_ai_generated: linesTotal,
+      ai_percentage: 100,
+      last_updated: timestamp,
+      tool: 'cursor',
+    };
+  }
+
+  const metadata = {
+    files,
+    metadata_version: '1.0',
+  };
+
+  writeFileSync(join(projectDir, '.ai-metadata.json'), JSON.stringify(metadata, null, 2));
+  Logger.debug('Initial .ai-metadata.json generated');
 }
 
 /**

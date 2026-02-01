@@ -12,7 +12,7 @@ import * as child_process from 'child_process';
 
 // Mock child_process
 jest.mock('child_process');
-const mockExecSync = child_process.execSync as jest.MockedFunction<typeof child_process.execSync>;
+const mockSpawnSync = child_process.spawnSync as jest.MockedFunction<typeof child_process.spawnSync>;
 
 // Mock logger to avoid console output during tests
 jest.mock('../../src/utils/logger', () => {
@@ -131,7 +131,15 @@ describe('TerraformExecutor - Integration', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    mockExecSync.mockImplementation(() => Buffer.from(''));
+    mockSpawnSync.mockImplementation(() => ({
+      status: 0,
+      signal: null,
+      output: [Buffer.from(''), Buffer.from(''), Buffer.from('')],
+      stdout: Buffer.from(''),
+      stderr: Buffer.from(''),
+      pid: 12345,
+      error: undefined,
+    }));
     Logger.setLevel('error');
   });
 
@@ -149,8 +157,9 @@ describe('TerraformExecutor - Integration', () => {
       await TerraformExecutor.execute('plan', [], config, context, { configFileDir: process.cwd() });
 
       // Verify terraform init was called
-      expect(mockExecSync).toHaveBeenCalledWith(
-        'terraform init',
+      expect(mockSpawnSync).toHaveBeenCalledWith(
+        'terraform',
+        ['init'],
         expect.objectContaining({
           cwd: mockWorkingDir,
           stdio: 'inherit',
@@ -158,8 +167,9 @@ describe('TerraformExecutor - Integration', () => {
       );
 
       // Verify workspace select was attempted
-      expect(mockExecSync).toHaveBeenCalledWith(
-        'terraform workspace select test-workspace',
+      expect(mockSpawnSync).toHaveBeenCalledWith(
+        'terraform',
+        ['workspace', 'select', 'test-workspace'],
         expect.objectContaining({
           cwd: mockWorkingDir,
           stdio: 'pipe',
@@ -167,8 +177,9 @@ describe('TerraformExecutor - Integration', () => {
       );
 
       // Verify terraform command was executed
-      expect(mockExecSync).toHaveBeenCalledWith(
-        'terraform plan',
+      expect(mockSpawnSync).toHaveBeenCalledWith(
+        'terraform',
+        ['plan'],
         expect.objectContaining({
           cwd: mockWorkingDir,
           stdio: 'inherit',
@@ -265,27 +276,53 @@ describe('TerraformExecutor - Integration', () => {
       context.workspace = 'new-workspace';
 
       // Mock workspace select to fail (workspace doesn't exist)
-      mockExecSync.mockImplementation((command: string) => {
-        if (command.includes('workspace select')) {
-          throw new Error('workspace does not exist');
+      mockSpawnSync.mockImplementation((command: string, args?: readonly string[]) => {
+        if (command === 'terraform' && args && args[0] === 'workspace' && args[1] === 'select') {
+          return {
+            status: 1,
+            signal: null,
+            output: [Buffer.from(''), Buffer.from(''), Buffer.from('')],
+            stdout: Buffer.from(''),
+            stderr: Buffer.from('workspace does not exist'),
+            pid: 12345,
+            error: undefined,
+          };
         }
-        if (command.includes('workspace new')) {
-          return Buffer.from('');
+        if (command === 'terraform' && args && args[0] === 'workspace' && args[1] === 'new') {
+          return {
+            status: 0,
+            signal: null,
+            output: [Buffer.from(''), Buffer.from(''), Buffer.from('')],
+            stdout: Buffer.from(''),
+            stderr: Buffer.from(''),
+            pid: 12345,
+            error: undefined,
+          };
         }
-        return Buffer.from('');
+        return {
+          status: 0,
+          signal: null,
+          output: [Buffer.from(''), Buffer.from(''), Buffer.from('')],
+          stdout: Buffer.from(''),
+          stderr: Buffer.from(''),
+          pid: 12345,
+          error: undefined,
+        };
       });
 
       await TerraformExecutor.execute('plan', [], config, context, { configFileDir: process.cwd() });
 
       // Verify workspace select was attempted
-      expect(mockExecSync).toHaveBeenCalledWith(
-        'terraform workspace select new-workspace',
+      expect(mockSpawnSync).toHaveBeenCalledWith(
+        'terraform',
+        ['workspace', 'select', 'new-workspace'],
         expect.anything()
       );
 
       // Verify workspace new was called
-      expect(mockExecSync).toHaveBeenCalledWith(
-        'terraform workspace new new-workspace',
+      expect(mockSpawnSync).toHaveBeenCalledWith(
+        'terraform',
+        ['workspace', 'new', 'new-workspace'],
         expect.objectContaining({
           cwd: mockWorkingDir,
           stdio: 'inherit',
@@ -300,11 +337,27 @@ describe('TerraformExecutor - Integration', () => {
       context.workspace = 'new-workspace';
 
       // Mock both workspace select and new to fail
-      mockExecSync.mockImplementation((command: string) => {
-        if (command.includes('workspace')) {
-          throw new Error('workspace operation failed');
+      mockSpawnSync.mockImplementation((command: string, args?: readonly string[]) => {
+        if (command === 'terraform' && args && args[0] === 'workspace') {
+          return {
+            status: 1,
+            signal: null,
+            output: [Buffer.from(''), Buffer.from(''), Buffer.from('workspace operation failed')],
+            stdout: Buffer.from(''),
+            stderr: Buffer.from('workspace operation failed'),
+            pid: 12345,
+            error: new Error('workspace operation failed'),
+          };
         }
-        return Buffer.from('');
+        return {
+          status: 0,
+          signal: null,
+          output: [Buffer.from(''), Buffer.from(''), Buffer.from('')],
+          stdout: Buffer.from(''),
+          stderr: Buffer.from(''),
+          pid: 12345,
+          error: undefined,
+        };
       });
 
       await expect(
@@ -350,12 +403,14 @@ describe('TerraformExecutor - Integration', () => {
       expect(mockBackendPlugin.validate).toHaveBeenCalled();
 
       // Verify terraform commands were NOT executed
-      expect(mockExecSync).not.toHaveBeenCalledWith(
-        expect.stringContaining('terraform init'),
+      expect(mockSpawnSync).not.toHaveBeenCalledWith(
+        'terraform',
+        ['init'],
         expect.anything()
       );
-      expect(mockExecSync).not.toHaveBeenCalledWith(
-        expect.stringContaining('terraform plan'),
+      expect(mockSpawnSync).not.toHaveBeenCalledWith(
+        'terraform',
+        ['plan'],
         expect.anything()
       );
 
@@ -468,11 +523,27 @@ describe('TerraformExecutor - Integration', () => {
     });
 
     it('should fail if terraform init fails', async () => {
-      mockExecSync.mockImplementation((command: string) => {
-        if (command.includes('terraform init')) {
-          throw new Error('Init failed');
+      mockSpawnSync.mockImplementation((command: string, args?: readonly string[]) => {
+        if (command === 'terraform' && args && args[0] === 'init') {
+          return {
+            status: 1,
+            signal: null,
+            output: [Buffer.from(''), Buffer.from(''), Buffer.from('Init failed')],
+            stdout: Buffer.from(''),
+            stderr: Buffer.from('Init failed'),
+            pid: 12345,
+            error: new Error('Init failed'),
+          };
         }
-        return Buffer.from('');
+        return {
+          status: 0,
+          signal: null,
+          output: [Buffer.from(''), Buffer.from(''), Buffer.from('')],
+          stdout: Buffer.from(''),
+          stderr: Buffer.from(''),
+          pid: 12345,
+          error: undefined,
+        };
       });
 
       const { config } = await ConfigManager.load({});
@@ -486,11 +557,27 @@ describe('TerraformExecutor - Integration', () => {
     });
 
     it('should fail if terraform command fails', async () => {
-      mockExecSync.mockImplementation((command: string) => {
-        if (command.includes('terraform plan')) {
-          throw new Error('Plan failed');
+      mockSpawnSync.mockImplementation((command: string, args?: readonly string[]) => {
+        if (command === 'terraform' && args && args[0] === 'plan') {
+          return {
+            status: 1,
+            signal: null,
+            output: [Buffer.from(''), Buffer.from(''), Buffer.from('Plan failed')],
+            stdout: Buffer.from(''),
+            stderr: Buffer.from('Plan failed'),
+            pid: 12345,
+            error: new Error('Plan failed'),
+          };
         }
-        return Buffer.from('');
+        return {
+          status: 0,
+          signal: null,
+          output: [Buffer.from(''), Buffer.from(''), Buffer.from('')],
+          stdout: Buffer.from(''),
+          stderr: Buffer.from(''),
+          pid: 12345,
+          error: undefined,
+        };
       });
 
       const { config } = await ConfigManager.load({});
@@ -518,16 +605,17 @@ describe('TerraformExecutor - Integration', () => {
       await TerraformExecutor.execute('plan', [], config, context, { configFileDir: process.cwd() });
 
       // Verify init was called without backend-config flags
-      expect(mockExecSync).toHaveBeenCalledWith(
-        'terraform init',
+      expect(mockSpawnSync).toHaveBeenCalledWith(
+        'terraform',
+        ['init'],
         expect.anything()
       );
 
       // Verify it was NOT called with -backend-config
-      const initCalls = mockExecSync.mock.calls.filter((call) =>
-        call[0].toString().includes('terraform init')
+      const initCalls = mockSpawnSync.mock.calls.filter(
+        (call) => call[0] === 'terraform' && call[1]?.[0] === 'init'
       );
-      expect(initCalls[0][0]).not.toContain('-backend-config');
+      expect(initCalls[0][1]).not.toContain('-backend-config');
     });
 
     it('should include backend-config args for remote backends', async () => {
@@ -554,6 +642,126 @@ describe('TerraformExecutor - Integration', () => {
 
       // Verify backend plugin's getBackendConfig was called
       expect(mockBackendPlugin.getBackendConfig).toHaveBeenCalled();
+    });
+  });
+
+  describe('Command arguments handling', () => {
+    it('should pass arguments with special characters correctly without shell interpretation', async () => {
+      const { config } = await ConfigManager.load({});
+      // Ensure provider is set (required field)
+      if (!config.provider) {
+        config.provider = 'aws';
+      }
+      const context = await ContextBuilder.build(config);
+      context.workingDir = mockWorkingDir;
+      context.workspace = 'test-workspace';
+
+      // Track all spawnSync calls to verify arguments
+      const spawnCalls: Array<{ command: string; args: readonly string[] }> = [];
+      mockSpawnSync.mockImplementation((command: string, args?: readonly string[]) => {
+        spawnCalls.push({ command, args: args || [] });
+        return {
+          status: 0,
+          signal: null,
+          output: [Buffer.from(''), Buffer.from(''), Buffer.from('')],
+          stdout: Buffer.from(''),
+          stderr: Buffer.from(''),
+          pid: 12345,
+          error: undefined,
+        };
+      });
+
+      // Test arguments with various special characters that could be interpreted by shell
+      const specialArgs = [
+        '-var',
+        'tags={key="value",env="prod"}', // JSON-like object with brackets and quotes
+        '-var',
+        'list=[item1,item2,item3]', // Array with brackets
+        '-var',
+        'path=/path/to/file[0].txt', // Path with brackets
+        '-var',
+        'value="string with spaces"', // Quoted string with spaces
+        '-var',
+        'special=value&other=thing', // Ampersand
+        '-var',
+        'nested={outer={inner="value"}}', // Nested brackets
+      ];
+
+      await TerraformExecutor.execute('plan', specialArgs, config, context, {
+        configFileDir: process.cwd(),
+      });
+
+      // Find the plan command call (there will also be init and workspace calls)
+      const planCall = spawnCalls.find(
+        (call) => call.command === 'terraform' && call.args && call.args[0] === 'plan'
+      );
+
+      expect(planCall).toBeDefined();
+      expect(planCall?.args).toBeDefined();
+      // Verify plan is the first arg and specialArgs follow
+      expect(planCall?.args[0]).toBe('plan');
+      expect(planCall?.args.slice(1)).toEqual(specialArgs);
+
+      // Verify that special characters are preserved exactly as passed
+      // (not interpreted by shell)
+      expect(planCall?.args).toContain('tags={key="value",env="prod"}');
+      expect(planCall?.args).toContain('list=[item1,item2,item3]');
+      expect(planCall?.args).toContain('path=/path/to/file[0].txt');
+      expect(planCall?.args).toContain('value="string with spaces"');
+      expect(planCall?.args).toContain('special=value&other=thing');
+      expect(planCall?.args).toContain('nested={outer={inner="value"}}');
+    });
+
+    it('should handle backend-config arguments with special characters', async () => {
+      const { config } = await ConfigManager.load({});
+      // Ensure provider is set (required field)
+      if (!config.provider) {
+        config.provider = 'aws';
+      }
+      config.backend = {
+        type: 's3',
+        config: {
+          bucket: 'test-bucket',
+          key: 'path/to/state[env].tfstate', // Key with brackets
+        },
+      };
+      const context = await ContextBuilder.build(config);
+      context.workingDir = mockWorkingDir;
+      context.workspace = 'test-workspace';
+
+      const { loadBackendPlugin } = require('../../src/core/plugin-loader');
+      const mockBackendPlugin = await loadBackendPlugin('s3');
+      mockBackendPlugin.getBackendConfig.mockResolvedValueOnce([
+        '-backend-config=bucket=test-bucket',
+        '-backend-config=key=path/to/state[env].tfstate', // Special characters in backend config
+        '-backend-config=tags={env="prod",app="web"}', // JSON-like value
+      ]);
+
+      const spawnCalls: Array<{ command: string; args: readonly string[] }> = [];
+      mockSpawnSync.mockImplementation((command: string, args?: readonly string[]) => {
+        spawnCalls.push({ command, args: args || [] });
+        return {
+          status: 0,
+          signal: null,
+          output: [Buffer.from(''), Buffer.from(''), Buffer.from('')],
+          stdout: Buffer.from(''),
+          stderr: Buffer.from(''),
+          pid: 12345,
+          error: undefined,
+        };
+      });
+
+      await TerraformExecutor.execute('plan', [], config, context, { configFileDir: process.cwd() });
+
+      // Find the init command call
+      const initCall = spawnCalls.find(
+        (call) => call.command === 'terraform' && call.args[0] === 'init'
+      );
+
+      expect(initCall).toBeDefined();
+      // Verify backend-config arguments with special characters are passed correctly
+      expect(initCall?.args).toContain('-backend-config=key=path/to/state[env].tfstate');
+      expect(initCall?.args).toContain('-backend-config=tags={env="prod",app="web"}');
     });
   });
 });

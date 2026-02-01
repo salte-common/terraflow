@@ -73,6 +73,8 @@ export interface ValidationConfig {
  * Main Terraflow configuration file structure
  */
 export interface TerraflowConfig {
+  /** Cloud provider: aws | gcp | azure (required) */
+  provider: 'aws' | 'gcp' | 'azure';
   /** Workspace name */
   workspace?: string;
   /** Terraform working directory */

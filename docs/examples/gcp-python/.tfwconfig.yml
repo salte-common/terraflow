@@ -1,6 +1,9 @@
 # Terraflow configuration
 # See: https://github.com/salte-common/terraflow/blob/main/docs/configuration.md
 
+# Required: Cloud provider (aws, gcp, or azure)
+provider: gcp
+
 # Working directory for terraform files
 working-dir: ./terraform
 

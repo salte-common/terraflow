@@ -1,9 +1,11 @@
 # Service Account for Cloud Function
 resource "google_service_account" "function" {
-  account_id   = "${replace(local.project_name, "-", "")}-${replace(terraform.workspace, "-", "")}-sa"
+  # account_id must match regex: ^[a-z](?:[-a-z0-9]{4,28}[a-z0-9])$
+  # Must start with lowercase letter, 6-30 chars, end with letter/number
+  account_id   = "${replace(local.sanitized_project_name, "-", "")}${replace(local.sanitized_workspace, "-", "")}sa"
   display_name = "${local.project_name} ${terraform.workspace} Function Service Account"
 
-  labels = local.common_tags
+  # Note: google_service_account does not support labels
 }
 
 # IAM binding for service account to invoke Cloud Functions
@@ -15,7 +17,7 @@ resource "google_project_iam_member" "function_invoker" {
 
 # Storage bucket for function source code
 resource "google_storage_bucket" "function_source" {
-  name     = "${replace(local.project_name, "-", "")}-${replace(terraform.workspace, "-", "")}-funcs-source"
+  name     = "${replace(local.sanitized_project_name, "-", "")}-${replace(local.sanitized_workspace, "-", "")}-funcs-source"
   location = var.gcp_region
 
   uniform_bucket_level_access = true
@@ -38,7 +40,7 @@ resource "google_storage_bucket_object" "function_source" {
   source = data.archive_file.function_zip.output_path
 }
 
-# Cloud Function
+# Cloud Function (HTTP-triggered)
 resource "google_cloudfunctions_function" "main" {
   name        = "${local.project_name}-${terraform.workspace}-function"
   description = "Serverless function for ${local.project_name}"
@@ -47,9 +49,9 @@ resource "google_cloudfunctions_function" "main" {
   available_memory_mb   = 256
   source_archive_bucket = google_storage_bucket.function_source.name
   source_archive_object = google_storage_bucket_object.function_source.name
-  trigger {
-    http_trigger {}
-  }
+  
+  # HTTP-triggered (default when no event_trigger is specified)
+  # No https_trigger block needed for v1 - function is HTTP-triggered by default
 
   entry_point = "handler"
 

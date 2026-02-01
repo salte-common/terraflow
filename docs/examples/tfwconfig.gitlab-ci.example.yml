@@ -1,6 +1,9 @@
 # GitLab CI Integration Example
 # This example shows how to configure Terraflow for use in GitLab CI pipelines
 
+# Required: Cloud provider
+provider: aws
+
 backend:
   type: s3
   config:

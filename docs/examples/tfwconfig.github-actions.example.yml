@@ -1,6 +1,9 @@
 # GitHub Actions Integration Example
 # This example shows how to configure Terraflow for use in GitHub Actions workflows
 
+# Required: Cloud provider
+provider: aws
+
 backend:
   type: s3
   config:

@@ -147,18 +147,18 @@ Boolean handling: `true|1|yes` enables, anything else disables
 ```bash
 terraflow config show              # Show resolved configuration
 terraflow config init [-o file]    # Generate skeleton config file
-terraflow init [project-name]      # Scaffold new project
+terraflow new [project-name]      # Scaffold new project
 ```
 
 ## Project Scaffolding
 
-### Init Command
+### New Command
 
-The `terraflow init` command scaffolds a new infrastructure project with opinionated defaults and best practices.
+The `terraflow new` command scaffolds a new infrastructure project with opinionated defaults and best practices.
 
 #### Command Syntax
 ```bash
-terraflow init [project-name] [options]
+terraflow new [project-name] [options]
 ```
 
 #### Options
@@ -171,6 +171,12 @@ terraflow init [project-name] [options]
 
 ```
 <project-name>/
+├── .ai-metadata.json         # AI code tracking (initialized with scaffold stats)
+├── .cursor/
+│   └── rules/
+│       ├── terraform.mdc             # Cursor instructions for Terraflow (delete if not using Cursor)
+│       ├── ai-metadata.mdc           # Cursor instructions for .ai-metadata.json maintenance
+│       └── development-standards.mdc # Cursor instructions (language, platform, salte-common/standards)
 ├── src/
 │   ├── main/
 │   │   └── index.js (or .ts, .py, .go based on --language)
@@ -400,6 +406,9 @@ describe('<project-name>', () => {
 # Terraflow configuration
 # See: https://github.com/salte-common/terraflow/blob/main/docs/configuration.md
 
+# Required: Cloud provider (aws, gcp, or azure)
+provider: aws
+
 # Working directory for terraform files
 working-dir: ./terraform
 
@@ -619,7 +628,7 @@ MIT
 
 #### Implementation Details
 
-1. **Create src/commands/init.ts**:
+1. **Create src/commands/new.ts**:
    - Implement the init command handler
    - Validate that target directory is empty or --force is used
    - Create the complete project structure
@@ -669,7 +678,7 @@ Documentation: ./README.md
 
 #### Documentation Updates
 
-- Add `terraflow init` command to main README.md
+- Add `terraflow new` command to main README.md
 - Create docs/scaffolding.md with detailed init command documentation
 - Add examples for each provider type
 - Document template customization options
@@ -958,18 +967,30 @@ Exception: In `--dry-run` mode, validations run but don't stop execution (to sho
 #### Passthrough
 - Existing TF_VAR_* environment variables pass through unchanged
 
-### Cloud Provider Auto-Detection
+### Cloud Provider Detection
+
+Cloud provider is determined from the `provider` field in `.tfwconfig.yml` (required). This field must be set to one of: `aws`, `gcp`, or `azure`.
+
+**Primary Source:** The `provider` field in the configuration file is the primary source for cloud detection. This makes platform identification explicit and independent of environment variables.
+
+**Fallback:** If `provider` is not set in the config file, terraflow falls back to environment-based detection for backwards compatibility:
+- AWS: Detected if `AWS_ACCESS_KEY_ID`, `AWS_PROFILE`, or `AWS_REGION` is set
+- Azure: Detected if `AZURE_CLIENT_ID` or `ARM_CLIENT_ID` is set
+- GCP: Detected if `GOOGLE_APPLICATION_CREDENTIALS` or `GCLOUD_PROJECT` is set
 
 #### AWS
-- Sync `AWS_REGION` and `AWS_DEFAULT_REGION`
-- Default to `us-east-1` if not set
+- Uses `provider: aws` from config
+- Syncs `AWS_REGION` and `AWS_DEFAULT_REGION`
+- Defaults to `us-east-1` if region not set
 - Fetch account ID via `aws sts get-caller-identity`
 
 #### Azure
+- Uses `provider: azure` from config
 - Fetch subscription ID via `az account show`
 - Fetch tenant ID
 
 #### GCP
+- Uses `provider: gcp` from config
 - Fetch project ID via `gcloud config get-value project`
 
 ### VCS Environment Setup
@@ -1119,10 +1140,11 @@ Minimum 80% code coverage required
 ### docs/examples/
 
 - Example configurations for common scenarios
-- AWS + GitHub Actions
-- Azure + GitLab CI
+- Cursor instructions (cursor-terraflow-instructions.mdc, cursor-ai-metadata.mdc.template, cursor-development-standards.mdc.template) — included in scaffolded projects as .cursor/rules/terraform.mdc, .cursor/rules/ai-metadata.mdc, and .cursor/rules/development-standards.mdc
+- AWS + GitHub Actions (tfwconfig.github-actions.example.yml)
+- Azure + GitLab CI (tfwconfig.gitlab-ci.example.yml)
 - GCP + local development
-- Multi-environment setups
+- Multi-environment setups (tfwconfig.multi-environment.example.yml)
 
 ## NPM Package Configuration
 

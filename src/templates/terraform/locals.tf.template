@@ -2,6 +2,11 @@ locals {
   # Project name for resource naming
   project_name = "<project-name>"
   
+  # Sanitized names for GCP resources (lowercase, hyphens replaced with dashes)
+  # GCP requires lowercase alphanumeric with dashes for many resource names
+  sanitized_project_name = lower(replace("<project-name>", "_", "-"))
+  sanitized_workspace    = lower(replace(terraform.workspace, "_", "-"))
+  
   # Common tags/labels for all resources
   common_tags = {
     Workspace   = terraform.workspace

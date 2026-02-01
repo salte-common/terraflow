@@ -2,6 +2,9 @@
 # This example shows how to manage multiple environments using workspace strategy
 # and environment-specific variables.
 
+# Required: Cloud provider
+provider: aws
+
 # Use workspace to differentiate environments
 # Workspace is derived from git branch/tag or can be set explicitly
 workspace: development  # Override with --workspace flag or TERRAFLOW_WORKSPACE env var

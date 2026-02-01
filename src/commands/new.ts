@@ -15,6 +15,7 @@ import {
   generateTerraformFiles,
   generateApplicationFiles,
   generateConfigFiles,
+  generateAiMetadata,
 } from '../utils/scaffolding';
 
 /**
@@ -135,6 +136,7 @@ export class NewCommand {
     await generateTerraformFiles(projectDir, provider, finalProjectName);
     await generateApplicationFiles(projectDir, language, finalProjectName);
     await generateConfigFiles(projectDir, provider, language, finalProjectName);
+    await generateAiMetadata(projectDir, language);
 
     Logger.info(`✅ Project "${projectName || 'current directory'}" created successfully!`);
     Logger.info('');

@@ -57,6 +57,7 @@ describe('NewCommand', () => {
 
       const tfwconfig = readFileSync(join(projectDir, '.tfwconfig.yml'), 'utf8');
       expect(tfwconfig).toContain('type: s3');
+      expect(tfwconfig).toContain('provider: aws');
     });
 
     it('should create Azure provider files', async () => {
@@ -73,6 +74,7 @@ describe('NewCommand', () => {
 
       const tfwconfig = readFileSync(join(projectDir, '.tfwconfig.yml'), 'utf8');
       expect(tfwconfig).toContain('type: azurerm');
+      expect(tfwconfig).toContain('provider: azure');
     });
 
     it('should create GCP provider files', async () => {
@@ -89,6 +91,7 @@ describe('NewCommand', () => {
 
       const tfwconfig = readFileSync(join(projectDir, '.tfwconfig.yml'), 'utf8');
       expect(tfwconfig).toContain('type: gcs');
+      expect(tfwconfig).toContain('provider: gcp');
     });
 
     it('should create JavaScript application files', async () => {

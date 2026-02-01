@@ -9,15 +9,17 @@ An opinionated Node.js CLI wrapper for Terraform that provides intelligent works
 
 ## About
 
-Terraflow was created by Dave Woodward, VP of Cloud & Enterprise Architecture with over 20 years of experience in financial services technology. Coming from a full-stack development background before evolving into cloud architecture, Dave brings a hands-on, practical approach to enterprise architecture that emphasizes solving real operational problems over theoretical ideals.
+Terraflow was created by Dave Woodward, a technologist with over 20 years of experience building and operating infrastructure in regulated enterprise environments. Coming from a full-stack development background before moving deeper into cloud architecture, Dave brings a hands-on, pragmatic approach that emphasizes solving real operational problems over theoretical ideals.
 
 ### The Problem
 
-After half a decade of managing Terraform in enterprise environments, a pattern emerged: every infrastructure repository needed the same orchestration logic. Before Terraflow, this meant writing bash scripts in every repo to handle the multi-step process of initializing Terraform, selecting the appropriate workspace, assuming cloud provider roles, retrieving secrets, and finally applying changes. These scripts were essential for testing Terraform locally before CI/CD pipelines, but they became repetitive maintenance overhead. Environment-specific and branch-specific configuration—some sensitive, some not—required careful orchestration that varied slightly across projects. Additionally, while consistent project structure proved crucial for helping developers understand resource dependencies, manually scaffolding this structure was time-consuming and error-prone.
+After half a decade of managing Terraform in enterprise environments, a clear pattern emerged: every infrastructure repository needed the same orchestration logic. Before Terraflow, this meant writing bash scripts in every repo to handle the multi-step process of initializing Terraform, selecting the appropriate workspace, assuming cloud provider roles, retrieving secrets, and finally applying changes.
+
+These scripts were essential for testing Terraform locally before CI/CD pipelines, but they quickly became repetitive maintenance overhead. Environment-specific and branch-specific configuration—some sensitive, some not—required careful orchestration that varied slightly across projects. Additionally, while consistent project structure proved crucial for helping developers understand resource dependencies, manually scaffolding this structure was time-consuming and error-prone.
 
 ### The Developer Perspective
 
-Coming from a development background rather than pure infrastructure, the importance of preview branches became immediately apparent. Developers need to see their infrastructure changes in isolation before those changes overwrite shared development environments. This preview branch support is often overlooked by infrastructure-focused practitioners, but it's critical for modern development workflows where multiple feature branches need to coexist temporarily.
+Coming from a development background rather than pure infrastructure, the importance of preview branches became immediately apparent. Developers need to see their infrastructure changes in isolation before those changes overwrite shared development environments. This preview branch support is often overlooked by infrastructure-focused practitioners, but it is critical for modern development workflows where multiple feature branches need to coexist temporarily.
 
 ### Terraflow's Approach
 
@@ -87,11 +89,16 @@ terraflow new my-infrastructure --provider gcp --language python
 ```
 
 This creates a complete project structure with:
+- **Cursor-ready** — Optimized for [Cursor](https://cursor.com/) to get up and running quickly with AI-assisted development
 - Terraform configuration files for your cloud provider
 - Application code templates in your chosen language
 - Pre-configured `.tfwconfig.yml` with backend settings
 - Example `.env.example` file
 - Complete `.gitignore` and `README.md`
+- `.ai-metadata.json` — AI code tracking (initialized with scaffold stats)
+- `.cursor/rules/terraform.mdc` — Cursor instructions for Terraflow (delete if not using Cursor)
+- `.cursor/rules/ai-metadata.mdc` — Cursor instructions for `.ai-metadata.json` maintenance
+- `.cursor/rules/development-standards.mdc` — Cursor instructions (language, platform, salte-common/standards)
 
 See [Project Scaffolding Documentation](docs/scaffolding.md) for complete details.
 
@@ -108,6 +115,9 @@ This creates a `.tfwconfig.yml` file with examples for all backends, secrets pro
 2. **Configure your backend and secrets** in `.tfwconfig.yml`:
 
 ```yaml
+# Required: Cloud provider (aws, gcp, or azure)
+provider: aws
+
 backend:
   type: s3
   config:

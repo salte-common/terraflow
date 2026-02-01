@@ -1,6 +1,9 @@
 # GCP Example: GCS Backend
 # This example shows a complete GCP setup with Google Cloud Storage backend.
 
+# Required: Cloud provider
+provider: gcp
+
 backend:
   type: gcs
   config:
