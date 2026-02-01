@@ -8,6 +8,20 @@ alwaysApply: true
 
 This project was scaffolded with **TypeScript**, **AWS**, and **Jest** as the test framework. Assume these as the default context when suggesting code, tests, or architecture.
 
+## ⚠️ MANDATORY: External Standards Preflight
+
+**Before performing any task, you MUST:**
+
+1. Read [salte-common/standards](https://github.com/salte-common/standards) recursively and confirm compliance.
+2. **Do not proceed until done.** This is a blocking prerequisite.
+3. In your response, cite the specific standards section(s) you applied (e.g. "Per Architecture Standards: ...", "Per Development Standards §X: ...") to prove you reviewed them.
+
+**Required checklist — hard stop if not completed:**
+- [ ] I have reviewed salte-common/standards and confirmed compliance
+- [ ] I have cited the relevant standards section(s) in my response
+
+If you cannot access or read the standards, stop and inform the user. Do not proceed without this confirmation.
+
 ## Assumed Context (from `terraflow new`)
 
 | Setting | Value |
@@ -21,9 +35,9 @@ This project was scaffolded with **TypeScript**, **AWS**, and **Jest** as the te
 
 **Before making significant changes, check for `SPECIFICATION.md` in the project root.** If it exists, read it and apply its requirements. Project-specific specifications override generic standards when they conflict.
 
-## External Standards
+## External Standards (salte-common/standards)
 
-Follow [salte-common/standards](https://github.com/salte-common/standards) recursively. Apply as appropriate:
+Apply as appropriate for the task:
 
 - **Architecture Standards** — Twelve-Factor App, modular design, testing pyramid
 - **Development Standards** — Code formatting, quality, security
@@ -39,5 +53,5 @@ Follow [salte-common/standards](https://github.com/salte-common/standards) recur
 1. Use **TypeScript** conventions (runtime: **Node.js**)
 2. Write tests with **Jest**
 3. Target **AWS** for deployment and infrastructure
-4. Reference salte-common/standards for patterns and compliance
+4. Cite the specific salte-common/standards section(s) you applied in your response
 5. Honor `SPECIFICATION.md` if present
