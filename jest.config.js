@@ -16,6 +16,10 @@ module.exports = {
   },
   moduleNameMapper: {
     '^chalk$': '<rootDir>/tests/mocks/chalk.ts',
+    // Resolve plugin-loader dynamic .js imports to .ts sources in tests
+    '^\\.\\./plugins/backends/(.*)\\.js$': '<rootDir>/src/plugins/backends/$1.ts',
+    '^\\.\\./plugins/secrets/(.*)\\.js$': '<rootDir>/src/plugins/secrets/$1.ts',
+    '^\\.\\./plugins/auth/(.*)\\.js$': '<rootDir>/src/plugins/auth/$1.ts',
   },
   verbose: true,
 };
