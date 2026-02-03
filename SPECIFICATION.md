@@ -195,6 +195,7 @@ terraflow new [project-name] [options]
 ├── .tfwconfig.yml
 ├── .env.example
 ├── .gitignore
+├── .editorconfig
 └── README.md
 ```
 
