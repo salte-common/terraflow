@@ -406,6 +406,10 @@ export async function generateConfigFiles(
   // gitignore template already includes all languages, no processing needed
   writeFileSync(join(projectDir, '.gitignore'), gitignoreTemplate);
 
+  // .editorconfig
+  const editorconfigTemplate = loadTemplate(join(templatesDir, 'editorconfig.template'));
+  writeFileSync(join(projectDir, '.editorconfig'), editorconfigTemplate);
+
   // README.md
   const readmeTemplate = loadTemplate(join(templatesDir, 'README.md.template'));
   const readmeContent = processTemplate(readmeTemplate, {
@@ -450,6 +454,7 @@ function getScaffoldedFilePaths(language: string): string[] {
     '.tfwconfig.yml',
     '.env.example',
     '.gitignore',
+    '.editorconfig',
     'README.md',
     '.cursor/rules/terraform.mdc',
     '.cursor/rules/ai-metadata.mdc',

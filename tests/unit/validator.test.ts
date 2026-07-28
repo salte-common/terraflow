@@ -10,6 +10,7 @@ import {
 } from '../../src/core/validator';
 import { ValidationError } from '../../src/core/errors';
 import { GitUtils } from '../../src/utils/git';
+import { Logger } from '../../src/utils/logger';
 import type { TerraflowConfig, ValidationConfig } from '../../src/types/config';
 import type { ExecutionContext } from '../../src/types/context';
 import fs from 'fs';
@@ -321,6 +322,64 @@ describe('Validator', () => {
 
       const result = await Validator.validate('plan', config, mockContext);
       expect(result.passed).toBe(true);
+    });
+
+    it('should validate backend config and cloud credentials for plan with s3 backend', async () => {
+      const warnSpy = jest.spyOn(Logger, 'warn').mockImplementation();
+      const contextWithNone: ExecutionContext = {
+        ...mockContext,
+        cloud: { provider: 'none' },
+      };
+      const config: TerraflowConfig = {
+        provider: 'aws',
+        backend: { type: 's3' },
+      };
+
+      const result = await Validator.validate('plan', config, contextWithNone);
+
+      expect(result.passed).toBe(true);
+      expect(warnSpy).toHaveBeenCalledWith(
+        'S3 backend configured but AWS provider not detected'
+      );
+      warnSpy.mockRestore();
+    });
+
+    it('should warn for azurerm backend when Azure provider not detected', async () => {
+      const warnSpy = jest.spyOn(Logger, 'warn').mockImplementation();
+      const contextWithNone: ExecutionContext = {
+        ...mockContext,
+        cloud: { provider: 'none' },
+      };
+      const config: TerraflowConfig = {
+        provider: 'aws',
+        backend: { type: 'azurerm' },
+      };
+
+      await Validator.validate('plan', config, contextWithNone);
+
+      expect(warnSpy).toHaveBeenCalledWith(
+        'Azure backend configured but Azure provider not detected'
+      );
+      warnSpy.mockRestore();
+    });
+
+    it('should warn for gcs backend when GCP provider not detected', async () => {
+      const warnSpy = jest.spyOn(Logger, 'warn').mockImplementation();
+      const contextWithNone: ExecutionContext = {
+        ...mockContext,
+        cloud: { provider: 'none' },
+      };
+      const config: TerraflowConfig = {
+        provider: 'aws',
+        backend: { type: 'gcs' },
+      };
+
+      await Validator.validate('plan', config, contextWithNone);
+
+      expect(warnSpy).toHaveBeenCalledWith(
+        'GCS backend configured but GCP provider not detected'
+      );
+      warnSpy.mockRestore();
     });
   });
 

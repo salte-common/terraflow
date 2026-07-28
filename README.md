@@ -94,7 +94,7 @@ This creates a complete project structure with:
 - Application code templates in your chosen language
 - Pre-configured `.tfwconfig.yml` with backend settings
 - Example `.env.example` file
-- Complete `.gitignore` and `README.md`
+- Complete `.gitignore`, `.editorconfig`, and `README.md`
 - `.ai-metadata.json` — AI code tracking (initialized with scaffold stats)
 - `.cursor/rules/terraform.mdc` — Cursor instructions for Terraflow (delete if not using Cursor)
 - `.cursor/rules/ai-metadata.mdc` — Cursor instructions for `.ai-metadata.json` maintenance

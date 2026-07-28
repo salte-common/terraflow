@@ -81,6 +81,7 @@ Each example project includes:
 ├── .tfwconfig.yml     # Terraflow configuration
 ├── .env.example       # Environment variables template
 ├── .gitignore         # Git ignore rules
+├── .editorconfig      # EditorConfig for consistent formatting
 └── README.md          # Project documentation
 ```
 

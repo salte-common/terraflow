@@ -8,7 +8,7 @@ The `terraflow new` command scaffolds a new infrastructure project with:
 - **Cursor-ready** — Optimized for [Cursor](https://cursor.com/) to get up and running quickly with AI-assisted development
 - Pre-configured Terraform files for your cloud provider
 - Application code templates in your chosen language
-- Complete configuration files (`.tfwconfig.yml`, `.env.example`, `.gitignore`, `README.md`)
+- Complete configuration files (`.tfwconfig.yml`, `.env.example`, `.gitignore`, `.editorconfig`, `README.md`)
 - `.ai-metadata.json` initialized with stats for all scaffolded files (100% AI-authored)
 - Cursor rules for Terraflow usage, `.ai-metadata.json` maintenance, and development standards (language, platform, salte-common/standards)
 - Proper directory structure following best practices
@@ -76,6 +76,7 @@ terraflow new my-infrastructure --force
 ├── .tfwconfig.yml        # Terraflow configuration
 ├── .env.example          # Environment variables template
 ├── .gitignore            # Git ignore rules
+├── .editorconfig         # EditorConfig for consistent formatting
 └── README.md             # Project documentation
 ```
 
