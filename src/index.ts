@@ -174,12 +174,10 @@ Examples:
       .command(cmd)
       .description(`Run terraform ${cmd} with automatic init and workspace selection`)
       .allowExcessArguments(true)
+      .allowUnknownOption()
       .passThroughOptions()
-      .action(async () => {
-        // Get remaining arguments after the command
-        // Commander.js may include the command name in program.args, so filter it out
-        const terraformArgs = program.args.filter((arg) => arg !== cmd);
-        await handleWorkspaceSensitiveCommand(cmd, terraformArgs);
+      .action(async (_options, command) => {
+        await handleWorkspaceSensitiveCommand(cmd, [...command.args]);
       });
   }
 
