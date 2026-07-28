@@ -17,14 +17,14 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: ${{ github.event.workflow_run.head_sha }}
           fetch-depth: 2
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '24.18.0'
           registry-url: 'https://registry.npmjs.org'
@@ -117,9 +117,9 @@ jobs:
         if: |
           steps.version-check.outputs.changed == 'true' &&
           steps.tag-check.outputs.exists == 'false'
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v4
         with:
-          terraform_version: "1.6.0"
+          terraform_version: "1.15.8"
 
       - name: Run tests
         if: |
