@@ -645,10 +645,10 @@
       "tool": "cursor"
     },
     "src/index.ts": {
-      "lines_total": 341,
-      "lines_ai_generated": 341,
+      "lines_total": 339,
+      "lines_ai_generated": 339,
       "ai_percentage": 100,
-      "last_updated": "2026-01-31T17:37:24Z",
+      "last_updated": "2026-06-18T20:20:00Z",
       "tool": "cursor"
     },
     "src/plugins/auth/aws-assume-role.ts": {
@@ -1111,6 +1111,13 @@
       "lines_ai_generated": 197,
       "ai_percentage": 100,
       "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "tests/integration/cli-passthrough.test.ts": {
+      "lines_total": 43,
+      "lines_ai_generated": 43,
+      "ai_percentage": 100,
+      "last_updated": "2026-06-18T20:20:00Z",
       "tool": "cursor"
     },
     "tests/integration/gcs-backend.test.ts": {
