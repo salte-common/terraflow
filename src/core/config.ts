@@ -6,7 +6,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import yaml from 'js-yaml';
+import { load as yamlLoad } from 'js-yaml';
 import type { TerraflowConfig } from '../types/config';
 import { Logger } from '../utils/logger';
 import { ConfigError } from './errors';
@@ -125,7 +125,10 @@ export class ConfigManager {
 
     try {
       const content = fs.readFileSync(configPath, 'utf8');
-      const config = yaml.load(content) as Partial<TerraflowConfig>;
+      if (!content.trim()) {
+        return {};
+      }
+      const config = yamlLoad(content) as Partial<TerraflowConfig>;
       Logger.debug(`Loaded configuration from ${configPath}`);
       Logger.debug(`Backend type in loaded config: ${config.backend?.type || 'undefined'}`);
       return config || {};

@@ -25,7 +25,8 @@ export async function loadBackendPlugin(name: string): Promise<BackendPlugin> {
     return plugin as BackendPlugin;
   } catch (error) {
     throw new Error(
-      `Failed to load backend plugin "${name}": ${error instanceof Error ? error.message : String(error)}`
+      `Failed to load backend plugin "${name}": ${error instanceof Error ? error.message : String(error)}`,
+      { cause: error }
     );
   }
 }
@@ -74,7 +75,8 @@ export async function loadSecretsPlugin(name: string): Promise<SecretsPlugin> {
     return plugin as SecretsPlugin;
   } catch (error) {
     throw new Error(
-      `Failed to load secrets plugin "${name}": ${error instanceof Error ? error.message : String(error)}`
+      `Failed to load secrets plugin "${name}": ${error instanceof Error ? error.message : String(error)}`,
+      { cause: error }
     );
   }
 }
@@ -121,7 +123,8 @@ export async function loadAuthPlugin(name: string): Promise<AuthPlugin> {
     return plugin as AuthPlugin;
   } catch (error) {
     throw new Error(
-      `Failed to load auth plugin "${name}": ${error instanceof Error ? error.message : String(error)}`
+      `Failed to load auth plugin "${name}": ${error instanceof Error ? error.message : String(error)}`,
+      { cause: error }
     );
   }
 }

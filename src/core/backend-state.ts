@@ -40,7 +40,7 @@ export function loadBackendState(workingDir: string): BackendConfig | null {
     const stateContent = readFileSync(statePath, 'utf8');
     const state: BackendState = JSON.parse(stateContent);
     return state.backend || null;
-  } catch (error) {
+  } catch {
     // If state file is invalid, treat as no previous state
     return null;
   }

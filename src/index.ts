@@ -96,7 +96,7 @@ run 'terraform init' and select/create the workspace before executing.
       try {
         const opts = program.opts<CliOptions>();
         await ConfigCommand.show(opts);
-      } catch (error) {
+      } catch {
         process.exit(1);
       }
     });
@@ -113,7 +113,7 @@ run 'terraform init' and select/create the workspace before executing.
     .action(async (options: { output?: string }) => {
       try {
         await ConfigCommand.init(options.output);
-      } catch (error) {
+      } catch {
         process.exit(1);
       }
     });

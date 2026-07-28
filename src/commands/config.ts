@@ -5,7 +5,7 @@
 
 import { writeFileSync, existsSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
-import yaml from 'js-yaml';
+import { dump as yamlDump } from 'js-yaml';
 import type { TerraflowConfig } from '../types/config';
 import { ConfigManager, type CliOptions } from '../core/config';
 import { Logger } from '../utils/logger';
@@ -127,11 +127,10 @@ export class ConfigCommand {
       const maskedConfig = maskSensitiveValues(config) as TerraflowConfig;
 
       // Format as YAML
-      const yamlOutput = yaml.dump(maskedConfig, {
+      const yamlOutput = yamlDump(maskedConfig, {
         indent: 2,
         lineWidth: 120,
-        quotingType: '"',
-        forceQuotes: false,
+        quoteStyle: 'double',
       });
 
       Logger.info('Resolved configuration:');

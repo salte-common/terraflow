@@ -7,20 +7,6 @@
       "last_updated": "2026-01-31T17:37:24Z",
       "tool": "cursor"
     },
-    ".eslintignore": {
-      "lines_total": 6,
-      "lines_ai_generated": 6,
-      "ai_percentage": 100,
-      "last_updated": "2026-01-31T17:37:24Z",
-      "tool": "cursor"
-    },
-    ".eslintrc.js": {
-      "lines_total": 32,
-      "lines_ai_generated": 32,
-      "ai_percentage": 100,
-      "last_updated": "2026-01-31T17:37:24Z",
-      "tool": "cursor"
-    },
     ".github/copilot-instructions.md": {
       "lines_total": 143,
       "lines_ai_generated": 143,
@@ -29,17 +15,17 @@
       "tool": "cursor"
     },
     ".github/workflows/auto-tag-and-publish.yml": {
-      "lines_total": 200,
-      "lines_ai_generated": 200,
+      "lines_total": 199,
+      "lines_ai_generated": 199,
       "ai_percentage": 100,
-      "last_updated": "2026-01-31T17:37:24Z",
+      "last_updated": "2026-07-28T02:30:29Z",
       "tool": "cursor"
     },
     ".github/workflows/ci.yml": {
-      "lines_total": 91,
-      "lines_ai_generated": 91,
+      "lines_total": 90,
+      "lines_ai_generated": 90,
       "ai_percentage": 100,
-      "last_updated": "2026-01-31T17:37:24Z",
+      "last_updated": "2026-07-28T02:30:14Z",
       "tool": "cursor"
     },
     ".gitignore": {
@@ -554,10 +540,10 @@
       "tool": "cursor"
     },
     "jest.config.js": {
-      "lines_total": 23,
-      "lines_ai_generated": 23,
-      "ai_percentage": 100,
-      "last_updated": "2026-01-31T17:37:24Z",
+      "lines_total": 31,
+      "lines_ai_generated": 28,
+      "ai_percentage": 90.3,
+      "last_updated": "2026-07-28T02:41:50Z",
       "tool": "cursor"
     },
     "package-lock.json": {
@@ -568,17 +554,17 @@
       "tool": "cursor"
     },
     "package.json": {
-      "lines_total": 61,
-      "lines_ai_generated": 61,
+      "lines_total": 59,
+      "lines_ai_generated": 59,
       "ai_percentage": 100,
-      "last_updated": "2026-01-31T17:37:24Z",
+      "last_updated": "2026-07-28T02:41:50Z",
       "tool": "cursor"
     },
     "src/commands/config.ts": {
-      "lines_total": 374,
-      "lines_ai_generated": 374,
+      "lines_total": 372,
+      "lines_ai_generated": 372,
       "ai_percentage": 100,
-      "last_updated": "2026-01-31T17:37:24Z",
+      "last_updated": "2026-07-28T02:41:50Z",
       "tool": "cursor"
     },
     "src/commands/new.ts": {
@@ -589,17 +575,17 @@
       "tool": "cursor"
     },
     "src/core/backend-state.ts": {
-      "lines_total": 88,
-      "lines_ai_generated": 88,
+      "lines_total": 87,
+      "lines_ai_generated": 87,
       "ai_percentage": 100,
-      "last_updated": "2026-01-31T17:37:24Z",
+      "last_updated": "2026-07-28T02:41:50Z",
       "tool": "cursor"
     },
     "src/core/config.ts": {
-      "lines_total": 384,
-      "lines_ai_generated": 384,
+      "lines_total": 386,
+      "lines_ai_generated": 386,
       "ai_percentage": 100,
-      "last_updated": "2026-01-31T17:37:24Z",
+      "last_updated": "2026-07-28T02:41:50Z",
       "tool": "cursor"
     },
     "src/core/context.ts": {
@@ -624,10 +610,10 @@
       "tool": "cursor"
     },
     "src/core/plugin-loader.ts": {
-      "lines_total": 128,
-      "lines_ai_generated": 128,
+      "lines_total": 130,
+      "lines_ai_generated": 130,
       "ai_percentage": 100,
-      "last_updated": "2026-01-31T17:37:24Z",
+      "last_updated": "2026-07-28T02:41:50Z",
       "tool": "cursor"
     },
     "src/core/terraform.ts": {
@@ -645,10 +631,10 @@
       "tool": "cursor"
     },
     "src/index.ts": {
-      "lines_total": 339,
-      "lines_ai_generated": 339,
+      "lines_total": 338,
+      "lines_ai_generated": 338,
       "ai_percentage": 100,
-      "last_updated": "2026-06-18T20:20:00Z",
+      "last_updated": "2026-07-28T02:41:50Z",
       "tool": "cursor"
     },
     "src/plugins/auth/aws-assume-role.ts": {
@@ -1327,7 +1313,7 @@
       "lines_total": 26,
       "lines_ai_generated": 26,
       "ai_percentage": 100,
-      "last_updated": "2026-01-31T17:37:24Z",
+      "last_updated": "2026-07-28T02:41:50Z",
       "tool": "cursor"
     },
     ".ai-metadata.json": {
@@ -1335,6 +1321,20 @@
       "lines_ai_generated": 1320,
       "ai_percentage": 100,
       "last_updated": "2026-01-31T17:37:24Z",
+      "tool": "cursor"
+    },
+    "eslint.config.js": {
+      "lines_total": 35,
+      "lines_ai_generated": 35,
+      "ai_percentage": 100,
+      "last_updated": "2026-07-28T02:41:50Z",
+      "tool": "cursor"
+    },
+    "tsconfig.test.json": {
+      "lines_total": 10,
+      "lines_ai_generated": 10,
+      "ai_percentage": 100,
+      "last_updated": "2026-07-28T02:41:50Z",
       "tool": "cursor"
     }
   },
