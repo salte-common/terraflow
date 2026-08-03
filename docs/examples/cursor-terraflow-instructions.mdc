@@ -28,6 +28,53 @@ terraflow --dry-run plan    # Preview without executing
 
 Prefer `terraflow` over `terraform` for plan/apply/destroy — it runs init and workspace selection when needed.
 
+## Project Structure
+
+Terraflow scaffolds these files (do not collapse everything into `main.tf`):
+
+```
+terraform/
+├── _init.tf       # required_version, providers, commented backend
+├── inputs.tf      # variables
+├── locals.tf      # project_name, common_tags/labels
+├── main.tf        # resources and data sources (no separate data.tf)
+├── outputs.tf     # output values (examples commented)
+└── modules/
+    ├── inputs.tf
+    ├── main.tf
+    └── outputs.tf
+src/
+├── main/          # serverless function handler (not empty)
+└── test/          # unit tests for the handler
+```
+
+### `terraform/_init.tf`
+
+- `required_version = ">= 1.0"`
+- Cloud provider: AWS/GCP `~> 5.0`, Azure `~> 3.0`
+- Always includes `hashicorp/archive` `~> 2.0`
+- Backend block is commented; configure remote state via `.tfwconfig.yml` and `terraflow`
+
+### `.env.example`
+
+Copy to `.env` and uncomment what you need:
+
+- **AWS:** `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`
+- **Azure:** `ARM_CLIENT_ID`, `ARM_CLIENT_SECRET`, `ARM_SUBSCRIPTION_ID`, `ARM_TENANT_ID`
+- **GCP:** `GOOGLE_APPLICATION_CREDENTIALS`, `GCP_PROJECT_ID`
+- **Terraflow:** `TERRAFLOW_WORKSPACE`, `TERRAFLOW_SKIP_COMMIT_CHECK`
+- **TF vars:** `TF_VAR_*` (e.g. `TF_VAR_environment`)
+
+### Application code (`src/`)
+
+Not an empty directory. Scaffolding creates a Hello World handler plus tests:
+
+- JavaScript/TypeScript → `src/main/index.js|ts` + `src/test/index.spec.js|ts`
+- Python → `src/main/index.py` + `src/test/test_main.py`
+- Go → `src/main/index.go` + `src/test/main_test.go`
+
+Terraform packages `src/main` (via `archive_file` or equivalent) into Lambda / Azure Functions / Cloud Functions.
+
 ## Workspace Derivation
 
 Terraflow derives workspaces in this order (first match wins):

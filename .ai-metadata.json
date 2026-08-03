@@ -372,10 +372,10 @@
       "tool": "cursor"
     },
     "docs/examples/cursor-terraflow-instructions.mdc": {
-      "lines_total": 69,
-      "lines_ai_generated": 69,
+      "lines_total": 118,
+      "lines_ai_generated": 118,
       "ai_percentage": 100,
-      "last_updated": "2026-01-31T18:09:28Z",
+      "last_updated": "2026-08-03T18:07:18Z",
       "tool": "cursor"
     },
     "docs/examples/gcp-gcs.yml": {
@@ -876,10 +876,10 @@
       "tool": "cursor"
     },
     "src/templates/config/cursor-terraflow-instructions.mdc.template": {
-      "lines_total": 69,
-      "lines_ai_generated": 69,
+      "lines_total": 118,
+      "lines_ai_generated": 118,
       "ai_percentage": 100,
-      "last_updated": "2026-01-31T18:15:00Z",
+      "last_updated": "2026-08-03T18:07:18Z",
       "tool": "cursor"
     },
     "src/templates/config/env.example.template": {
