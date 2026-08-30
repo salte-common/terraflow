@@ -147,19 +147,21 @@ export class NewCommand {
     if (projectName) {
       Logger.info(`  1. cd ${projectName}`);
       Logger.info('  2. cp .env.example .env');
+      Logger.info('  3. Install IDE extensions (see README → IDE setup) for lint/format squiggles');
     } else {
       Logger.info('  1. cp .env.example .env');
-      Logger.info('  2. Edit .env with your credentials');
+      Logger.info('  2. Install IDE extensions (see README → IDE setup) for lint/format squiggles');
+      Logger.info('  3. Edit .env with your credentials');
     }
     if (projectName) {
-      Logger.info('  3. Edit .env with your credentials');
+      Logger.info('  4. Edit .env with your credentials');
+      Logger.info('  5. Review and update .tfwconfig.yml (use ${ENV_VAR}, never literal secrets)');
+      Logger.info('  6. terraflow init    # Initialize terraform with backend');
+      Logger.info('  7. terraflow plan    # Plan changes (auto init + workspace)');
+    } else {
       Logger.info('  4. Review and update .tfwconfig.yml (use ${ENV_VAR}, never literal secrets)');
       Logger.info('  5. terraflow init    # Initialize terraform with backend');
       Logger.info('  6. terraflow plan    # Plan changes (auto init + workspace)');
-    } else {
-      Logger.info('  3. Review and update .tfwconfig.yml (use ${ENV_VAR}, never literal secrets)');
-      Logger.info('  4. terraflow init    # Initialize terraform with backend');
-      Logger.info('  5. terraflow plan    # Plan changes (auto init + workspace)');
     }
     Logger.info('');
     Logger.info('Documentation: ./README.md');

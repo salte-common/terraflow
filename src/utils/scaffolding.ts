@@ -296,6 +296,41 @@ function getBackendType(provider: string): string {
 }
 
 /**
+ * Markdown list of recommended Cursor/VS Code extensions for IDE visual feedback
+ * @param language - Programming language (javascript, typescript, python, go)
+ * @returns Markdown bullet list of extensions
+ */
+function getIdeExtensionsMarkdown(language: string): string {
+  const terraformExtension =
+    '- [HashiCorp Terraform](https://marketplace.visualstudio.com/items?itemName=hashicorp.terraform) (`hashicorp.terraform`) — format and syntax checking for `.tf` files';
+
+  const extensionLists: Record<string, string> = {
+    javascript: [
+      '- [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) (`dbaeumer.vscode-eslint`) — inline lint errors and fix-on-save',
+      '- [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) (`esbenp.prettier-vscode`) — format on save',
+      terraformExtension,
+    ].join('\n'),
+    typescript: [
+      '- [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) (`dbaeumer.vscode-eslint`) — inline lint errors and fix-on-save',
+      '- [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) (`esbenp.prettier-vscode`) — format on save',
+      terraformExtension,
+    ].join('\n'),
+    python: [
+      '- [Python](https://marketplace.visualstudio.com/items?itemName=ms-python.python) (`ms-python.python`) — language support and syntax checking',
+      '- [Pylint](https://marketplace.visualstudio.com/items?itemName=ms-python.pylint) (`ms-python.pylint`) — inline lint errors',
+      '- [Black Formatter](https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter) (`ms-python.black-formatter`) — format on save',
+      terraformExtension,
+    ].join('\n'),
+    go: [
+      '- [Go](https://marketplace.visualstudio.com/items?itemName=golang.go) (`golang.go`) — format, syntax checking, and `golangci-lint` on save',
+      terraformExtension,
+    ].join('\n'),
+  };
+
+  return extensionLists[language] ?? extensionLists.javascript;
+}
+
+/**
  * Build template variables for development standards Cursor rules
  * @param language - Programming language (javascript, typescript, python, go)
  * @param provider - Cloud provider (aws, azure, gcp)
@@ -396,6 +431,7 @@ function getDevelopmentStandardsVariables(
     'lint-command': lang.lintCommand,
     'test-command': lang.testCommand,
     'build-validation': lang.buildValidation,
+    'ide-extensions-md': getIdeExtensionsMarkdown(language),
   };
 }
 
@@ -443,7 +479,8 @@ export async function generateConfigFiles(
   const readmeTemplate = loadTemplate(join(templatesDir, 'README.md.template'));
   const readmeContent = processTemplate(readmeTemplate, {
     'project-name': projectName,
-    provider: provider, // Use original provider name for README
+    provider: provider,
+    'ide-extensions-md': getIdeExtensionsMarkdown(language),
   });
   writeFileSync(join(projectDir, 'README.md'), readmeContent);
 

@@ -372,10 +372,10 @@
       "tool": "cursor"
     },
     "docs/examples/cursor-terraflow-instructions.mdc": {
-      "lines_total": 152,
-      "lines_ai_generated": 152,
+      "lines_total": 153,
+      "lines_ai_generated": 153,
       "ai_percentage": 100,
-      "last_updated": "2026-08-30T15:30:00Z",
+      "last_updated": "2026-08-30T16:00:00Z",
       "tool": "cursor"
     },
     "docs/examples/gcp-gcs.yml": {
@@ -533,10 +533,10 @@
       "tool": "cursor"
     },
     "docs/scaffolding.md": {
-      "lines_total": 353,
-      "lines_ai_generated": 353,
+      "lines_total": 403,
+      "lines_ai_generated": 403,
       "ai_percentage": 100,
-      "last_updated": "2026-01-31T18:15:00Z",
+      "last_updated": "2026-08-30T16:00:00Z",
       "tool": "cursor"
     },
     "jest.config.js": {
@@ -876,17 +876,17 @@
       "tool": "cursor"
     },
     "src/templates/config/cursor-development-standards.mdc.template": {
-      "lines_total": 80,
-      "lines_ai_generated": 80,
+      "lines_total": 86,
+      "lines_ai_generated": 86,
       "ai_percentage": 100,
-      "last_updated": "2026-08-30T15:30:00Z",
+      "last_updated": "2026-08-30T16:00:00Z",
       "tool": "cursor"
     },
     "src/templates/config/cursor-terraflow-instructions.mdc.template": {
-      "lines_total": 152,
-      "lines_ai_generated": 152,
+      "lines_total": 153,
+      "lines_ai_generated": 153,
       "ai_percentage": 100,
-      "last_updated": "2026-08-30T15:30:00Z",
+      "last_updated": "2026-08-30T16:00:00Z",
       "tool": "cursor"
     },
     "src/templates/config/env.example.template": {
@@ -1100,10 +1100,10 @@
       "tool": "cursor"
     },
     "src/utils/scaffolding.ts": {
-      "lines_total": 839,
-      "lines_ai_generated": 839,
+      "lines_total": 876,
+      "lines_ai_generated": 876,
       "ai_percentage": 100,
-      "last_updated": "2026-08-30T15:45:00Z",
+      "last_updated": "2026-08-30T16:00:00Z",
       "tool": "cursor"
     },
     "src/utils/templates.ts": {
@@ -1170,10 +1170,10 @@
       "tool": "cursor"
     },
     "tests/integration/new.test.ts": {
-      "lines_total": 333,
-      "lines_ai_generated": 333,
+      "lines_total": 335,
+      "lines_ai_generated": 335,
       "ai_percentage": 100,
-      "last_updated": "2026-08-30T15:45:00Z",
+      "last_updated": "2026-08-30T16:00:00Z",
       "tool": "cursor"
     },
     "tests/integration/s3-backend.test.ts": {

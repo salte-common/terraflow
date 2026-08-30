@@ -22,6 +22,12 @@ This project was scaffolded with **<language-display>**, **<provider-display>**,
 
 If you cannot access or read the standards, stop and inform the user. Do not proceed without this confirmation.
 
+## IDE visual feedback (prerequisite)
+
+`.vscode/settings.json` wires up format-on-save and lint integration. **Install these Cursor / VS Code extensions** for inline errors, formatting, and syntax checking — settings alone are not enough:
+
+<ide-extensions-md>
+
 ## ⚠️ MANDATORY: Validation After Every Change
 
 **After creating or modifying application code (`src/` or related config), you MUST run validation before finishing the task.**

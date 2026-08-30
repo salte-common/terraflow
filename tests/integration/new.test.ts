@@ -108,6 +108,8 @@ describe('NewCommand Integration Tests', () => {
       verifyFileContent(projectDir, 'scripts/setup-githooks.sh', 'core.hooksPath .githooks');
       verifyFileExists(projectDir, 'README.md');
       verifyFileContent(projectDir, 'README.md', `# ${projectName}`);
+      verifyFileContent(projectDir, 'README.md', 'IDE setup (Cursor / VS Code)');
+      verifyFileContent(projectDir, 'README.md', 'dbaeumer.vscode-eslint');
 
       // Git repository initialized with hooks and initial commit
       verifyFileExists(projectDir, '.git/HEAD');

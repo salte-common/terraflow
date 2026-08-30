@@ -10,6 +10,15 @@ Infrastructure as Code project managed with [Terraflow](https://github.com/salte
 - [Node.js](https://nodejs.org/) >= 18.x
 - [Terraflow](https://www.npmjs.com/package/terraflow): `npm install -g terraflow`
 - Cloud provider credentials (<provider>)
+- [Cursor](https://cursor.com/) or [VS Code](https://code.visualstudio.com/) with the extensions below (required for inline linting, formatting, and syntax checking)
+
+## IDE setup (Cursor / VS Code)
+
+Scaffolding includes `.vscode/settings.json` for format-on-save and lint integration. **The settings file alone does not show squiggles or format code** — you must install the matching editor extensions:
+
+<ide-extensions-md>
+
+Open the project in Cursor or VS Code after installing extensions. Reload the window if diagnostics do not appear immediately.
 
 ## Getting Started
 

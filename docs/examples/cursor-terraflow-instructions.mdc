@@ -43,6 +43,7 @@ Run from the **project root**:
 - Actually **run** the commands — do not only describe them.
 - Fix every format diff, validation error, and provider/config issue before you consider the task complete.
 - Prefer `terraflow fmt` over raw `terraform fmt` for consistency with this project.
+- Install the [HashiCorp Terraform](https://marketplace.visualstudio.com/items?itemName=hashicorp.terraform) extension (`hashicorp.terraform`) for inline `.tf` diagnostics and format-on-save (see README **IDE setup**).
 
 **Required checklist — hard stop if not completed:**
 - [ ] Terraform formatted (`terraflow fmt`)

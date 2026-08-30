@@ -9,8 +9,10 @@ The `terraflow new` command scaffolds a new infrastructure project with:
 - Pre-configured Terraform files for your cloud provider
 - Application code templates in your chosen language
 - Complete configuration files (`.tfwconfig.yml`, `.env.example`, `.gitignore`, `.editorconfig`, `README.md`)
+- `.vscode/settings.json` for format-on-save and lint integration (requires editor extensions — see [IDE setup](#ide-setup-cursor--vs-code))
+- Git repository with pre-commit secret scanning and an initial commit
 - `.ai-metadata.json` initialized with stats for all scaffolded files (100% AI-authored)
-- Cursor rules for Terraflow usage, `.ai-metadata.json` maintenance, and development standards (language, platform, salte-common/standards)
+- Cursor rules for Terraflow usage, `.ai-metadata.json` maintenance, validation after changes, and development standards (language, platform, salte-common/standards)
 - Proper directory structure following best practices
 
 ## Command Syntax
@@ -57,7 +59,13 @@ terraflow new my-infrastructure --force
 │   └── rules/
 │       ├── terraform.mdc             # Cursor instructions for Terraflow usage
 │       ├── ai-metadata.mdc           # Cursor instructions for .ai-metadata.json maintenance
-│       └── development-standards.mdc # Cursor instructions (language, platform, salte-common/standards)
+│       └── development-standards.mdc # Cursor instructions (language, platform, validation, salte-common/standards)
+├── .githooks/
+│   └── pre-commit                    # Secret-scanning pre-commit hook
+├── .vscode/
+│   └── settings.json                 # Format-on-save and lint integration (requires extensions)
+├── scripts/
+│   └── setup-githooks.sh             # Re-enable git hooks if needed
 ├── src/
 │   ├── main/
 │   │   └── index.js (or .ts, .py, .go based on --language)
@@ -75,9 +83,9 @@ terraflow new my-infrastructure --force
 │   └── outputs.tf        # Output values
 ├── .tfwconfig.yml        # Terraflow configuration
 ├── .env.example          # Environment variables template
-├── .gitignore            # Git ignore rules
+├── .gitignore            # Git ignore rules (.vscode/settings.json is committed)
 ├── .editorconfig         # EditorConfig for consistent formatting
-└── README.md             # Project documentation
+└── README.md             # Project documentation (includes IDE extension prerequisites)
 ```
 
 ## Cloud Provider Examples
@@ -184,6 +192,35 @@ terraflow new my-project --language go
 - `go.mod` - Go module definition
 - `.gitignore` includes Go patterns
 
+## IDE setup (Cursor / VS Code)
+
+Scaffolded projects include `.vscode/settings.json` configured for format-on-save, lint-on-save, and Terraform formatting. **These settings only take full effect when the matching editor extensions are installed.** Without them, you will not get inline squiggles, automatic formatting, or syntax diagnostics in the editor.
+
+Install extensions in [Cursor](https://cursor.com/) or [VS Code](https://code.visualstudio.com/) before developing. The generated `README.md` lists the exact extensions for your `--language` choice.
+
+### Recommended extensions by language
+
+| Language | Extensions (Marketplace ID) | Purpose |
+|----------|------------------------------|---------|
+| **JavaScript** | `dbaeumer.vscode-eslint`, `esbenp.prettier-vscode`, `hashicorp.terraform` | ESLint squiggles, Prettier format-on-save, Terraform |
+| **TypeScript** | `dbaeumer.vscode-eslint`, `esbenp.prettier-vscode`, `hashicorp.terraform` | ESLint squiggles, Prettier format-on-save, Terraform |
+| **Python** | `ms-python.python`, `ms-python.pylint`, `ms-python.black-formatter`, `hashicorp.terraform` | Syntax checking, Pylint squiggles, Black format-on-save, Terraform |
+| **Go** | `golang.go`, `hashicorp.terraform` | gofmt, golangci-lint on save, syntax checking, Terraform |
+
+**All languages** include Terraform extension support because every scaffolded project has a `terraform/` directory.
+
+### What you get with extensions installed
+
+- **Red/yellow squiggles** for lint and syntax errors in `src/` and `terraform/`
+- **Format on save** for application code and `.tf` files
+- **ESLint fix-on-save** (JavaScript/TypeScript) via `source.fixAll.eslint`
+
+### Cursor rules vs editor extensions
+
+Cursor rules in `.cursor/rules/` instruct the AI agent to run `npm run lint`, `pytest`, `terraflow fmt`, etc. after changes. **Editor extensions provide real-time visual feedback while you type** — both are complementary.
+
+If diagnostics do not appear after installing extensions, reload the editor window and ensure project dependencies are installed (`npm install`, `pip install -r requirements.txt`, etc.).
+
 ## Project Name Validation
 
 Project names must:
@@ -240,38 +277,42 @@ After running `terraflow new`, follow these steps:
    cd my-project
    ```
 
-2. **Copy environment file:**
+2. **Install IDE extensions** (see [IDE setup](#ide-setup-cursor--vs-code) and your project `README.md`):
+   - Required for inline linting, formatting, and syntax checking
+   - `.vscode/settings.json` is already configured; extensions activate it
+
+3. **Copy environment file:**
    ```bash
    cp .env.example .env
    ```
 
-3. **Edit `.env` with your credentials:**
+4. **Edit `.env` with your credentials:**
    - AWS: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`
    - Azure: `ARM_CLIENT_ID`, `ARM_CLIENT_SECRET`, `ARM_SUBSCRIPTION_ID`, `ARM_TENANT_ID`
    - GCP: `GOOGLE_APPLICATION_CREDENTIALS`, `GCP_PROJECT_ID`
 
-4. **Review and update `.tfwconfig.yml`:**
+5. **Review and update `.tfwconfig.yml`:**
    - The `provider` field is automatically set based on the `--provider` flag used with `terraflow new`
    - Configure your backend bucket/storage account
    - Set up secrets provider if needed
    - Adjust workspace strategy if needed
 
-5. **Initialize Terraform:**
+6. **Initialize Terraform:**
    ```bash
    terraflow init
    ```
 
-6. **Plan your infrastructure:**
+7. **Plan your infrastructure:**
    ```bash
    terraflow plan
    ```
 
-7. **Apply your infrastructure:**
+8. **Apply your infrastructure:**
    ```bash
    terraflow apply
    ```
 
-8. **Optional: Create `SPECIFICATION.md`** — Add a project specification document in the root to define requirements, architecture, and conventions. Cursor will read this file to inform code suggestions.
+9. **Optional: Create `SPECIFICATION.md`** — Add a project specification document in the root to define requirements, architecture, and conventions. Cursor will read this file to inform code suggestions.
 
 ## Template Customization
 
