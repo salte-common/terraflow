@@ -13,6 +13,7 @@ import {
   generateGitHooks,
   configureGitHooksPath,
   initializeGitRepository,
+  generateEditorSettings,
 } from '../../src/utils/scaffolding';
 import { mkdirSync, writeFileSync, rmSync, readFileSync } from 'fs';
 import { join } from 'path';
@@ -213,6 +214,34 @@ describe('Scaffolding Utilities', () => {
       expect(existsSync(setupScript)).toBe(true);
       expect(readFileSync(preCommit, 'utf8')).toContain('AKIA[0-9A-Z]{16}');
       expect(readFileSync(setupScript, 'utf8')).toContain('core.hooksPath .githooks');
+    });
+  });
+
+  describe('generateEditorSettings', () => {
+    const testDir = join(__dirname, '..', '..', 'tmp', 'vscode-settings-test');
+
+    beforeEach(() => {
+      if (existsSync(testDir)) {
+        rmSync(testDir, { recursive: true, force: true });
+      }
+      mkdirSync(testDir, { recursive: true });
+    });
+
+    afterEach(() => {
+      if (existsSync(testDir)) {
+        rmSync(testDir, { recursive: true, force: true });
+      }
+    });
+
+    it('should create language-specific VS Code settings', () => {
+      generateEditorSettings(testDir, 'typescript');
+
+      const settingsPath = join(testDir, '.vscode', 'settings.json');
+      expect(existsSync(settingsPath)).toBe(true);
+      const settings = readFileSync(settingsPath, 'utf8');
+      expect(settings).toContain('"editor.formatOnSave": true');
+      expect(settings).toContain('source.fixAll.eslint');
+      expect(settings).toContain('hashicorp.terraform');
     });
   });
 

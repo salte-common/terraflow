@@ -121,6 +121,18 @@ describe('NewCommand Integration Tests', () => {
         encoding: 'utf8',
       }).trim();
       expect(lastCommit).toBe('Initialized');
+
+      // Cursor rules include mandatory validation directives
+      verifyFileExists(projectDir, '.cursor/rules/development-standards.mdc');
+      verifyFileContent(
+        projectDir,
+        '.cursor/rules/development-standards.mdc',
+        'MANDATORY: Validation After Every Change'
+      );
+      verifyFileContent(projectDir, '.cursor/rules/development-standards.mdc', 'npm run lint');
+      verifyFileContent(projectDir, '.cursor/rules/terraform.mdc', 'MANDATORY: Terraform Validation');
+      verifyFileExists(projectDir, '.vscode/settings.json');
+      verifyFileContent(projectDir, '.vscode/settings.json', '"editor.formatOnSave": true');
     });
   });
 

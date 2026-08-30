@@ -22,6 +22,29 @@ This project was scaffolded with **<language-display>**, **<provider-display>**,
 
 If you cannot access or read the standards, stop and inform the user. Do not proceed without this confirmation.
 
+## ⚠️ MANDATORY: Validation After Every Change
+
+**After creating or modifying application code (`src/` or related config), you MUST run validation before finishing the task.**
+
+Run these from the **project root** in the terminal (install dependencies first if needed, e.g. `npm install` or `pip install -r requirements.txt`):
+
+| Step | Command |
+|------|---------|
+| Lint | `<lint-command>` |
+| Test | `<test-command>` |
+| Build | `<build-validation>` |
+
+**Rules:**
+- Actually **run** the commands — do not only describe them.
+- Fix every lint error, test failure, and build failure before you consider the task complete.
+- If you changed tests, ensure they pass; if you changed implementation, add or update tests as needed.
+- Skip the build step only when it says "Not required" above.
+
+**Required checklist — hard stop if not completed:**
+- [ ] Lint passed (`<lint-command>`)
+- [ ] Tests passed (`<test-command>`)
+- [ ] Build validation passed (or confirmed not required)
+
 ## Assumed Context (from `terraflow new`)
 
 | Setting | Value |

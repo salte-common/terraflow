@@ -307,32 +307,62 @@ function getDevelopmentStandardsVariables(
 ): Record<string, string> {
   const languageMap: Record<
     string,
-    { display: string; testFramework: string; runtime: string; standards: string }
+    {
+      display: string;
+      testFramework: string;
+      runtime: string;
+      standards: string;
+      lintCommand: string;
+      testCommand: string;
+      buildValidation: string;
+    }
   > = {
     javascript: {
       display: 'JavaScript',
       testFramework: 'Jest',
       runtime: 'Node.js',
       standards: 'JavaScript Standards',
+      lintCommand: 'npm run lint',
+      testCommand: 'npm test',
+      buildValidation: 'Not required — JavaScript has no compile step.',
     },
     typescript: {
       display: 'TypeScript',
       testFramework: 'Jest',
       runtime: 'Node.js',
       standards: 'JavaScript Standards',
+      lintCommand: 'npm run lint',
+      testCommand: 'npm test',
+      buildValidation: 'npm run build',
     },
     python: {
       display: 'Python',
       testFramework: 'pytest',
       runtime: 'Python',
       standards: 'Python Standards',
+      lintCommand: 'pylint src',
+      testCommand: 'pytest',
+      buildValidation: 'python -m compileall src/main src/test',
     },
     go: {
       display: 'Go',
       testFramework: 'go test',
       runtime: 'Go',
       standards: 'Development Standards',
+      lintCommand: 'golangci-lint run ./...',
+      testCommand: 'go test ./...',
+      buildValidation: 'go build ./...',
     },
+  };
+
+  const defaultLang = {
+    display: language,
+    testFramework: 'tests',
+    runtime: language,
+    standards: 'Development Standards',
+    lintCommand: 'npm run lint',
+    testCommand: 'npm test',
+    buildValidation: 'npm run build',
   };
 
   const providerMap: Record<string, { display: string; platformStandards: string }> = {
@@ -350,12 +380,7 @@ function getDevelopmentStandardsVariables(
     },
   };
 
-  const lang = languageMap[language] ?? {
-    display: language,
-    testFramework: 'tests',
-    runtime: language,
-    standards: 'Development Standards',
-  };
+  const lang = languageMap[language] ?? defaultLang;
   const prov = providerMap[provider] ?? {
     display: provider,
     platformStandards: 'platform-specific standards',
@@ -368,6 +393,9 @@ function getDevelopmentStandardsVariables(
     runtime: lang.runtime,
     'language-standards': lang.standards,
     'platform-standards': prov.platformStandards,
+    'lint-command': lang.lintCommand,
+    'test-command': lang.testCommand,
+    'build-validation': lang.buildValidation,
   };
 }
 
@@ -441,9 +469,28 @@ export async function generateConfigFiles(
   const devStandardsContent = processTemplate(devStandardsTemplate, devStandardsVars);
   writeFileSync(join(cursorRulesDir, 'development-standards.mdc'), devStandardsContent);
 
+  generateEditorSettings(projectDir, language);
   generateGitHooks(projectDir);
 
   Logger.debug('Configuration files generated successfully');
+}
+
+/**
+ * Generate VS Code / Cursor editor settings for format-on-save and linting
+ * @param projectDir - Root directory of the project
+ * @param language - Programming language (javascript, typescript, python, go)
+ */
+export function generateEditorSettings(projectDir: string, language: string): void {
+  const supportedLanguages = ['javascript', 'typescript', 'python', 'go'];
+  const settingsLanguage = supportedLanguages.includes(language) ? language : 'javascript';
+  const settingsTemplate = loadTemplate(
+    join('config', 'vscode', `settings.${settingsLanguage}.json.template`)
+  );
+  const vscodeDir = join(projectDir, '.vscode');
+  mkdirSync(vscodeDir, { recursive: true });
+  writeFileSync(join(vscodeDir, 'settings.json'), settingsTemplate);
+
+  Logger.debug(`Editor settings generated in .vscode/ (${settingsLanguage})`);
 }
 
 /**
@@ -592,6 +639,7 @@ function getScaffoldedFilePaths(language: string): string[] {
     '.cursor/rules/development-standards.mdc',
     '.githooks/pre-commit',
     'scripts/setup-githooks.sh',
+    '.vscode/settings.json',
     'terraform/_init.tf',
     'terraform/inputs.tf',
     'terraform/locals.tf',

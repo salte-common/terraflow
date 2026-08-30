@@ -28,6 +28,26 @@ terraflow --dry-run plan    # Preview without executing
 
 Prefer `terraflow` over `terraform` for plan/apply/destroy — it runs init and workspace selection when needed.
 
+## ⚠️ MANDATORY: Terraform Validation After Every Change
+
+**After creating or modifying Terraform files (`terraform/**/*.tf`, `*.tf`), you MUST run validation before finishing the task.**
+
+Run from the **project root**:
+
+| Step | Command |
+|------|---------|
+| Format | `terraflow fmt` |
+| Validate | `terraflow init` (if not done) then `terraform -chdir=terraform validate` |
+
+**Rules:**
+- Actually **run** the commands — do not only describe them.
+- Fix every format diff, validation error, and provider/config issue before you consider the task complete.
+- Prefer `terraflow fmt` over raw `terraform fmt` for consistency with this project.
+
+**Required checklist — hard stop if not completed:**
+- [ ] Terraform formatted (`terraflow fmt`)
+- [ ] Terraform validated (`terraform -chdir=terraform validate`)
+
 ## Project Structure
 
 Terraflow scaffolds these files (do not collapse everything into `main.tf`):

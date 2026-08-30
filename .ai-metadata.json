@@ -372,10 +372,10 @@
       "tool": "cursor"
     },
     "docs/examples/cursor-terraflow-instructions.mdc": {
-      "lines_total": 132,
-      "lines_ai_generated": 132,
+      "lines_total": 152,
+      "lines_ai_generated": 152,
       "ai_percentage": 100,
-      "last_updated": "2026-08-30T15:15:00Z",
+      "last_updated": "2026-08-30T15:30:00Z",
       "tool": "cursor"
     },
     "docs/examples/gcp-gcs.yml": {
@@ -875,11 +875,18 @@
       "last_updated": "2026-08-30T15:15:00Z",
       "tool": "cursor"
     },
-    "src/templates/config/cursor-terraflow-instructions.mdc.template": {
-      "lines_total": 132,
-      "lines_ai_generated": 132,
+    "src/templates/config/cursor-development-standards.mdc.template": {
+      "lines_total": 80,
+      "lines_ai_generated": 80,
       "ai_percentage": 100,
-      "last_updated": "2026-08-30T15:15:00Z",
+      "last_updated": "2026-08-30T15:30:00Z",
+      "tool": "cursor"
+    },
+    "src/templates/config/cursor-terraflow-instructions.mdc.template": {
+      "lines_total": 152,
+      "lines_ai_generated": 152,
+      "ai_percentage": 100,
+      "last_updated": "2026-08-30T15:30:00Z",
       "tool": "cursor"
     },
     "src/templates/config/env.example.template": {
@@ -893,7 +900,7 @@
       "lines_total": 41,
       "lines_ai_generated": 41,
       "ai_percentage": 100,
-      "last_updated": "2026-01-31T17:37:24Z",
+      "last_updated": "2026-08-30T15:45:00Z",
       "tool": "cursor"
     },
     "src/templates/config/githooks/pre-commit.template": {
@@ -908,6 +915,34 @@
       "lines_ai_generated": 17,
       "ai_percentage": 100,
       "last_updated": "2026-08-30T15:15:00Z",
+      "tool": "cursor"
+    },
+    "src/templates/config/vscode/settings.go.json.template": {
+      "lines_total": 21,
+      "lines_ai_generated": 21,
+      "ai_percentage": 100,
+      "last_updated": "2026-08-30T15:45:00Z",
+      "tool": "cursor"
+    },
+    "src/templates/config/vscode/settings.javascript.json.template": {
+      "lines_total": 22,
+      "lines_ai_generated": 22,
+      "ai_percentage": 100,
+      "last_updated": "2026-08-30T15:45:00Z",
+      "tool": "cursor"
+    },
+    "src/templates/config/vscode/settings.python.json.template": {
+      "lines_total": 23,
+      "lines_ai_generated": 23,
+      "ai_percentage": 100,
+      "last_updated": "2026-08-30T15:45:00Z",
+      "tool": "cursor"
+    },
+    "src/templates/config/vscode/settings.typescript.json.template": {
+      "lines_total": 25,
+      "lines_ai_generated": 25,
+      "ai_percentage": 100,
+      "last_updated": "2026-08-30T15:45:00Z",
       "tool": "cursor"
     },
     "src/templates/config/tfwconfig.yml.template": {
@@ -1065,10 +1100,10 @@
       "tool": "cursor"
     },
     "src/utils/scaffolding.ts": {
-      "lines_total": 791,
-      "lines_ai_generated": 791,
+      "lines_total": 839,
+      "lines_ai_generated": 839,
       "ai_percentage": 100,
-      "last_updated": "2026-08-30T15:15:00Z",
+      "last_updated": "2026-08-30T15:45:00Z",
       "tool": "cursor"
     },
     "src/utils/templates.ts": {
@@ -1135,10 +1170,10 @@
       "tool": "cursor"
     },
     "tests/integration/new.test.ts": {
-      "lines_total": 321,
-      "lines_ai_generated": 321,
+      "lines_total": 333,
+      "lines_ai_generated": 333,
       "ai_percentage": 100,
-      "last_updated": "2026-08-30T15:15:00Z",
+      "last_updated": "2026-08-30T15:45:00Z",
       "tool": "cursor"
     },
     "tests/integration/s3-backend.test.ts": {
@@ -1303,10 +1338,10 @@
       "tool": "cursor"
     },
     "tests/unit/scaffolding.test.ts": {
-      "lines_total": 275,
-      "lines_ai_generated": 275,
+      "lines_total": 304,
+      "lines_ai_generated": 304,
       "ai_percentage": 100,
-      "last_updated": "2026-08-30T15:15:00Z",
+      "last_updated": "2026-08-30T15:45:00Z",
       "tool": "cursor"
     },
     "tests/unit/templates.test.ts": {
