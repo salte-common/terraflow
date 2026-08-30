@@ -29,10 +29,10 @@
       "tool": "cursor"
     },
     ".gitignore": {
-      "lines_total": 42,
-      "lines_ai_generated": 42,
+      "lines_total": 49,
+      "lines_ai_generated": 49,
       "ai_percentage": 100,
-      "last_updated": "2026-01-31T17:37:24Z",
+      "last_updated": "2026-08-30T17:05:00Z",
       "tool": "cursor"
     },
     ".npmignore": {
@@ -45,13 +45,6 @@
     ".prettierrc": {
       "lines_total": 12,
       "lines_ai_generated": 12,
-      "ai_percentage": 100,
-      "last_updated": "2026-01-31T17:37:24Z",
-      "tool": "cursor"
-    },
-    ".tfwconfig.yml": {
-      "lines_total": 175,
-      "lines_ai_generated": 175,
       "ai_percentage": 100,
       "last_updated": "2026-01-31T17:37:24Z",
       "tool": "cursor"
@@ -1109,20 +1102,6 @@
     "src/utils/templates.ts": {
       "lines_total": 71,
       "lines_ai_generated": 71,
-      "ai_percentage": 100,
-      "last_updated": "2026-01-31T17:37:24Z",
-      "tool": "cursor"
-    },
-    "terraform/.terraflow/state.json": {
-      "lines_total": 7,
-      "lines_ai_generated": 7,
-      "ai_percentage": 100,
-      "last_updated": "2026-01-31T17:37:24Z",
-      "tool": "cursor"
-    },
-    "terraform/.terraform/environment": {
-      "lines_total": 1,
-      "lines_ai_generated": 1,
       "ai_percentage": 100,
       "last_updated": "2026-01-31T17:37:24Z",
       "tool": "cursor"

@@ -39,3 +39,11 @@ temp/
 Thumbs.db
 .DS_Store
 
+# Terraform (not used in this CLI repo; ignore if created by local terraflow/terraform runs)
+.terraform/
+.terraflow/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+terraform/
+
