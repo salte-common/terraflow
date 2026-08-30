@@ -568,10 +568,10 @@
       "tool": "cursor"
     },
     "src/commands/new.ts": {
-      "lines_total": 167,
-      "lines_ai_generated": 167,
+      "lines_total": 169,
+      "lines_ai_generated": 169,
       "ai_percentage": 100,
-      "last_updated": "2026-08-30T15:15:00Z",
+      "last_updated": "2026-08-30T16:00:00Z",
       "tool": "cursor"
     },
     "src/core/backend-state.ts": {
@@ -869,10 +869,10 @@
       "tool": "cursor"
     },
     "src/templates/config/README.md.template": {
-      "lines_total": 105,
-      "lines_ai_generated": 105,
+      "lines_total": 114,
+      "lines_ai_generated": 114,
       "ai_percentage": 100,
-      "last_updated": "2026-08-30T15:15:00Z",
+      "last_updated": "2026-08-30T16:00:00Z",
       "tool": "cursor"
     },
     "src/templates/config/cursor-development-standards.mdc.template": {
