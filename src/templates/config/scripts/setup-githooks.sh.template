@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Re-enable Terraflow scaffolded git hooks (also configured automatically during terraflow new).
+set -euo pipefail
+
+repo_root="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$repo_root"
+
+if ! git rev-parse --git-dir >/dev/null 2>&1; then
+  echo "Not a git repository. Run: git init" >&2
+  exit 1
+fi
+
+git config core.hooksPath .githooks
+chmod +x .githooks/pre-commit 2>/dev/null || true
+
+echo "Git hooks enabled: core.hooksPath=.githooks"
+echo "Pre-commit will block likely secrets in staged files."

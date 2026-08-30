@@ -3,8 +3,9 @@
  * Handles template processing and file generation
  */
 
-import { existsSync, mkdirSync, readFileSync, writeFileSync, readdirSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync, readdirSync, chmodSync } from 'fs';
 import { join } from 'path';
+import { spawnSync } from 'child_process';
 import { Logger } from './logger';
 import { ConfigError } from '../core/errors';
 
@@ -440,7 +441,137 @@ export async function generateConfigFiles(
   const devStandardsContent = processTemplate(devStandardsTemplate, devStandardsVars);
   writeFileSync(join(cursorRulesDir, 'development-standards.mdc'), devStandardsContent);
 
+  generateGitHooks(projectDir);
+
   Logger.debug('Configuration files generated successfully');
+}
+
+/**
+ * Generate git hooks for secret scanning in commits
+ * @param projectDir - Root directory of the project
+ */
+export function generateGitHooks(projectDir: string): void {
+  const hooksDir = join(projectDir, '.githooks');
+  mkdirSync(hooksDir, { recursive: true });
+
+  const preCommitTemplate = loadTemplate(join('config', 'githooks', 'pre-commit.template'));
+  const preCommitPath = join(hooksDir, 'pre-commit');
+  writeFileSync(preCommitPath, preCommitTemplate, { mode: 0o755 });
+  chmodSync(preCommitPath, 0o755);
+
+  const scriptsDir = join(projectDir, 'scripts');
+  mkdirSync(scriptsDir, { recursive: true });
+  const setupScriptTemplate = loadTemplate(
+    join('config', 'scripts', 'setup-githooks.sh.template')
+  );
+  const setupScriptPath = join(scriptsDir, 'setup-githooks.sh');
+  writeFileSync(setupScriptPath, setupScriptTemplate, { mode: 0o755 });
+  chmodSync(setupScriptPath, 0o755);
+
+  Logger.debug('Git hooks generated in .githooks/');
+}
+
+/**
+ * Point git at the scaffolded hooks directory when already in a repository
+ * @param projectDir - Root directory of the project
+ */
+export function configureGitHooksPath(projectDir: string): void {
+  const gitDir = join(projectDir, '.git');
+  if (!existsSync(gitDir)) {
+    Logger.debug('No .git directory; skipping core.hooksPath configuration');
+    return;
+  }
+
+  const result = spawnSync('git', ['config', 'core.hooksPath', '.githooks'], {
+    cwd: projectDir,
+    encoding: 'utf8',
+  });
+
+  if (result.status !== 0) {
+    Logger.warn(
+      `Could not set core.hooksPath: ${result.stderr?.trim() || 'unknown error'}. Run ./scripts/setup-githooks.sh after git init.`
+    );
+    return;
+  }
+
+  Logger.debug('Configured git core.hooksPath=.githooks');
+}
+
+/**
+ * Read a git config value (local or global)
+ */
+function gitConfigGet(projectDir: string, key: string): string | undefined {
+  const result = spawnSync('git', ['config', '--get', key], {
+    cwd: projectDir,
+    encoding: 'utf8',
+  });
+  return result.status === 0 ? result.stdout.trim() : undefined;
+}
+
+/**
+ * Ensure git user identity is configured so the initial commit can succeed
+ */
+function ensureGitIdentity(projectDir: string): void {
+  if (!gitConfigGet(projectDir, 'user.email')) {
+    spawnSync('git', ['config', 'user.email', 'terraflow@local.dev'], {
+      cwd: projectDir,
+      encoding: 'utf8',
+    });
+  }
+  if (!gitConfigGet(projectDir, 'user.name')) {
+    spawnSync('git', ['config', 'user.name', 'Terraflow'], {
+      cwd: projectDir,
+      encoding: 'utf8',
+    });
+  }
+}
+
+/**
+ * Initialize git, enable secret-scanning hooks, and create the initial commit
+ * @param projectDir - Root directory of the project
+ */
+export function initializeGitRepository(projectDir: string): void {
+  const gitDir = join(projectDir, '.git');
+  if (!existsSync(gitDir)) {
+    const initResult = spawnSync('git', ['init'], {
+      cwd: projectDir,
+      encoding: 'utf8',
+    });
+    if (initResult.status !== 0) {
+      Logger.warn(
+        `Could not initialize git repository: ${initResult.stderr?.trim() || 'unknown error'}. Run git init manually.`
+      );
+      return;
+    }
+    Logger.debug('Initialized git repository');
+  }
+
+  configureGitHooksPath(projectDir);
+  ensureGitIdentity(projectDir);
+
+  const addResult = spawnSync('git', ['add', '-A'], {
+    cwd: projectDir,
+    encoding: 'utf8',
+  });
+  if (addResult.status !== 0) {
+    Logger.warn(
+      `Could not stage scaffolded files: ${addResult.stderr?.trim() || 'unknown error'}`
+    );
+    return;
+  }
+
+  const commitResult = spawnSync('git', ['commit', '-m', 'Initialized'], {
+    cwd: projectDir,
+    encoding: 'utf8',
+  });
+  if (commitResult.status !== 0) {
+    Logger.warn(
+      `Could not create initial commit: ${commitResult.stderr?.trim() || 'unknown error'}`
+    );
+    return;
+  }
+
+  Logger.debug('Created initial git commit');
 }
 
 /**
@@ -459,6 +590,8 @@ function getScaffoldedFilePaths(language: string): string[] {
     '.cursor/rules/terraform.mdc',
     '.cursor/rules/ai-metadata.mdc',
     '.cursor/rules/development-standards.mdc',
+    '.githooks/pre-commit',
+    'scripts/setup-githooks.sh',
     'terraform/_init.tf',
     'terraform/inputs.tf',
     'terraform/locals.tf',

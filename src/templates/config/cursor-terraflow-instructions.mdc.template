@@ -99,6 +99,20 @@ terraflow --workspace production plan
 
 Point users to `.tfwconfig.yml` for backend, secrets, and auth configuration.
 
+## Secrets (do not commit)
+
+- **`.tfwconfig.yml`** — committed; use `${ENV_VAR}` references only, never literal passwords/keys
+- **`.env`** — gitignored; put local credentials here (`cp .env.example .env`)
+- **Secrets managers** — configure provider names/paths in `.tfwconfig.yml`, values live in AWS Secrets Manager, Key Vault, etc.
+
+A **pre-commit hook** in `.githooks/` scans staged files for common secret patterns. Terraflow enables it automatically when scaffolding (`git init` + initial commit). Re-enable after cloning or if hooks were disabled:
+
+```bash
+./scripts/setup-githooks.sh
+```
+
+Never paste `client_secret`, API keys, private keys, or `.env` into commits. Use `git commit --no-verify` only in emergencies.
+
 ## Optional Cleanup
 
 If the project doesn't need certain generated artifacts, you may delete them:

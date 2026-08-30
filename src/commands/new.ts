@@ -16,6 +16,7 @@ import {
   generateApplicationFiles,
   generateConfigFiles,
   generateAiMetadata,
+  initializeGitRepository,
 } from '../utils/scaffolding';
 
 /**
@@ -54,6 +55,7 @@ export class NewCommand {
    * - Terraform configuration files for the specified cloud provider
    * - Application code templates in the specified language
    * - Pre-configured `.tfwconfig.yml` with backend settings
+   * - Git repository with secret-scanning pre-commit hook and initial commit
    * - Example `.env.example` file
    * - Complete `.gitignore` and `README.md`
    *
@@ -137,6 +139,7 @@ export class NewCommand {
     await generateApplicationFiles(projectDir, language, finalProjectName);
     await generateConfigFiles(projectDir, provider, language, finalProjectName);
     await generateAiMetadata(projectDir, language);
+    initializeGitRepository(projectDir);
 
     Logger.info(`✅ Project "${projectName || 'current directory'}" created successfully!`);
     Logger.info('');
@@ -150,11 +153,11 @@ export class NewCommand {
     }
     if (projectName) {
       Logger.info('  3. Edit .env with your credentials');
-      Logger.info('  4. Review and update .tfwconfig.yml');
+      Logger.info('  4. Review and update .tfwconfig.yml (use ${ENV_VAR}, never literal secrets)');
       Logger.info('  5. terraflow init    # Initialize terraform with backend');
       Logger.info('  6. terraflow plan    # Plan changes (auto init + workspace)');
     } else {
-      Logger.info('  3. Review and update .tfwconfig.yml');
+      Logger.info('  3. Review and update .tfwconfig.yml (use ${ENV_VAR}, never literal secrets)');
       Logger.info('  4. terraflow init    # Initialize terraform with backend');
       Logger.info('  5. terraflow plan    # Plan changes (auto init + workspace)');
     }

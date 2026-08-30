@@ -75,15 +75,15 @@ provider: <cloud-provider>
 #   #   session_name: terraflow-session
 #   #   duration: 3600
 #   
-#   # Azure Service Principal:
+#   # Azure Service Principal (use env vars — never commit secrets here):
 #   # service_principal:
-#   #   client_id: your-client-id
-#   #   tenant_id: your-tenant-id
-#   #   client_secret: your-client-secret
+#   #   client_id: ${AZURE_CLIENT_ID}
+#   #   tenant_id: ${AZURE_TENANT_ID}
+#   #   client_secret: ${AZURE_CLIENT_SECRET}
 #   
-#   # GCP Service Account:
+#   # GCP Service Account (path from env or standard ADC location):
 #   # service_account:
-#   #   key_file: /path/to/service-account-key.json
+#   #   key_file: ${GOOGLE_APPLICATION_CREDENTIALS}
 
 # Terraform variables (optional)
 # Variables defined here are automatically converted to TF_VAR_* environment variables

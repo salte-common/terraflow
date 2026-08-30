@@ -6,6 +6,7 @@ import { NewCommand } from '../../src/commands/new';
 import { ConfigError } from '../../src/core/errors';
 import { existsSync, readFileSync, rmSync, mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
+import { execSync } from 'child_process';
 
 describe('NewCommand Integration Tests', () => {
   const testBaseDir = join(__dirname, '..', '..', 'tmp', 'init-integration-test');
@@ -101,8 +102,25 @@ describe('NewCommand Integration Tests', () => {
       verifyFileContent(projectDir, '.tfwconfig.yml', 'type: s3');
       verifyFileExists(projectDir, '.env.example');
       verifyFileExists(projectDir, '.gitignore');
+      verifyFileExists(projectDir, '.githooks/pre-commit');
+      verifyFileContent(projectDir, '.githooks/pre-commit', 'Terraflow scaffolded pre-commit hook');
+      verifyFileExists(projectDir, 'scripts/setup-githooks.sh');
+      verifyFileContent(projectDir, 'scripts/setup-githooks.sh', 'core.hooksPath .githooks');
       verifyFileExists(projectDir, 'README.md');
       verifyFileContent(projectDir, 'README.md', `# ${projectName}`);
+
+      // Git repository initialized with hooks and initial commit
+      verifyFileExists(projectDir, '.git/HEAD');
+      const hooksPath = execSync('git config core.hooksPath', {
+        cwd: projectDir,
+        encoding: 'utf8',
+      }).trim();
+      expect(hooksPath).toBe('.githooks');
+      const lastCommit = execSync('git log -1 --format=%s', {
+        cwd: projectDir,
+        encoding: 'utf8',
+      }).trim();
+      expect(lastCommit).toBe('Initialized');
     });
   });
 

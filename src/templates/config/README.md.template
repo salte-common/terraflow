@@ -93,6 +93,8 @@ Examples:
 
 See `.tfwconfig.yml` for all available options and the [documentation](https://github.com/salte-common/terraflow/blob/main/docs/configuration.md) for detailed configuration reference.
 
+**Secrets:** Never commit credentials. Use `.env` (gitignored) for local secrets and `${ENV_VAR}` references in `.tfwconfig.yml`. Terraflow runs `git init`, enables the pre-commit hook in `.githooks/`, and creates an initial commit when scaffolding. Re-run `./scripts/setup-githooks.sh` if hooks were disabled.
+
 ## Project Specification
 
 You can create a `SPECIFICATION.md` file in the project root to define project-specific requirements, architecture, and conventions. Cursor and other AI tools will read this file to inform code suggestions and maintain consistency with your specification.

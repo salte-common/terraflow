@@ -10,10 +10,14 @@ import {
   loadTemplate,
   isDirectoryEmpty,
   buildTemplateVariables,
+  generateGitHooks,
+  configureGitHooksPath,
+  initializeGitRepository,
 } from '../../src/utils/scaffolding';
-import { mkdirSync, writeFileSync, rmSync } from 'fs';
+import { mkdirSync, writeFileSync, rmSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { existsSync } from 'fs';
+import { execSync } from 'child_process';
 
 describe('Scaffolding Utilities', () => {
   describe('validateProjectName', () => {
@@ -180,6 +184,91 @@ describe('Scaffolding Utilities', () => {
       expect(vars['project-name']).toBe('my-project');
       expect(vars.provider).toBe('gcs');
       expect(vars['provider-name']).toBe('gcp');
+    });
+  });
+
+  describe('generateGitHooks', () => {
+    const testDir = join(__dirname, '..', '..', 'tmp', 'githooks-test');
+
+    beforeEach(() => {
+      if (existsSync(testDir)) {
+        rmSync(testDir, { recursive: true, force: true });
+      }
+      mkdirSync(testDir, { recursive: true });
+    });
+
+    afterEach(() => {
+      if (existsSync(testDir)) {
+        rmSync(testDir, { recursive: true, force: true });
+      }
+    });
+
+    it('should create pre-commit hook and setup script', () => {
+      generateGitHooks(testDir);
+
+      const preCommit = join(testDir, '.githooks', 'pre-commit');
+      const setupScript = join(testDir, 'scripts', 'setup-githooks.sh');
+
+      expect(existsSync(preCommit)).toBe(true);
+      expect(existsSync(setupScript)).toBe(true);
+      expect(readFileSync(preCommit, 'utf8')).toContain('AKIA[0-9A-Z]{16}');
+      expect(readFileSync(setupScript, 'utf8')).toContain('core.hooksPath .githooks');
+    });
+  });
+
+  describe('configureGitHooksPath', () => {
+    const testDir = join(__dirname, '..', '..', 'tmp', 'githooks-config-test');
+
+    beforeEach(() => {
+      if (existsSync(testDir)) {
+        rmSync(testDir, { recursive: true, force: true });
+      }
+      mkdirSync(testDir, { recursive: true });
+    });
+
+    afterEach(() => {
+      if (existsSync(testDir)) {
+        rmSync(testDir, { recursive: true, force: true });
+      }
+    });
+
+    it('should skip when not a git repository', () => {
+      expect(() => configureGitHooksPath(testDir)).not.toThrow();
+    });
+  });
+
+  describe('initializeGitRepository', () => {
+    const testDir = join(__dirname, '..', '..', 'tmp', 'git-init-test');
+
+    beforeEach(() => {
+      if (existsSync(testDir)) {
+        rmSync(testDir, { recursive: true, force: true });
+      }
+      mkdirSync(testDir, { recursive: true });
+      writeFileSync(join(testDir, 'README.md'), '# test\n');
+    });
+
+    afterEach(() => {
+      if (existsSync(testDir)) {
+        rmSync(testDir, { recursive: true, force: true });
+      }
+    });
+
+    it('should init git, configure hooks, and create initial commit', () => {
+      generateGitHooks(testDir);
+      initializeGitRepository(testDir);
+
+      expect(existsSync(join(testDir, '.git', 'HEAD'))).toBe(true);
+      const hooksPath = execSync('git config core.hooksPath', {
+        cwd: testDir,
+        encoding: 'utf8',
+      }).trim();
+      expect(hooksPath).toBe('.githooks');
+      const subject = execSync('git log -1 --format=%s', {
+        cwd: testDir,
+        encoding: 'utf8',
+      }).trim();
+      expect(subject).toBe('Initialized');
     });
   });
 });

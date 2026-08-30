@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+# Terraflow scaffolded pre-commit hook — blocks likely secrets in staged files.
+# Configured automatically by terraflow new; re-run scripts/setup-githooks.sh if needed.
+set -euo pipefail
+
+RED='\033[0;31m'
+NC='\033[0m'
+
+# Files that must never be committed
+blocked_paths=(
+  '^\.env$'
+  '^\.env\.local$'
+  '.*\.pem$'
+  '.*\.p12$'
+  '.*-credentials\.json$'
+  '.*service-account.*\.json$'
+)
+
+# Patterns scanned in staged file contents (extended regex)
+secret_patterns=(
+  'AKIA[0-9A-Z]{16}'
+  'ASIA[0-9A-Z]{16}'
+  'BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY'
+  'client_secret:[[:space:]]*["'\''][^"${][^"'\'']*["'\'']'
+  'secret_access_key:[[:space:]]*["'\''][^"${][^"'\'']*["'\'']'
+  'password:[[:space:]]*["'\''][^"${][^"'\'']{8,}["'\'']'
+  'api_key:[[:space:]]*["'\''][^"${][^"'\'']{8,}["'\'']'
+)
+
+staged="$(git diff --cached --name-only --diff-filter=ACM || true)"
+if [ -z "$staged" ]; then
+  exit 0
+fi
+
+failed=0
+
+while IFS= read -r file; do
+  [ -z "$file" ] && continue
+
+  for pattern in "${blocked_paths[@]}"; do
+    if echo "$file" | grep -qE "$pattern"; then
+      echo -e "${RED}ERROR: Refusing to commit ${file} (secrets belong in .env or a secrets manager)${NC}" >&2
+      failed=1
+    fi
+  done
+
+  # Skip likely binary files
+  if git diff --cached --numstat -- "$file" 2>/dev/null | awk '{print $1}' | grep -q '^-$'; then
+    continue
+  fi
+
+  content="$(git show ":$file" 2>/dev/null || true)"
+  [ -z "$content" ] && continue
+
+  for pattern in "${secret_patterns[@]}"; do
+    if echo "$content" | grep -qE "$pattern"; then
+      echo -e "${RED}ERROR: Possible secret in ${file} (matched: ${pattern})${NC}" >&2
+      failed=1
+      break
+    fi
+  done
+done <<< "$staged"
+
+if [ "$failed" -ne 0 ]; then
+  echo "" >&2
+  echo "Commit blocked. Put credentials in .env (gitignored), use \${ENV_VAR} in .tfwconfig.yml," >&2
+  echo "or load secrets via Terraflow secrets providers. See README.md." >&2
+  exit 1
+fi
