@@ -125,7 +125,8 @@ describe('S3 Backend Plugin', () => {
       expect(result).toContain('-backend-config=bucket=my-bucket');
       expect(result).toContain('-backend-config=key=terraform.tfstate');
       expect(result).toContain('-backend-config=encrypt=true'); // Default
-      expect(result).toContain('-backend-config=dynamodb_table=terraform-statelock'); // Default
+      expect(result).toContain('-backend-config=use_lockfile=true'); // Default
+      expect(result).not.toContain('-backend-config=dynamodb_table=');
     });
 
     it('should apply default values', async () => {
@@ -140,7 +141,39 @@ describe('S3 Backend Plugin', () => {
       const result = await s3Backend.getBackendConfig(config, mockContext);
 
       expect(result).toContain('-backend-config=encrypt=true');
-      expect(result).toContain('-backend-config=dynamodb_table=terraform-statelock');
+      expect(result).toContain('-backend-config=use_lockfile=true');
+    });
+
+    it('should use dynamodb_table when explicitly set (legacy locking)', async () => {
+      const config: BackendConfig = {
+        type: 's3',
+        config: {
+          bucket: 'my-bucket',
+          key: 'terraform.tfstate',
+          dynamodb_table: 'my-lock-table',
+        },
+      };
+
+      const result = await s3Backend.getBackendConfig(config, mockContext);
+
+      expect(result).toContain('-backend-config=dynamodb_table=my-lock-table');
+      expect(result).not.toContain('-backend-config=use_lockfile=');
+    });
+
+    it('should omit locking when use_lockfile is false and dynamodb_table unset', async () => {
+      const config: BackendConfig = {
+        type: 's3',
+        config: {
+          bucket: 'my-bucket',
+          key: 'terraform.tfstate',
+          use_lockfile: false,
+        },
+      };
+
+      const result = await s3Backend.getBackendConfig(config, mockContext);
+
+      expect(result).not.toContain('-backend-config=use_lockfile=');
+      expect(result).not.toContain('-backend-config=dynamodb_table=');
     });
 
     it('should include optional fields when provided', async () => {

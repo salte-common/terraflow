@@ -71,7 +71,7 @@ src/
 
 ### `terraform/_init.tf`
 
-- `required_version = ">= 1.0"`
+- `required_version = ">= 1.10"` (AWS; S3 `use_lockfile` locking) or `">= 1.0"` (Azure/GCP)
 - Cloud provider: AWS/GCP `~> 5.0`, Azure `~> 3.0`
 - Always includes `hashicorp/archive` `~> 2.0`
 - Backend block is commented; configure remote state via `.tfwconfig.yml` and `terraflow`

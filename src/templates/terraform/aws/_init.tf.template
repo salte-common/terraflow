@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 1.0"
+  required_version = ">= 1.10"
   
   required_providers {
     aws = {
@@ -19,6 +19,9 @@ terraform {
   #   # - environment variables (TERRAFLOW_*)
   #   # - .tfwconfig.yml
   #   # Do not hardcode values here
+  #   #
+  #   # State locking (Terraform 1.10+): default use_lockfile = true via .tfwconfig.yml
+  #   # Legacy DynamoDB locking: set dynamodb_table in .tfwconfig.yml instead
   # }
 }
 

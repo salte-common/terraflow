@@ -238,7 +238,8 @@ backend:
     #   key: terraform.tfstate
     #   region: us-east-1
     #   encrypt: true  # Always recommended
-    #   dynamodb_table: terraform-statelock  # For state locking
+    #   use_lockfile: true  # Default: native S3 locking (Terraform 1.10+)
+    #   dynamodb_table: terraform-statelock  # Legacy DynamoDB locking (optional)
     #   kms_key_id: arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012  # Optional: KMS encryption
 
     # Azure RM Backend Example:

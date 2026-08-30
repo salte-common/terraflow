@@ -38,7 +38,8 @@ provider: <cloud-provider>
 #     # bucket: ${AWS_REGION}-${AWS_ACCOUNT_ID}-terraform-state
 #     # key: ${GIT_REPOSITORY}
 #     # region: ${AWS_REGION}
-#     # dynamodb_table: terraform-statelock
+#     # use_lockfile: true  # Default: native S3 locking (Terraform 1.10+)
+#     # dynamodb_table: terraform-statelock  # Legacy DynamoDB locking (optional)
 #     # encrypt: true
 #     # kms_key_id: arn:aws:kms:${AWS_REGION}:${AWS_ACCOUNT_ID}:key/your-key-id  # Optional: Customer-managed KMS key for encryption
 #     

@@ -66,7 +66,7 @@ describe('S3 Backend Plugin - Integration', () => {
       expect(result).toContain('-backend-config=bucket=my-terraform-state');
       expect(result).toContain('-backend-config=key=terraform.tfstate');
       expect(result).toContain('-backend-config=encrypt=true');
-      expect(result).toContain('-backend-config=dynamodb_table=terraform-statelock');
+      expect(result).toContain('-backend-config=use_lockfile=true');
     });
 
     it('should generate KMS key ARN format from template variables', async () => {

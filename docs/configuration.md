@@ -107,7 +107,8 @@ backend:
 **Optional fields:**
 - `region` - AWS region (defaults to `AWS_REGION` env var)
 - `encrypt` - Enable encryption (default: `true`)
-- `dynamodb_table` - DynamoDB table for state locking (default: `terraform-statelock`)
+- `use_lockfile` - Native S3 state locking via lockfile (default: `true`, requires Terraform 1.10+). Set to `false` to disable locking.
+- `dynamodb_table` - Legacy DynamoDB table for state locking (optional; when set, takes precedence over `use_lockfile`)
 - `kms_key_id` - KMS key ARN for encryption
 - `profile` - AWS profile name
 - `role_arn` - IAM role ARN to assume
@@ -122,9 +123,11 @@ backend:
     key: ${GIT_REPOSITORY}/terraform.tfstate
     region: ${AWS_REGION}
     encrypt: true
-    dynamodb_table: terraform-statelock
+    use_lockfile: true
     kms_key_id: arn:aws:kms:${AWS_REGION}:${AWS_ACCOUNT_ID}:alias/terraform-state
 ```
+
+For legacy DynamoDB-based locking, set `dynamodb_table` instead of `use_lockfile` (they are mutually exclusive; `dynamodb_table` wins if both are set).
 
 ### AzureRM Backend
 
@@ -493,7 +496,7 @@ backend:
     key: ${GIT_REPOSITORY}/terraform.tfstate
     region: ${AWS_REGION}
     encrypt: true
-    dynamodb_table: terraform-statelock
+    use_lockfile: true
 
 # Secrets management
 secrets:

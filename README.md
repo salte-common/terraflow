@@ -222,7 +222,7 @@ backend:
     bucket: ${AWS_REGION}-${AWS_ACCOUNT_ID}-terraform-state
     key: ${GITHUB_REPOSITORY}
     region: ${AWS_REGION}
-    dynamodb_table: terraform-statelock
+    use_lockfile: true
 
 secrets:
   provider: aws-secrets

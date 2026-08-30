@@ -16,7 +16,10 @@ interface S3BackendConfig {
   key: string;
   region?: string;
   encrypt?: boolean;
+  /** @deprecated Prefer use_lockfile (Terraform 1.10+). Still supported for existing configs. */
   dynamodb_table?: string;
+  /** Native S3 lockfile locking (Terraform 1.10+). Default: true when dynamodb_table is unset. */
+  use_lockfile?: boolean;
   kms_key_id?: string;
   profile?: string;
   role_arn?: string;
@@ -33,6 +36,25 @@ interface S3BackendConfig {
   skip_metadata_api_check?: boolean;
   skip_region_validation?: boolean;
   force_path_style?: boolean;
+}
+
+/**
+ * Append S3 backend locking args: dynamodb_table (legacy) or use_lockfile (default).
+ */
+function applyS3LockingBackendArgs(s3Config: S3BackendConfig, backendArgs: string[]): void {
+  if (s3Config.dynamodb_table) {
+    if (s3Config.use_lockfile === true) {
+      Logger.warn(
+        '⚠️  Both dynamodb_table and use_lockfile are set; using dynamodb_table (legacy DynamoDB locking).'
+      );
+    }
+    backendArgs.push(`-backend-config=dynamodb_table=${s3Config.dynamodb_table}`);
+    return;
+  }
+
+  if (s3Config.use_lockfile !== false) {
+    backendArgs.push('-backend-config=use_lockfile=true');
+  }
 }
 
 /**
@@ -87,10 +109,9 @@ export const s3Backend: BackendPlugin = {
       context.templateVars
     ) as unknown as S3BackendConfig;
 
-    // Apply defaults
+    // Apply defaults (locking defaults to use_lockfile — see applyS3LockingBackendArgs)
     const s3Config: S3BackendConfig = {
-      encrypt: true, // Default: encryption enabled
-      dynamodb_table: 'terraform-statelock', // Default: standard DynamoDB table name
+      encrypt: true,
       ...resolvedConfig,
     };
 
@@ -146,9 +167,7 @@ export const s3Backend: BackendPlugin = {
       backendArgs.push(`-backend-config=encrypt=${s3Config.encrypt}`);
     }
 
-    if (s3Config.dynamodb_table) {
-      backendArgs.push(`-backend-config=dynamodb_table=${s3Config.dynamodb_table}`);
-    }
+    applyS3LockingBackendArgs(s3Config, backendArgs);
 
     if (s3Config.kms_key_id) {
       backendArgs.push(`-backend-config=kms_key_id=${s3Config.kms_key_id}`);

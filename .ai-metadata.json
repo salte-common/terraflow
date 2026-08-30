@@ -85,10 +85,10 @@
       "tool": "cursor"
     },
     "README.md": {
-      "lines_total": 316,
-      "lines_ai_generated": 316,
+      "lines_total": 320,
+      "lines_ai_generated": 320,
       "ai_percentage": 100,
-      "last_updated": "2026-01-31T17:37:24Z",
+      "last_updated": "2026-08-30T16:15:00Z",
       "tool": "cursor"
     },
     "RELEASE_SUMMARY.md": {
@@ -141,10 +141,10 @@
       "tool": "cursor"
     },
     "docs/configuration.md": {
-      "lines_total": 558,
-      "lines_ai_generated": 558,
+      "lines_total": 560,
+      "lines_ai_generated": 560,
       "ai_percentage": 100,
-      "last_updated": "2026-01-31T17:37:24Z",
+      "last_updated": "2026-08-30T16:15:00Z",
       "tool": "cursor"
     },
     "docs/examples/README.md": {
@@ -680,10 +680,10 @@
       "tool": "cursor"
     },
     "src/plugins/backends/s3.ts": {
-      "lines_total": 263,
-      "lines_ai_generated": 263,
+      "lines_total": 281,
+      "lines_ai_generated": 281,
       "ai_percentage": 100,
-      "last_updated": "2026-01-31T17:37:24Z",
+      "last_updated": "2026-08-30T16:15:00Z",
       "tool": "cursor"
     },
     "src/plugins/secrets/aws-secrets.ts": {
@@ -953,10 +953,10 @@
       "tool": "cursor"
     },
     "src/templates/terraform/aws/_init.tf.template": {
-      "lines_total": 29,
-      "lines_ai_generated": 29,
+      "lines_total": 31,
+      "lines_ai_generated": 31,
       "ai_percentage": 100,
-      "last_updated": "2026-01-31T17:37:24Z",
+      "last_updated": "2026-08-30T16:15:00Z",
       "tool": "cursor"
     },
     "src/templates/terraform/aws/inputs.tf.template": {
@@ -1331,10 +1331,10 @@
       "tool": "cursor"
     },
     "tests/unit/s3-backend.test.ts": {
-      "lines_total": 250,
-      "lines_ai_generated": 250,
+      "lines_total": 282,
+      "lines_ai_generated": 282,
       "ai_percentage": 100,
-      "last_updated": "2026-01-31T17:37:24Z",
+      "last_updated": "2026-08-30T16:15:00Z",
       "tool": "cursor"
     },
     "tests/unit/scaffolding.test.ts": {
